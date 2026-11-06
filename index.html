@@ -165,11 +165,16 @@ select{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1
 .place h3{font-size:22px}
 .place .addr{color:var(--muted);margin:0}
 .badge{align-self:flex-start;font-size:12px;font-weight:600;color:var(--copper-hi);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
-.place .phone{font-family:var(--font-tech);font-size:26px;letter-spacing:.08em;direction:ltr;text-align:right;color:var(--copper-hi);user-select:all}
+.place .phone{font-family:var(--font-tech);font-size:26px;letter-spacing:.08em;direction:ltr;unicode-bidi:isolate;text-align:right;color:var(--copper-hi);text-decoration:none;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tel{font-family:var(--font-tech);letter-spacing:.04em;direction:ltr;unicode-bidi:isolate;white-space:nowrap;font-variant-numeric:tabular-nums}
 .place .btn{width:100%}
 .nums{display:flex;flex-direction:column;gap:8px}
-.numrow{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;background:#0C1526;border:1px solid var(--line)}
-.numrow span{font-size:13px;color:var(--muted)}
+.numrow{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:12px 14px;border-radius:12px;background:#0C1526;border:1px solid var(--line)}
+.numrow .nl{font-size:13px;color:var(--muted)}
+.numrow .phone{font-size:23px;justify-self:start}
+.nact{display:flex;gap:6px}
+.nact a{font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;border:1px solid var(--line);color:var(--fg);text-decoration:none}
+.nact a.w{background:var(--wa);border-color:var(--wa);color:#062b14}
 .numrow .phone{font-size:24px}
 
 .wa-float{position:fixed;z-index:8;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:calc(18px + env(safe-area-inset-left,0px));display:flex;align-items:center;gap:8px;padding:14px 18px;border-radius:999px;background:var(--wa);color:#062b14;font-weight:600;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.45);transition:transform .2s}
@@ -195,9 +200,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;
 .fld{display:flex;flex-direction:column;gap:5px;min-width:0}
 .fld span{font-size:12px;color:var(--muted)}
 .fld input,.fld select{width:100%;min-width:0}
-#qty,input[type=number]{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;direction:ltr;text-align:right}
+#qty,#cLoad,input[type=number]{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;direction:ltr;text-align:right}
 .order-go{display:flex;flex-wrap:wrap;align-items:center;gap:14px;width:100%}
 .price-note{font-size:13px;color:var(--muted)}
+.send2{display:flex;flex-wrap:wrap;gap:10px}
+.send2 .sn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(6,43,20,.18);font-family:var(--font-tech);font-size:14px;margin-inline-end:4px}
+.btn.wa.alt{background:transparent;color:var(--wa);border:1.5px solid var(--wa)}
+.btn.wa.alt:hover{background:rgba(37,211,102,.12)}
+.btn.wa.done{opacity:.65}
+.btn.wa.done .sn{font-size:0}.btn.wa.done .sn::after{content:"✓";font-size:14px}
+.btn.wa.next{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(37,211,102,.28)}}
 /* hours */
 .hours{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:#0C1526;border:1px solid var(--line)}
 .hrow{display:flex;justify-content:space-between;gap:10px;font-size:15px;color:var(--muted)}
@@ -224,7 +237,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .res-size span{font-family:var(--font-tech);font-size:clamp(54px,8vw,76px);font-weight:700;line-height:1;color:var(--copper-hi)}
 .res-size small{font-size:16px;color:var(--muted)}
 .res-name{font-size:16px;font-weight:600}
-.meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.meters .wide{grid-column:1/-1}
+.seg button:disabled{opacity:.35;cursor:not-allowed}
 .meters div{display:flex;flex-direction:column;gap:2px;padding:10px;border-radius:10px;background:#0C1526}
 .meters span{font-size:12px;color:var(--muted)}
 .meters b{font-size:15px}
@@ -550,10 +565,23 @@ input[type=range]{width:100%;accent-color:var(--copper)}
               <button type="button" data-v="3" aria-pressed="false">ثلاث فازات 380</button>
             </div>
           </div>
+          <div class="fld"><span>طريقة التمديد</span>
+            <div class="seg" role="group" aria-label="طريقة التمديد" id="cInst">
+              <button type="button" data-v="air" aria-pressed="true">بالهواء أو على الجدار</button>
+              <button type="button" data-v="ground" aria-pressed="false">مدفون بالأرض</button>
+            </div>
+          </div>
+          <div class="fld"><span>نوع الحمل</span>
+            <div class="seg" role="group" aria-label="نوع الحمل" id="cUse">
+              <button type="button" data-v="5" aria-pressed="true">أجهزة ومكائن</button>
+              <button type="button" data-v="3" aria-pressed="false">إنارة</button>
+            </div>
+          </div>
           <div class="calc-row">
-            <label class="fld"><span>الحمل</span><input type="number" id="cLoad" min="0" step="any" value="32" inputmode="decimal"></label>
+            <label class="fld"><span>الحمل</span><input type="text" id="cLoad" inputmode="decimal" autocomplete="off" value="32"></label>
             <label class="fld"><span>الوحدة</span><select id="cUnit"><option value="a">أمبير</option><option value="kw">كيلوواط</option></select></label>
           </div>
+          <label class="fld"><span id="cTempL">حرارة الجو</span><select id="cTemp"></select></label>
           <label class="fld"><span>طول الكيبل: <b id="cLenOut">40</b> متر</span><input type="range" id="cLen" min="5" max="500" step="5" value="40"></label>
         </form>
         <div class="calc-out" aria-live="polite">
@@ -563,11 +591,13 @@ input[type=range]{width:100%;accent-color:var(--copper)}
           <div class="meters">
             <div><span>التيار</span><b id="rAmp">32 أمبير</b></div>
             <div><span>هبوط الجهد</span><b id="rDrop">2.1٪</b></div>
-            <div><span>السبب</span><b id="rWhy">التيار</b></div>
+            <div><span>القاطع المقترح</span><b id="rBrk">32 أمبير</b></div>
+            <div><span>تحمّل الكيبل بحرارتك</span><b id="rIz">—</b></div>
+            <div class="wide"><span>شنو حدد القياس</span><b id="rWhy">التيار</b></div>
           </div>
           <div class="meter-bar"><i id="rBar"></i></div>
           <button type="button" class="btn solid" id="rGo">اختار هذا القياس واطلب</button>
-          <p class="calc-note">النتيجة تقريبية لكيبل ممدود بالهواء أو القنوات، وبهبوط جهد أقل من 5٪. الفلكس محسوب بتحميل أقل لأن عازله PVC. للمشاريع الكبيرة خلي المهندس يأكد القياس.</p>
+          <p class="calc-note">الحساب حسب المواصفة الدولية <span class="tech">IEC 60364-5-52</span>: جداول تحمّل التيار، تصحيح الحرارة، والقاطع لازم يكون أكبر من الحمل وأصغر من تحمّل الكيبل. هبوط الجهد محسوب بمعامل قدرة 0.85، وحدّه 5٪ للأجهزة و3٪ للإنارة. النحاس والفافون عازلهم XLPE (90°)، والفلكس PVC (70°)، والفافون يبدي من 16 ملم². إذا أكثر من كيبل ممدودين سوا بنفس المجرى، القياس يحتاج يكبر، فخلي المهندس يأكده.</p>
         </div>
       </div>
     </div>
@@ -615,7 +645,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <details><summary>شلون أدفع؟</summary><p>الدفع كاش أو بالماستر كارد.</p></details>
         <details><summary>شنو الفرق بين المدرّع وغير المدرّع؟</summary><p>المدرّع بيه طبقة أسلاك فولاذ تحميه، فيصلح للدفن تحت الأرض والأماكن المعرضة للضرب. غير المدرّع للتمديد داخل المباني والقنوات. المدرّع متوفر بالنحاس بس.</p></details>
         <details><summary>شنو يعني خط واحد وخطين وأربع خطوط؟</summary><p>هو عدد القلوب داخل الكيبل. الخطين للفاز الواحد (220)، والأربع خطوط للثلاث فازات (380)، والخط الواحد للتمديدات الخاصة واللوحات. كل الأنواع متوفرة بكل القياسات.</p></details>
-        <details><summary>شلون أتواصل وياكم؟</summary><p>رقم المحل والواتساب: 0770 736 8351، ورقم المسؤول: 0770 074 0146.</p></details>
+        <details><summary>شلون أتواصل وياكم؟</summary><p>رقم المحل والواتساب: <bdi class="tel" dir="ltr">0770 736 8351</bdi>، ورقم المسؤول: <bdi class="tel" dir="ltr">0770 074 0146</bdi>.</p></details>
         <details><summary>شنو أوقات الدوام؟</summary><p>من السبت للخميس من 7 الصبح لـ 3 العصر، والجمعة من 7 الصبح لـ 12 الظهر.</p></details>
       </div>
     </div>
@@ -729,8 +759,8 @@ input[type=range]{width:100%;accent-color:var(--copper)}
             <div class="hrow" data-day="fri"><span>الجمعة</span><span>7 الصبح – 12 الظهر</span></div>
           </div>
           <div class="nums">
-            <div class="numrow"><span>رقم المحل والواتساب</span><b class="phone">0770 736 8351</b></div>
-            <div class="numrow"><span>رقم المسؤول</span><b class="phone">0770 074 0146</b></div>
+            <div class="numrow"><span class="nl">رقم المحل والواتساب</span><a class="phone" dir="ltr" href="tel:+9647707368351">0770 736 8351</a><span class="nact"><a href="tel:+9647707368351">اتصال</a><a class="w" target="_blank" rel="noopener" href="https://wa.me/9647707368351">واتساب</a></span></div>
+            <div class="numrow"><span class="nl">رقم المسؤول</span><a class="phone" dir="ltr" href="tel:+9647700740146">0770 074 0146</a><span class="nact"><a href="tel:+9647700740146">اتصال</a><a class="w" target="_blank" rel="noopener" href="https://wa.me/9647700740146">واتساب</a></span></div>
           </div>
           <div class="coords"><span>الإحداثيات</span><b class="num" id="coordsTxt">33.337972, 44.397639</b><button type="button" class="copy" id="copyCoords">نسخ</button></div>
           <a class="btn solid" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;destination=33.337972,44.397639">الاتجاهات بخرائط Google</a>
@@ -742,7 +772,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 </main>
 
 <a class="wa-float" data-wa target="_blank" rel="noopener" href="https://wa.me/9647707368351" aria-label="راسلنا علواتساب"><span class="wa-i"></span><span class="wa-float-t">واتساب</span></a>
-<footer><div class="wrap"><span>سعد البديري للكيبلات · منذ 1991 · الشورجة، بغداد · المحل 0770 736 8351 · المسؤول 0770 074 0146</span><span>© 2026 سعد البديري</span></div></footer>
+<footer><div class="wrap"><span>سعد البديري للكيبلات · منذ 1991 · الشورجة، بغداد · المحل <bdi class="tel" dir="ltr">0770 736 8351</bdi> · المسؤول <bdi class="tel" dir="ltr">0770 074 0146</bdi></span><span>© 2026 سعد البديري</span></div></footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
@@ -750,7 +780,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 <script>
 (function(){
   var WA = '9647707368351';
-  function waLink(t){ return 'https://wa.me/' + WA + (t ? '?text=' + encodeURIComponent(t) : ''); }
+  var WA2 = '9647700740146';
+  function waLink(t, num){ return 'https://wa.me/' + (num || WA) + (t ? '?text=' + encodeURIComponent(t) : ''); }
+  function updLinks(){ var w = document.getElementById('waOrder'), m = document.getElementById('waMgr'); if(w) w.href = waLink(message()); if(m) m.href = waLink(message(), WA2); }
   document.querySelectorAll('[data-wa]').forEach(function(a){ a.href = waLink('مرحبا محل سعد البديري، أريد أستفسر عن الكيبلات'); });
 
   var SIZES = ['1.5','2.5','4','6','10','16','25','35','50','70','95','120','150','185','240'];
@@ -768,7 +800,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     {id:'cu', name:'نحاس', sub:'مدرّع وغير مدرّع · خط، خطين، أربع خطوط', tone:'#D98A56', metal:'cu', colors:['black','red','blue','yellow','ge','white'],
       armourOpts:[{id:'plain', name:'غير مدرّع', code:'Cu/XLPE/PVC', ar:'نحاس · عازل XLPE · غلاف PVC', armour:false, desc:'للتمديد داخل المباني والقنوات والسيبل تري.'},
                   {id:'swa', name:'مدرّع', code:'Cu/XLPE/SWA/PVC', ar:'نحاس · عازل XLPE · درع أسلاك فولاذ · غلاف PVC', armour:true, desc:'للدفن المباشر تحت الأرض وخطوط التغذية الرئيسية.'}]},
-    {id:'al', name:'فافون', sub:'غير مدرّع · خط، خطين، أربع خطوط', tone:'#8794AA', metal:'al', colors:['black','red','blue','yellow','ge','white'],
+    {id:'al', name:'فافون', sub:'غير مدرّع · خط، خطين، أربع خطوط', tone:'#8794AA', metal:'al', colors:['black'],
       armourOpts:[{id:'plain', name:'غير مدرّع', code:'Al/XLPE/PVC', ar:'فافون · عازل XLPE · غلاف PVC', armour:false, desc:'أخف وأوفر من النحاس، للتغذية بالمقاطع الكبيرة.'}]},
     {id:'flex', name:'فلكس', sub:'كيبل مرن أبيض · خط، خطين، أربع خطوط', tone:'#14B8A6', metal:'cu', volt:'450/750 V', std:'IEC 60227', colors:['white'],
       armourOpts:[{id:'plain', name:'غير مدرّع', code:'Cu Flex/PVC', ar:'نحاس مرن · عازل PVC', armour:false, desc:'نحاس مرن سهل اللف، للتأسيسات واللوحات والمعدات.'}]}
@@ -839,8 +871,11 @@ input[type=range]{width:100%;accent-color:var(--copper)}
                 '<label class="fld"><span>الوحدة</span><select id="unit">'+UNITS.map(function(x){ return '<option'+(x===st.unit?' selected':'')+'>'+x+'</option>'; }).join('')+'</select></label>'+
                 '<label class="fld"><span>التوصيل إلى</span><select id="gov">'+GOVS.map(function(x){ return '<option'+(x===st.gov?' selected':'')+'>'+x+'</option>'; }).join('')+'</select></label>'+
               '</div>'+
-              '<div class="order-go"><a class="btn wa" target="_blank" rel="noopener" id="waOrder" href="'+waLink(message())+'"><span class="wa-i"></span>اطلب السعر علواتساب</a>'+
-              '<span class="price-note">يوصلك السعر علواتساب حسب النوع والقياس والكمية. التوصيل بأجرة، والدفع كاش أو ماستر كارد.</span>'+
+              '<div class="order-go"><div class="send2">'+
+                '<a class="btn wa" target="_blank" rel="noopener" id="waOrder" href="'+waLink(message())+'"><span class="wa-i"></span><span><b class="sn">1</b> أرسل الطلب للمحل</span></a>'+
+                '<a class="btn wa alt" target="_blank" rel="noopener" id="waMgr" href="'+waLink(message(), WA2)+'"><span class="wa-i"></span><span><b class="sn">2</b> أرسل نسخة للمسؤول</span></a>'+
+              '</div>'+
+              '<span class="price-note">اضغط الزرين حتى يوصل طلبك للرقمين (المحل والمسؤول)، ونرد عليك بالسعر علواتساب. التوصيل بأجرة، والدفع كاش أو ماستر كارد.</span>'+
               '<button type="button" class="view3d" id="view3d">شوفه 3D</button></div>'
             : '<div class="pick"><span>اختار قياس حتى يطلعلك زر الطلب.</span></div>')+
         '</div>'+
@@ -856,6 +891,8 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     if(sb){ st.size = sb.dataset.s; renderPanel(); syncModel(); return; }
     var cb = e.target.closest('[data-c]');
     if(cb){ st.color = cb.dataset.c; renderPanel(); syncModel(); return; }
+    var sent = e.target.closest('#waOrder, #waMgr');
+    if(sent){ sent.classList.add('done'); sent.classList.remove('next'); var o = document.getElementById(sent.id==='waOrder' ? 'waMgr' : 'waOrder'); if(o && !o.classList.contains('done')) o.classList.add('next'); return; }
     if(e.target.closest('#view3d')){ document.getElementById('stage').scrollIntoView({behavior:'smooth', block:'center'}); }
   });
   slot.addEventListener('change', function(e){
@@ -863,7 +900,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     if(id==='gov') st.gov = e.target.value;
     if(id==='origin') st.origin = e.target.value;
     if(id==='unit') st.unit = e.target.value;
-    var w = document.getElementById('waOrder'); if(w) w.href = waLink(message());
+    updLinks();
   });
   slot.addEventListener('input', function(e){
     if(e.target.id==='qty'){
@@ -871,7 +908,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       var clean = raw.replace(/[^0-9]/g,'');
       if(clean !== e.target.value) e.target.value = clean;
       st.qty = clean;
-      var w = document.getElementById('waOrder'); if(w) w.href = waLink(message());
+      updLinks();
     }
   });
 
@@ -900,65 +937,89 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   }
 
 
-  /* ---------- calculator ---------- */
+  /* ---------- calculator (IEC 60364-5-52) ---------- */
   (function(){
-    var AMP1 = [24,33,45,58,80,107,138,171,209,269,328,382,441,506,599];
-    var AMP3 = [22,30,40,51,70,94,119,148,180,232,282,328,379,434,514];
-    var c = {metal:'cu', phase:1, res:null};
+    // current-carrying capacity (A), multicore cable, aligned with SIZES 1.5..240
+    var T = {
+      cu:{air:{2:[24,33,45,58,80,107,138,171,209,269,328,382,441,506,599], 3:[23,31,42,54,75,100,127,158,192,246,298,346,395,450,538]},   // XLPE 90°, method C (B.52.5)
+          ground:{2:[26,34,44,56,73,95,121,146,173,213,252,287,324,363,419], 3:[22,29,37,46,61,79,101,122,144,178,211,240,271,304,351]}}, // XLPE, method D (B.52.3)
+      al:{air:{2:[0,26,35,45,62,84,101,126,154,198,241,280,324,371,439], 3:[0,24,32,42,58,77,97,120,146,187,227,263,304,347,409]},
+          ground:{2:[0,26,34,42,56,73,93,112,132,163,193,220,249,279,322], 3:[0,22,29,36,47,61,78,94,112,138,164,186,210,236,272]}},
+      flex:{air:{2:[19.5,27,36,46,63,85,112,138,168,213,258,299,344,392,461], 3:[17.5,24,32,41,57,76,96,119,144,184,223,259,299,341,403]}} // PVC 70°, method C (B.52.4)
+    };
+    var KT = { // temperature correction (B.52.14 air ref 30°C, B.52.15 ground ref 20°C)
+      air:{xlpe:{30:1,35:.96,40:.91,45:.87,50:.82,55:.76}, pvc:{30:1,35:.94,40:.87,45:.79,50:.71,55:.61}},
+      ground:{xlpe:{20:1,25:.96,30:.93,35:.89,40:.85}, pvc:{20:1,25:.95,30:.89,35:.84,40:.77}}
+    };
+    var TEMPS = {air:[[30,'30° معتدل'],[35,'35°'],[40,'40°'],[45,'45°'],[50,'50° صيف العراق'],[55,'55° سطح أو قرب مصدر حرارة']], ground:[[20,'20°'],[25,'25°'],[30,'30° تربة العراق بالصيف'],[35,'35°'],[40,'40°']]};
+    var DEF = {air:50, ground:30};
+    var BRK = [6,10,16,20,25,32,40,50,63,80,100,125,160,200,250,315,400,500,630];
+    var PF = .85, SIN = Math.sqrt(1-PF*PF), LAMBDA = .00008, RHO = {cu:.0225, al:.036, flex:.0225};
+    var c = {metal:'cu', phase:1, inst:'air', use:5, res:null};
+    function fillTemps(){
+      var sel = document.getElementById('cTemp');
+      sel.innerHTML = TEMPS[c.inst].map(function(t){ return '<option value="'+t[0]+'"'+(t[0]===DEF[c.inst]?' selected':'')+'>'+t[1]+'</option>'; }).join('');
+      document.getElementById('cTempL').textContent = c.inst==='ground' ? 'حرارة التربة' : 'حرارة الجو';
+    }
+    function press(id, v){ document.getElementById(id).querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.v===String(v)); }); }
     function segBind(id, key, cast){
       var el = document.getElementById(id);
       el.addEventListener('click', function(e){
-        var b = e.target.closest('button'); if(!b) return;
-        el.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
-        c[key] = cast ? cast(b.dataset.v) : b.dataset.v; run();
+        var b = e.target.closest('button'); if(!b || b.disabled) return;
+        c[key] = cast ? cast(b.dataset.v) : b.dataset.v; press(id, b.dataset.v);
+        if(key==='metal'){
+          var gb = document.querySelector('#cInst [data-v=ground]'); gb.disabled = c.metal==='flex';
+          if(c.metal==='flex' && c.inst==='ground'){ c.inst = 'air'; press('cInst','air'); fillTemps(); }
+        }
+        if(key==='inst') fillTemps();
+        run();
       });
     }
     segBind('cMetal','metal'); segBind('cPhase','phase', function(v){ return parseInt(v,10); });
-    ['cLoad','cUnit','cLen'].forEach(function(id){ document.getElementById(id).addEventListener('input', run); document.getElementById(id).addEventListener('change', run); });
+    segBind('cInst','inst'); segBind('cUse','use', function(v){ return parseInt(v,10); });
+    fillTemps();
+    ['cLoad','cUnit','cLen','cTemp'].forEach(function(id){ document.getElementById(id).addEventListener('input', run); document.getElementById(id).addEventListener('change', run); });
     function fmt(n, d){ return n.toLocaleString('en-US', {maximumFractionDigits:d==null?1:d}); }
+    function num(v){ return parseFloat(String(v).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }).replace(/[٫,]/g,'.').replace(/[^0-9.]/g,'')) || 0; }
+    function $(id){ return document.getElementById(id); }
     function run(){
-      var load = parseFloat(document.getElementById('cLoad').value) || 0;
-      var unit = document.getElementById('cUnit').value;
-      var L = parseInt(document.getElementById('cLen').value,10);
-      document.getElementById('cLenOut').textContent = L;
-      var V = c.phase===3 ? 380 : 220;
-      var I = unit==='kw' ? (c.phase===3 ? load*1000/(Math.sqrt(3)*380*0.9) : load*1000/(220*0.9)) : load;
-      var table = c.phase===3 ? AMP3 : AMP1, k = c.metal==='al' ? 0.78 : (c.metal==='flex' ? 0.82 : 1), rho = c.metal==='al' ? 0.036 : 0.0225;
-      var need = I*1.25, iAmp = -1, iDrop = -1;
-      for(var i=0;i<SIZES.length;i++){ if(table[i]*k >= need){ iAmp = i; break; } }
-      for(var j=0;j<SIZES.length;j++){
-        var A = parseFloat(SIZES[j]);
-        var vd = c.phase===3 ? Math.sqrt(3)*L*I*rho/A : 2*L*I*rho/A;
-        if(vd/V*100 <= 5){ iDrop = j; break; }
-      }
-      var n = c.phase===3 ? 4 : 2;
-      var out = document.getElementById('rSize'), go = document.getElementById('rGo');
-      if(I<=0){ out.textContent = '—'; document.getElementById('rName').textContent = 'دخّل الحمل'; c.res=null; go.disabled = true; return; }
-      if(iAmp<0 || iDrop<0){
-        out.textContent = '240+'; document.getElementById('rName').textContent = 'الحمل كبير، تحتاج أكثر من كيبل أو استشارة مهندس';
-        document.getElementById('rAmp').textContent = fmt(I) + ' أمبير'; document.getElementById('rDrop').textContent = '—'; document.getElementById('rWhy').textContent = '—';
-        document.getElementById('rBar').style.width = '100%'; c.res = null; go.disabled = true; return;
-      }
-      var idx = Math.max(iAmp, iDrop), A2 = parseFloat(SIZES[idx]);
-      var drop = (c.phase===3 ? Math.sqrt(3)*L*I*rho/A2 : 2*L*I*rho/A2)/V*100;
+      var load = num($('cLoad').value), unit = $('cUnit').value, L = parseInt($('cLen').value,10), tC = parseInt($('cTemp').value,10);
+      $('cLenOut').textContent = L;
+      var three = c.phase===3, V = three ? 380 : 220, loaded = three ? 3 : 2, n = three ? 4 : 2;
+      var Ib = unit==='kw' ? (three ? load*1000/(Math.sqrt(3)*380*PF) : load*1000/(220*PF)) : load;
+      var ins = c.metal==='flex' ? 'pvc' : 'xlpe', k = KT[c.inst][ins][tC] || 1;
+      var tab = T[c.metal][c.inst][loaded], rho = RHO[c.metal], minI = c.metal==='al' ? 5 : 0;
+      var out = $('rSize'), go = $('rGo');
+      function fail(name){ out.textContent = '—'; $('rName').textContent = name; ['rDrop','rBrk','rIz','rWhy'].forEach(function(id){ $(id).textContent = '—'; }); $('rAmp').textContent = Ib>0 ? fmt(Ib) + ' أمبير' : '—'; $('rBar').style.width = Ib>0 ? '100%' : '0'; c.res = null; go.disabled = true; }
+      if(Ib<=0) return fail('دخّل الحمل');
+      var In = 0; for(var b=0;b<BRK.length;b++){ if(BRK[b]>=Ib){ In = BRK[b]; break; } }
+      if(!In) return fail('الحمل كبير، تحتاج أكثر من كيبل على التوازي. راسلنا ونحسبه وياك');
+      function dropAt(i){ var A = parseFloat(SIZES[i]); return (three ? Math.sqrt(3) : 2)*L*Ib*(rho/A*PF + LAMBDA*SIN)/V*100; }
+      var iAmp = -1, iDrop = -1;
+      for(var i=minI;i<SIZES.length;i++){ if(tab[i] && tab[i]*k >= In){ iAmp = i; break; } }
+      for(var j=minI;j<SIZES.length;j++){ if(dropAt(j) <= c.use){ iDrop = j; break; } }
+      if(iAmp<0 || iDrop<0) return fail('الحمل أو المسافة أكبر من قياس 240، تحتاج كيبلين على التوازي. راسلنا ونحسبه وياك');
+      var idx = Math.max(iAmp, iDrop), drop = dropAt(idx), armour = c.inst==='ground' && c.metal==='cu';
       out.textContent = n + '×' + SIZES[idx];
-      document.getElementById('rName').textContent = 'كيبل ' + ({cu:'نحاس', al:'فافون', flex:'فلكس'})[c.metal] + ' ' + (n===4 ? 'أربع خطوط' : 'خطين');
-      document.getElementById('rAmp').textContent = fmt(I) + ' أمبير';
-      document.getElementById('rDrop').textContent = fmt(drop) + '٪';
-      document.getElementById('rWhy').textContent = iDrop > iAmp ? 'طول المسافة' : 'التيار';
-      document.getElementById('rBar').style.width = Math.min(100, drop/5*100) + '%';
-      c.res = {g:c.metal, n:n, size:SIZES[idx]}; go.disabled = false;
+      $('rName').textContent = 'كيبل ' + ({cu:'نحاس', al:'فافون', flex:'فلكس'})[c.metal] + (armour ? ' مدرّع' : '') + ' ' + (n===4 ? 'أربع خطوط' : 'خطين');
+      $('rAmp').textContent = fmt(Ib) + ' أمبير';
+      $('rDrop').textContent = fmt(drop) + '٪ من ' + c.use + '٪';
+      $('rBrk').textContent = In + ' أمبير';
+      $('rIz').textContent = fmt(tab[idx]*k, 0) + ' أمبير';
+      $('rWhy').textContent = idx===minI && c.metal==='al' && iAmp<=minI && iDrop<=minI ? 'أصغر قياس فافون (16)' : (iDrop > iAmp ? 'طول المسافة (هبوط الجهد)' : 'التيار والحرارة');
+      $('rBar').style.width = Math.min(100, drop/c.use*100) + '%';
+      c.res = {g:c.metal, n:n, size:SIZES[idx], armour:armour}; go.disabled = false;
       calcModel();
     }
     function calcModel(){
       if(window.__view!=='calc' || !c.res || !window.__cable) return;
-      var g = GROUPS.filter(function(x){ return x.id===c.res.g; })[0], a = g.armourOpts[0], sz = c.res.n + '×' + c.res.size;
-      document.getElementById('tagSize').textContent = sz;
-      document.getElementById('tagName').textContent = document.getElementById('rName').textContent;
+      var g = GROUPS.filter(function(x){ return x.id===c.res.g; })[0], a = g.armourOpts.filter(function(o){ return !!o.armour===c.res.armour; })[0] || g.armourOpts[0], sz = c.res.n + '×' + c.res.size;
+      $('tagSize').textContent = sz;
+      $('tagName').textContent = $('rName').textContent;
       window.__cable.set({code:a.code, armour:a.armour, metal:g.metal, volt:g.volt, std:g.std, color:COLORS[g.colors[0]]}, sz);
     }
     window.__calcModel = calcModel;
-    document.getElementById('rGo').addEventListener('click', function(){ if(c.res) openProduct(c.res.g, c.res.n, c.res.size); });
+    $('rGo').addEventListener('click', function(){ if(c.res) openProduct(c.res.g, c.res.n, c.res.size, c.res.armour); });
     run();
   })();
 
@@ -978,9 +1039,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     r.addEventListener('input', upd); upd();
   })();
 
-  function openProduct(gid, n, size){
+  function openProduct(gid, n, size, armour){
     var g = GROUPS.filter(function(x){ return x.id===gid; })[0];
-    st.g = g; st.a = g.armourOpts[0]; st.n = n; st.size = size; st.color = g.colors[0];
+    st.g = g; st.a = g.armourOpts.filter(function(o){ return !!o.armour===!!armour; })[0] || g.armourOpts[0]; st.n = n; st.size = size; st.color = g.colors[0];
     renderPanel(); syncModel(); go('products');
     setTimeout(function(){ var p = document.getElementById('panel'); if(p) p.scrollIntoView({behavior:'smooth', block:'center'}); }, 60);
   }
