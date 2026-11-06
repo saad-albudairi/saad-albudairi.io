@@ -56,6 +56,8 @@ h2{font-size:clamp(28px,4vw,40px);font-weight:800}
 .tech{font-family:var(--font-tech);letter-spacing:.05em;direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
 :focus-visible{outline:2px solid var(--copper);outline-offset:3px}
 
+</head>
+<body>
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:600;font-size:15px;border-radius:12px;padding:12px 20px;cursor:pointer;text-decoration:none;border:1px solid transparent;transition:background .2s,border-color .2s,transform .2s}
 .btn:hover{transform:translateY(-1px)}
 .btn.solid{background:var(--copper);color:#ffffff}
@@ -87,6 +89,16 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .hero h1 em{font-style:normal;color:var(--copper)}
 .cta{display:flex;flex-wrap:wrap;gap:10px}
 .stage{position:relative;aspect-ratio:7/5;max-width:100%;min-width:0}
+.stage-home{min-width:0}
+.stage-slot:empty{display:none}
+.stage-slot{margin:0 0 22px;border:1px solid rgba(61,123,255,.22);border-radius:18px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,rgba(61,123,255,.14),transparent 70%)}
+.stage-slot .stage{aspect-ratio:21/9}
+@media (max-width:700px){.stage-slot .stage{aspect-ratio:4/3}}
+.vtabs{display:flex;gap:6px;margin:0 0 12px;padding:4px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);width:max-content;max-width:100%}
+.vtabs button{font:inherit;font-weight:600;font-size:14px;padding:8px 16px;border-radius:9px;border:0;background:transparent;color:inherit;opacity:.7;cursor:pointer}
+.vtabs button[aria-selected="true"]{background:#3d7bff;color:#fff;opacity:1}
+.vid video{display:block;width:100%;max-height:72vh;border-radius:16px;background:#000}
+.vid-note{margin:8px 2px 0;font-size:13px;opacity:.7}
 #cable{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
 .stage-tag{position:absolute;bottom:8px;left:8px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(10,17,32,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;flex-direction:column;line-height:1.4}
 .stage-tag strong{font-family:var(--font-tech);font-size:18px;letter-spacing:.05em}
@@ -417,8 +429,6 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 }
 </style>
 
-</head>
-<body>
 <div dir="rtl">
 <header class="bar">
   <div class="wrap">
@@ -455,7 +465,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
           <a class="btn line" href="#where">موقعنا بالشورجة</a>
         </div>
       </div>
-      <div class="stage">
+      <div class="stage-home" id="slot-home"><div class="stage" id="stage">
         <canvas id="cable" aria-label="موديل ثلاثي الأبعاد للكيبل المختار"></canvas>
         <div class="cable-labels" id="cableLabels" aria-hidden="true"></div>
         <div class="drag-hint">اسحب لتدوير الكيبل</div>
@@ -465,7 +475,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
           <button type="button" id="cSpin" aria-pressed="true">الدوران</button>
         </div>
         <div class="stage-tag"><strong><span class="num" id="tagSize">4×16</span> ملم²</strong><span id="tagName">كيبل مدرّع نحاس</span></div>
-      </div>
+      </div></div>
     </div>
   </section>
 
@@ -511,6 +521,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <p class="lead">اضغط على القسم حتى تطلعلك الأنواع والقياسات. ما تعرف القياس؟ <a href="#calc">استعمل الحاسبة</a>.</p>
         <ol class="steps"><li><b>1</b>اختار القسم</li><li><b>2</b>النوع وعدد الخطوط</li><li><b>3</b>القياس</li><li><b>4</b>المنشأ والكمية والمحافظة</li><li><b>5</b>اطلب السعر علواتساب</li></ol>
       </div>
+      <div class="stage-slot" id="slot-products"></div>
       <div class="tiles" id="tiles"></div>
       <div id="panelSlot"></div>
     </div>
@@ -523,6 +534,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <h2>شكد قياس الكيبل اللي تحتاجه؟</h2>
         <p class="lead">اختار نوع الكيبل والكهرباء، دخّل الحمل، وحرّك طول الكيبل. القياس يطلع وحده، وبعدها تگدر تطلبه مباشرة.</p>
       </div>
+      <div class="stage-slot" id="slot-calc"></div>
       <div class="calc">
         <form class="calc-in" id="calcForm" onsubmit="return false">
           <div class="fld"><span>نوع الكيبل</span>
@@ -618,6 +630,14 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       </div>
       <div class="where">
         <div class="where-vis">
+          <div class="vtabs" role="tablist" aria-label="طريقة عرض الطريق">
+            <button type="button" role="tab" data-t="3d" aria-selected="true">المجسّم 3D</button>
+            <button type="button" role="tab" data-t="vid" aria-selected="false">الفيديو الأصلي</button>
+          </div>
+          <div class="vid" id="vidBox" hidden>
+            <video id="shopVid" controls playsinline preload="metadata" poster="shop-route.jpg" src="shop-route.mp4" aria-label="فيديو الطريق من الشارع الرئيسي لحد باب المحل"></video>
+            <p class="vid-note">فيديو مصوّر للطريق الحقيقي بالشورجة لحد باب المحل الأزرق.</p>
+          </div>
           <div class="world" id="world" tabindex="0" aria-label="مجسّم الطريق للمحل. الأسهم للتنقل بين الخطوات، والمسافة للتشغيل">
             <canvas id="worldCanvas" aria-label="مجسّم ثلاثي الأبعاد للطريق من الشارع الرئيسي لمحل سعد البديري"></canvas>
             <div class="wmarks" id="wMarks"></div>
@@ -836,7 +856,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     if(sb){ st.size = sb.dataset.s; renderPanel(); syncModel(); return; }
     var cb = e.target.closest('[data-c]');
     if(cb){ st.color = cb.dataset.c; renderPanel(); syncModel(); return; }
-    if(e.target.closest('#view3d')){ go('home'); setTimeout(function(){ document.getElementById('model').scrollIntoView({behavior:'smooth'}); }, 50); }
+    if(e.target.closest('#view3d')){ document.getElementById('stage').scrollIntoView({behavior:'smooth', block:'center'}); }
   });
   slot.addEventListener('change', function(e){
     var id = e.target.id;
@@ -928,7 +948,16 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       document.getElementById('rWhy').textContent = iDrop > iAmp ? 'طول المسافة' : 'التيار';
       document.getElementById('rBar').style.width = Math.min(100, drop/5*100) + '%';
       c.res = {g:c.metal, n:n, size:SIZES[idx]}; go.disabled = false;
+      calcModel();
     }
+    function calcModel(){
+      if(window.__view!=='calc' || !c.res || !window.__cable) return;
+      var g = GROUPS.filter(function(x){ return x.id===c.res.g; })[0], a = g.armourOpts[0], sz = c.res.n + '×' + c.res.size;
+      document.getElementById('tagSize').textContent = sz;
+      document.getElementById('tagName').textContent = document.getElementById('rName').textContent;
+      window.__cable.set({code:a.code, armour:a.armour, metal:g.metal, volt:g.volt, std:g.std, color:COLORS[g.colors[0]]}, sz);
+    }
+    window.__calcModel = calcModel;
     document.getElementById('rGo').addEventListener('click', function(){ if(c.res) openProduct(c.res.g, c.res.n, c.res.size); });
     run();
   })();
@@ -967,6 +996,22 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   })();
 
 
+  /* ---------- route tabs: 3D / video ---------- */
+  (function(){
+    var tabs = document.querySelector('.vtabs'); if(!tabs) return;
+    var vid = document.getElementById('shopVid');
+    tabs.addEventListener('click', function(e){
+      var b = e.target.closest('[data-t]'); if(!b) return;
+      var isVid = b.dataset.t==='vid';
+      tabs.querySelectorAll('[data-t]').forEach(function(x){ x.setAttribute('aria-selected', x===b); });
+      document.getElementById('vidBox').hidden = !isVid;
+      var has3d = !!window.__world;
+      ['world','wBar','rSteps'].forEach(function(id){ document.getElementById(id).hidden = isVid || !has3d; });
+      document.getElementById('map').hidden = isVid || has3d;
+      if(!isVid && vid) vid.pause();
+    });
+  })();
+
   /* ---------- views ---------- */
   var VIEWS = ['home','products','calc','compare','faq','where'];
   function show(v){
@@ -974,6 +1019,11 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     document.querySelectorAll('[data-view]').forEach(function(el){ el.hidden = el.dataset.view!==v; });
     document.querySelectorAll('.guide a').forEach(function(a){ if(a.dataset.go===v) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
     var cur = document.querySelector('.guide a[aria-current]'); if(cur && cur.scrollIntoView) cur.scrollIntoView({block:'nearest', inline:'center'});
+    var slot = document.getElementById('slot-' + v) || document.getElementById('slot-home'), stg = document.getElementById('stage');
+    if(stg.parentNode !== slot) slot.appendChild(stg);
+    window.__view = v;
+    if(v==='products' && st.g) syncModel();
+    if(v==='calc' && window.__calcModel) window.__calcModel();
     window.scrollTo(0,0);
   }
   function go(v){ if(location.hash==='#'+v) show(v); else location.hash = v; }
@@ -1419,20 +1469,6 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     var door = box(.1, gH - .25, W/2 - .25, doorMat); door.position.set(FX - .06, (gH - .25)/2 + .1, SZ + W/4); shop.add(door);
     for(var dl=0; dl<3; dl++){ var rib = box(.03, .05, W/2 - .35, std('#174a9c')); rib.position.set(FX - .12, 1 + dl*1.1, SZ + W/4); shop.add(rib); }
     [[0, gH - .1, W, .18], [-W/2 + .08, gH/2, .16, gH]].forEach(function(f){ var fr = box(.14, f[3], f[2], doorMat); fr.position.set(FX - .07, f[1], SZ + f[0]); shop.add(fr); });
-    var sc = document.createElement('canvas'); sc.width = 1024; sc.height = 256; var signTex = tex(sc);
-    function drawSign(){
-      var g = sc.getContext('2d'); var grd = g.createLinearGradient(0,0,0,256); grd.addColorStop(0,'#c0272d'); grd.addColorStop(1,'#8f1a1f');
-      g.fillStyle = grd; g.fillRect(0,0,1024,256); g.strokeStyle = '#fff'; g.lineWidth = 6; g.strokeRect(12,12,1000,232);
-      g.direction = 'rtl'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#fff';
-      g.font = '700 112px "Aref Ruqaa","IBM Plex Sans Arabic",serif'; g.fillText('سعد البديري', 512, 104);
-      g.fillStyle = '#ffe1e1'; g.font = '600 42px "IBM Plex Sans Arabic",sans-serif'; g.fillText('للكيبلات الكهربائية · منذ 1991', 512, 200);
-      signTex.needsUpdate = true;
-    }
-    drawSign();
-    if(document.fonts && document.fonts.load){ Promise.all([document.fonts.load('700 112px "Aref Ruqaa"'), document.fonts.load('600 42px "IBM Plex Sans Arabic"')]).then(drawSign).catch(function(){}); }
-    var signMat = new THREE.MeshStandardMaterial({map:signTex, roughness:.5});
-    var sideRed = std('#8f1a1f');
-    var signBox = box(.18, 1.0, W*.55, [sideRed, signMat, sideRed, sideRed, sideRed, sideRed]); signBox.position.set(FX - .14, gH + .65, SZ - W*.2); shop.add(signBox);
     drumStack(3.95, -2.6, 2, ['green','black']); drumStack(3.95, 1.8, 2, ['stripe','green']);
 
     // pin and light beam above the shop
@@ -1458,7 +1494,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       {p:[0,46], t:'الساحة', d:'توصل لساحة بيها عربانات مغطاة بنايلون أزرق. اعبرها دغري.'},
       {p:[0,30.5], t:'زقاق تجار الكيبل', d:'ادخل الزقاق اللي البكرات مصفوفة على جهتيه.'},
       {p:[0,14], t:'قرّبت', d:'راح تشوف بناية بيضاء عالية على يمينك، والمحل بعدها مباشرة.'},
-      {p:[-1.3,1.6], t:'الباب الأزرق', d:'هنا محلنا على يمينك: باب حديد أزرق كبير ولافتة حمرة، وقدامه بكرات كيبل أخضر وأصفر.'},
+      {p:[-1.3,1.6], t:'الباب الأزرق', d:'هنا محلنا على يمينك: باب حديد أزرق كبير، وقدامه بكرات كيبل أخضر وأصفر.'},
       {p:[3.1,-1.05], t:'وصلت!', d:'أهلاً بيك داخل محل سعد البديري. الرفوف مليانة لفات بكل الأنواع والقياسات.'}
     ];
     STEPS.forEach(function(s){ s.u = uNear(s.p[0], s.p[1]); });
