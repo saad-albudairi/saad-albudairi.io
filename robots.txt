@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://saad-albudairi.github.io/saad-albudairi.io/sitemap.xml
