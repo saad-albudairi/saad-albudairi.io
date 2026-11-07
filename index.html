@@ -218,6 +218,15 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;
 #qty,#cLoad,input[type=number]{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;direction:ltr;text-align:right}
 .order-go{display:flex;flex-wrap:wrap;align-items:center;gap:14px;width:100%}
 .price-note{font-size:13px;color:var(--muted)}
+.app-bar{background:linear-gradient(90deg,#123072,#1d4fc4);border-bottom:1px solid rgba(255,255,255,.12)}
+.app-bar[hidden]{display:none}
+.app-bar-in{display:flex;align-items:center;gap:10px;min-height:54px;padding-block:6px}
+.app-bar-ic{flex:none;border-radius:8px}
+.app-bar-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35}
+.app-bar-t b{font-size:14px;color:#fff}
+.app-bar-t span{font-size:12px;color:#c9d8ff}
+.app-bar-go{flex:none;font:inherit;font-weight:700;font-size:14px;padding:8px 16px;border-radius:999px;border:0;background:#fff;color:#123072;cursor:pointer}
+.app-bar-x{flex:none;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:13px;cursor:pointer}
 .app-btn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:14px;color:var(--copper-hi);background:rgba(61,123,255,.1);border:1px solid rgba(61,123,255,.45);border-radius:12px;padding:8px 12px;cursor:pointer}
 .app-btn[hidden]{display:none}
 .app-btn .ico{width:18px;height:18px}
@@ -500,6 +509,14 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 <body>
 <div dir="rtl">
 <header class="bar">
+  <div class="app-bar" id="appBar" hidden>
+    <div class="wrap app-bar-in">
+      <img class="app-bar-ic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpolygon points='100,6 181,53 181,147 100,194 19,147 19,53' fill='%230E1A33' stroke='%23C6CEDC' stroke-width='7'/%3E%3Ccircle cx='100' cy='100' r='58' fill='none' stroke='%233D7BFF' stroke-width='10'/%3E%3Ccircle cx='83' cy='83' r='15' fill='%233D7BFF'/%3E%3Ccircle cx='117' cy='83' r='15' fill='%233D7BFF'/%3E%3Ccircle cx='83' cy='117' r='15' fill='%233D7BFF'/%3E%3Ccircle cx='117' cy='117' r='15' fill='%233D7BFF'/%3E%3C/svg%3E" alt="" width="34" height="34">
+      <div class="app-bar-t"><b>نزّل تطبيق سعد البديري</b><span>اطلب كيبلك بضغطة من موبايلك</span></div>
+      <button type="button" class="app-bar-go" id="appBarGo">نزّل التطبيق</button>
+      <button type="button" class="app-bar-x" id="appBarX" aria-label="سد">✕</button>
+    </div>
+  </div>
   <div class="wrap">
     <a class="logo" href="#home" aria-label="سعد البديري للكيبلات">
       <svg class="logo-hex" width="40" height="40" viewBox="0 0 200 200" aria-hidden="true"><polygon points="100,6 181,53 181,147 100,194 19,147 19,53" fill="#0E1A33" stroke="#C6CEDC" stroke-width="7"/><circle cx="100" cy="100" r="58" fill="none" stroke="#3D7BFF" stroke-width="9"/><circle cx="83" cy="83" r="14" fill="#3D7BFF"/><circle cx="117" cy="83" r="14" fill="#3D7BFF"/><circle cx="83" cy="117" r="14" fill="#3D7BFF"/><circle cx="117" cy="117" r="14" fill="#3D7BFF"/></svg>
@@ -861,9 +878,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   </section>
 </div>
 
-<div class="ios-tip" id="iosTip" hidden role="dialog" aria-label="تنزيل التطبيق على الآيفون">
-  <b>تنزيل التطبيق على الآيفون 📱</b>
-  <ol><li>اضغط زر المشاركة <span class="sh">⬆︎</span> جوة بالسفاري</li><li>اختار «إضافة إلى الشاشة الرئيسية»</li><li>اضغط «إضافة»، ويطلع اللوغو بشاشتك مثل أي تطبيق</li></ol>
+<div class="ios-tip" id="iosTip" hidden role="dialog" aria-labelledby="iosTipH">
+  <b id="iosTipH">تنزيل التطبيق 📱</b>
+  <ol id="iosTipL"></ol>
   <button type="button" id="iosTipX">تمام</button>
 </div>
 
@@ -1947,18 +1964,32 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   /* ---------- app install + visit counter (live site only) ---------- */
   (function(){
     var live = /github\.io$/.test(location.hostname) || /saad-albudairi/.test(location.hostname);
-    var btn = document.getElementById('appBtn'), tip = document.getElementById('iosTip'), deferred = null;
+    var btn = document.getElementById('appBtn'), tip = document.getElementById('iosTip'), bar = document.getElementById('appBar'), deferred = null;
     var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1);
+    var ua = navigator.userAgent;
+    var ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1);
+    var inApp = /Instagram|FBAN|FBAV|FB_IAB|WhatsApp|Snapchat|TikTok|Telegram|Line\//i.test(ua);
+    var android = /android/i.test(ua);
+    var dismissed = false; try{ dismissed = sessionStorage.getItem('sab-appbar')==='x'; }catch(err){}
     if(live && 'serviceWorker' in navigator){ window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
-    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; if(!standalone) btn.hidden = false; });
-    if(live && ios && !standalone) btn.hidden = false;
-    btn.addEventListener('click', function(){
-      if(deferred){ deferred.prompt(); deferred.userChoice.then(function(r){ if(r.outcome==='accepted'){ btn.hidden = true; track('تطبيق/تنزيل'); } deferred = null; }); }
-      else tip.hidden = false;
-    });
+    if(!standalone){ btn.hidden = false; if(!dismissed) bar.hidden = false; }
+    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; });
+    function steps(){
+      if(inApp) return ['الموقع مفتوح داخل تطبيق (واتساب أو إنستغرام). اضغط النقاط الثلاث ⋮ أو ⋯ فوق', 'اختار «فتح في المتصفح» (كروم أو سفاري)', 'من هناك اضغط «نزّل التطبيق» مرة ثانية'];
+      if(ios) return ['افتح الموقع بالسفاري، واضغط زر المشاركة <span class="sh">⬆︎</span> جوة', 'اختار «إضافة إلى الشاشة الرئيسية»', 'اضغط «إضافة»، ويطلع اللوغو بشاشتك مثل أي تطبيق'];
+      if(android) return ['اضغط النقاط الثلاث ⋮ فوق بكروم', 'اختار «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»', 'اضغط «تثبيت»، ويطلع اللوغو بشاشتك مثل أي تطبيق'];
+      return ['بكروم أو إيدج، اضغط أيقونة التثبيت ⊕ بآخر شريط العنوان', 'أو من القائمة ⋮ اختار «تثبيت سعد البديري»', 'يتنصب ويفتح بنافذة لوحده مثل البرنامج'];
+    }
+    function install(){
+      if(deferred){ deferred.prompt(); deferred.userChoice.then(function(r){ if(r.outcome==='accepted'){ btn.hidden = true; bar.hidden = true; track('تطبيق/تنزيل'); } deferred = null; }); return; }
+      document.getElementById('iosTipL').innerHTML = steps().map(function(x){ return '<li>' + x + '</li>'; }).join('');
+      tip.hidden = false; track('تطبيق/شرح');
+    }
+    btn.addEventListener('click', install);
+    document.getElementById('appBarGo').addEventListener('click', install);
+    document.getElementById('appBarX').addEventListener('click', function(){ bar.hidden = true; try{ sessionStorage.setItem('sab-appbar','x'); }catch(err){} });
     document.getElementById('iosTipX').addEventListener('click', function(){ tip.hidden = true; });
-    window.addEventListener('appinstalled', function(){ btn.hidden = true; });
+    window.addEventListener('appinstalled', function(){ btn.hidden = true; bar.hidden = true; tip.hidden = true; });
     if(live){
       var gc = document.createElement('script'); gc.async = true; gc.src = 'https://gc.zgo.at/count.js';
       gc.setAttribute('data-goatcounter', 'https://saad-albudairi.goatcounter.com/count'); document.head.appendChild(gc);
