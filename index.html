@@ -916,26 +916,17 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 <div class="iosg" id="iosGuide" hidden role="dialog" aria-modal="true" aria-labelledby="iosgH">
   <div class="iosg-box">
     <div class="iosg-head"><b id="iosgH">نزّل التطبيق على الآيفون 📱</b><button type="button" class="iosg-x" id="iosgX" aria-label="سد">✕</button></div>
-    <div class="iosg-auto" id="iosgAuto">
-      <p class="iosg-sub">التنزيل بدا ✅ كمّل هالخطوتين حتى يتثبت:</p>
+    <div class="iosg-safari" id="iosgSafari">
+      <p class="iosg-sub">3 ضغطات بس، وبدون App Store ولا إعدادات 👇</p>
       <ol class="iosg-steps">
-        <li><div class="iosg-txt"><b>اضغط «سماح»</b><span>يطلعلك سؤال: «هذا الموقع يحاول تنزيل ملف تعريف»، اضغط <b>سماح</b> وبعدها <b>إغلاق</b>.</span></div></li>
-        <li><div class="iosg-txt"><b>افتح الإعدادات ⚙️ واضغط «تثبيت»</b><span>بأول الإعدادات يطلعلك <b>«تم تنزيل ملف التعريف»</b>، اضغط عليه، بعدها <b>تثبيت</b> فوق باليمين ودخّل رمز الموبايل. ويطلع لوغو سعد البديري بشاشتك ✅</span></div></li>
-      </ol>
-      <a class="iosg-copy iosg-dl" id="iosgDl" href="saad-albudairi.mobileconfig">ما بدا التنزيل؟ اضغط هنا</a>
-      <p class="iosg-note">ملف آمن من محلنا: يضيف الأيقونة بس، ما ياخذ أي صلاحية على موبايلك، وتگدر تمسحه من الإعدادات بأي وقت. إذا كتب «غير موثّق» هذا طبيعي لأنه مو من App Store.</p>
-    </div>
-    <details class="iosg-safari" id="iosgSafari">
-      <summary>طريقة ثانية: من زر المشاركة</summary>
-      <ol class="iosg-steps">
-        <li><div class="iosg-txt"><b>اضغط زر المشاركة</b><span>تحت بالشاشة. بالآيفونات الجديدة اضغط <span class="k">⋯</span> تحت، وبعدها «مشاركة».</span></div>
+        <li><div class="iosg-txt"><b>اضغط زر المشاركة</b><span>بسفاري تحت بالنص. وبـ Brave أو كروم تلگاه بشريط العنوان أو داخل <span class="k">⋯</span>.</span></div>
           <div class="iosg-mock tb"><span class="d">‹</span><span class="d">›</span><span class="hl"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#3D7BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span><span class="d">⧉</span><span class="d">⋯</span></div></li>
         <li><div class="iosg-txt"><b>اختار «إضافة إلى الشاشة الرئيسية»</b><span>انزل شوية بالقائمة. إذا ما لگيتها اضغط «عرض المزيد».</span></div>
           <div class="iosg-mock row"><span>إضافة إلى الشاشة الرئيسية</span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg></div></li>
         <li><div class="iosg-txt"><b>اضغط «إضافة»</b><span>فوق باليمين، ويطلع اللوغو بشاشتك ويفتح مثل التطبيق ✅</span></div>
           <div class="iosg-mock add"><img src="apple-touch-icon.png" alt="" width="40" height="40" onerror="this.style.display='none'"><span>سعد البديري</span><b>إضافة</b></div></li>
       </ol>
-    </details>
+    </div>
     <div class="iosg-other" id="iosgOther" hidden>
       <p>بالآيفون التنزيل يشتغل من <b>سفاري</b> بس. انسخ الرابط وافتحه بسفاري، وبعدها اضغط «نزّل التطبيق» مرة ثانية.</p>
       <button type="button" class="iosg-copy" id="iosgCopy">انسخ رابط الموقع</button>
@@ -2051,12 +2042,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     var iosChrome = ios && !inApp && /CriOS|EdgiOS/.test(ua);
     function iosGuide(){
       var g = document.getElementById('iosGuide');
-      document.getElementById('iosgAuto').hidden = !iosSafari;
-      document.getElementById('iosgSafari').hidden = !(iosSafari || iosChrome);
-      document.getElementById('iosgSafari').open = iosChrome;
-      document.getElementById('iosgOther').hidden = iosSafari || iosChrome;
-      document.getElementById('iosgArrow').hidden = true;
-      if(iosSafari){ track('تطبيق/تنزيل-آيفون'); setTimeout(function(){ location.href = 'saad-albudairi.mobileconfig'; }, 350); }
+      document.getElementById('iosgSafari').hidden = inApp;
+      document.getElementById('iosgOther').hidden = !inApp;
+      document.getElementById('iosgArrow').hidden = !iosSafari;
       g.hidden = false; track('تطبيق/شرح-آيفون');
     }
     document.getElementById('iosgX').addEventListener('click', function(){ document.getElementById('iosGuide').hidden = true; });
