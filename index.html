@@ -58,6 +58,7 @@ html[data-theme="light"]{
 html[data-theme="light"] .logo-hex polygon{fill:#0E1A33}
 html[data-theme="light"] .cart-btn b.zero{background:#dfe6f2}
 html[data-theme="light"] .stage-tag,html[data-theme="light"] .drag-hint{color:var(--fg)}
+html[data-theme="light"] .stage-tag,html[data-theme="light"] .stage-mode{background:rgba(255,255,255,.88)}
 html[data-theme="light"] .place .phone{color:var(--copper)}
 html[data-theme="light"] .stage-tools button{background:rgba(255,255,255,.85);color:var(--fg);border-color:var(--line)}
 html[data-theme="light"] .stage-tools button[aria-pressed="true"]{background:var(--copper);color:#fff}
@@ -458,7 +459,10 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .stage-tools button,.shop-tools button{font:inherit;font-size:13px;font-weight:600;color:var(--fg);background:rgba(10,17,32,.78);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .stage-tools button:hover,.shop-tools button:hover{border-color:var(--copper)}
 .stage-tools button[aria-pressed="true"],.shop-tools button[aria-pressed="true"]{background:var(--copper);border-color:var(--copper);color:#fff}
-.drag-hint{top:auto;bottom:8px;left:auto;right:8px}
+.stage-mode{position:absolute;bottom:8px;right:8px;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(10,17,32,.78);border:1px solid var(--line);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.stage-mode button{font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);background:none;border:0;border-radius:999px;padding:6px 11px;cursor:pointer}
+.stage-mode button[aria-pressed="true"]{background:var(--copper);color:#fff}
+.stage.m-coil .s-cable,.stage.m-drum .s-cable{display:none}
 #cable{-webkit-mask-image:radial-gradient(ellipse 75% 80% at 50% 50%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 80% at 50% 50%,#000 70%,transparent 100%)}
 .cable-labels{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s}
 .cable-labels.on{opacity:1}
@@ -646,9 +650,14 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <div class="cable-labels" id="cableLabels" aria-hidden="true"></div>
         <div class="drag-hint">اسحب لتدوير الكيبل</div>
         <div class="stage-tools" role="group" aria-label="التحكم بالكيبل">
-          <button type="button" id="cStrip">فكّك الطبقات</button>
-          <button type="button" id="cLabels" aria-pressed="false">أسماء الطبقات</button>
+          <button type="button" id="cStrip" class="s-cable">فكّك الطبقات</button>
+          <button type="button" id="cLabels" class="s-cable" aria-pressed="false">أسماء الطبقات</button>
           <button type="button" id="cSpin" aria-pressed="true">الدوران</button>
+        </div>
+        <div class="stage-mode" role="group" aria-label="طريقة العرض">
+          <button type="button" data-mode="cable" aria-pressed="true">الكيبل</button>
+          <button type="button" data-mode="coil" aria-pressed="false">لفة 90م</button>
+          <button type="button" data-mode="drum" aria-pressed="false">بكرة 1000م</button>
         </div>
         <div class="stage-tag"><strong><span class="num" id="tagSize">4×16</span> ملم²</strong><span id="tagName">كيبل مدرّع نحاس</span></div>
       </div></div>
@@ -1132,7 +1141,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     var id = e.target.id;
     if(id==='gov') st.gov = e.target.value;
     if(id==='origin') st.origin = e.target.value;
-    if(id==='unit') st.unit = e.target.value;
+    if(id==='unit'){ st.unit = e.target.value; if(window.__cable && window.__cable.mode) window.__cable.mode(/لفة/.test(st.unit) ? 'coil' : (/بكرة/.test(st.unit) ? 'drum' : 'cable')); }
     updLinks();
   });
   slot.addEventListener('input', function(e){
@@ -1622,12 +1631,19 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       var cap = new THREE.SphereGeometry(r,12,10); [pts[0],pts[segs]].forEach(function(p){ var s = new THREE.Mesh(cap,mat); s.position.copy(p); grp.add(s); });
       return grp;
     }
-    var COPPER = new THREE.Color(0xe3905c).convertSRGBToLinear(), ALU = new THREE.Color(0xc9ccd1).convertSRGBToLinear();
-    var condMat = new THREE.MeshStandardMaterial({color:COPPER.clone(), metalness:1, roughness:.22});
+    var COPPER = new THREE.Color(0xd9845a).convertSRGBToLinear(), ALU = new THREE.Color(0xcfd3d8).convertSRGBToLinear();
+    /* fine surface detail: brushed streaks on metal, grain on the plastic */
+    function noiseTex(w, h, fn){ var c = document.createElement('canvas'); c.width = w; c.height = h; var g = c.getContext('2d'); fn(g, w, h); var t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); return t; }
+    var brushed = noiseTex(512, 64, function(g, w, h){ g.fillStyle = '#5a5a5a'; g.fillRect(0,0,w,h); for(var i=0;i<900;i++){ var v = 60 + Math.random()*120|0; g.fillStyle = 'rgba('+v+','+v+','+v+',.55)'; g.fillRect(Math.random()*w, Math.random()*h, 30 + Math.random()*160, 1); } });
+    brushed.repeat.set(3, 1);
+    var grain = noiseTex(256, 256, function(g, w, h){ g.fillStyle = '#808080'; g.fillRect(0,0,w,h); for(var i=0;i<9000;i++){ var v = 100 + Math.random()*60|0; g.fillStyle = 'rgb('+v+','+v+','+v+')'; g.fillRect(Math.random()*w, Math.random()*h, 1 + Math.random()*2, 1 + Math.random()*2); } });
+    grain.repeat.set(10, 6);
+    var condMat = new THREE.MeshPhysicalMaterial({color:COPPER.clone(), metalness:1, roughness:.3, roughnessMap:brushed, clearcoat:.25, clearcoatRoughness:.2});
     var steel = new THREE.MeshStandardMaterial({color:new THREE.Color(0xc6c9ce).convertSRGBToLinear(), metalness:1, roughness:.28});
     var bed = new THREE.MeshStandardMaterial({color:new THREE.Color(0x433d38).convertSRGBToLinear(), roughness:.9, envMapIntensity:.35});
-    var sheath = new THREE.MeshPhysicalMaterial({color:0xffffff, map:printTex, roughness:.48, clearcoat:.35, clearcoatRoughness:.4, envMapIntensity:.7});
-    var insul = [0x7a3c1c,0x161616,0x85878a,0x2453a6].map(function(c){ return new THREE.MeshPhysicalMaterial({color:new THREE.Color(c).convertSRGBToLinear(), roughness:.4, clearcoat:.4, clearcoatRoughness:.32, envMapIntensity:.5}); });
+    var sheath = new THREE.MeshPhysicalMaterial({color:0xffffff, map:printTex, roughness:.5, bumpMap:grain, bumpScale:.0045, clearcoat:.45, clearcoatRoughness:.35, envMapIntensity:.75});
+    var sheathCut = new THREE.MeshPhysicalMaterial({color:0x1b1c1f, roughness:.75, envMapIntensity:.4});
+    var insul = [0x7a3c1c,0x161616,0x85878a,0x2453a6].map(function(c){ return new THREE.MeshPhysicalMaterial({color:new THREE.Color(c).convertSRGBToLinear(), roughness:.38, bumpMap:grain, bumpScale:.002, clearcoat:.5, clearcoatRoughness:.28, envMapIntensity:.55}); });
 
     /* each layer is trimmed by a moving plane, so the cable can be "stripped" layer by layer */
     var END = {armour:2.55, bed:3.35, insul:4.3, cond:5.25}, CUT = 1.4;
@@ -1641,7 +1657,12 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       Object.keys(END).forEach(function(k){ lp[k].constant = cur[k] + .003; wp[k].copy(lp[k]).applyMatrix4(cable.matrixWorld); });
     }
 
-    cable.add(cyl(1.0, X0, CUT, sheath, 160));
+    (function(){ /* sheath as an open tube with a real wall thickness at the cut */
+      var geo = new THREE.CylinderGeometry(1, 1, CUT - X0, 160, 1, true); geo.rotateZ(-Math.PI/2);
+      var m = new THREE.Mesh(geo, sheath); m.position.x = (X0 + CUT)/2; m.castShadow = m.receiveShadow = true; cable.add(m);
+      var lip = new THREE.Mesh(new THREE.RingGeometry(.84, 1, 96), sheathCut); lip.rotation.y = Math.PI/2; lip.position.x = CUT; cable.add(lip);
+      var bevel = new THREE.Mesh(new THREE.TorusGeometry(.995, .012, 8, 128), sheathCut); bevel.rotation.y = Math.PI/2; bevel.position.x = CUT; cable.add(bevel);
+    })();
     var armour = new THREE.Group(); cable.add(armour);
     for(var i=0;i<48;i++) armour.add(helix(.83, i/48*Math.PI*2, 7, X0, END.armour, .05, steel, 150));
     var bedMesh = cyl(.775, X0, END.bed, bed, 128); cable.add(bedMesh);
@@ -1664,6 +1685,122 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       cable.add(coresGrp);
     }
     buildCores(4);
+
+    /* ---------- coil (لفة) and drum (بكرة) ---------- */
+    var mode = 'cable', coilGrp = null, drumGrp = null, windMats = [];
+    function windTex(){
+      var c = document.createElement('canvas'); c.width = 64; c.height = 64; var g = c.getContext('2d');
+      g.fillStyle = cfg.col.hex; g.fillRect(0,0,64,64);
+      if(cfg.col.stripe){ g.fillStyle = cfg.col.stripe; g.fillRect(0, 10, 64, 16); g.fillRect(0, 42, 64, 16); }
+      for(var i=0;i<160;i++){ g.fillStyle = 'rgba(255,255,255,'+(Math.random()*.05)+')'; g.fillRect(Math.random()*64, Math.random()*64, 1, 1); }
+      var t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+    }
+    function windMat(){ var m = new THREE.MeshPhysicalMaterial({map:windTex(), roughness:.45, bumpMap:grain, bumpScale:.003, clearcoat:.45, clearcoatRoughness:.3, envMapIntensity:.7}); windMats.push(m); return m; }
+    function recolorWind(){ windMats.forEach(function(m){ if(m.map) m.map.dispose(); m.map = windTex(); m.needsUpdate = true; }); }
+    function cutEnd(grp, pos, dir, r){ /* a cut cable end showing the cores */
+      var q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(1,0,0), dir);
+      var e = new THREE.Group(); e.position.copy(pos); e.quaternion.copy(q);
+      var cap = new THREE.Mesh(new THREE.CircleGeometry(r*.84, 32), sheathCut); cap.rotation.y = Math.PI/2; cap.position.x = .002; e.add(cap);
+      var ring = new THREE.Mesh(new THREE.RingGeometry(r*.84, r, 32), windMats[0]); ring.rotation.y = Math.PI/2; ring.position.x = .003; e.add(ring);
+      var c = CORES[curN] || CORES[4];
+      c.pos.forEach(function(pp, k){
+        var ins = new THREE.Mesh(new THREE.CylinderGeometry(c.rIns*r*.8, c.rIns*r*.8, .08, 20), insul[c.col[k]]); ins.rotation.z = -Math.PI/2; ins.position.set(.04, pp[0]*r*.8, pp[1]*r*.8); e.add(ins);
+        var cu = new THREE.Mesh(new THREE.CylinderGeometry(c.sr*r*1.6, c.sr*r*1.6, .16, 14), condMat); cu.rotation.z = -Math.PI/2; cu.position.set(.1, pp[0]*r*.8, pp[1]*r*.8); e.add(cu);
+      });
+      grp.add(e);
+    }
+    function buildCoil(){
+      var g = new THREE.Group(), mat = windMat(), R0 = 2.15, tr = .1, n = 0;
+      /* windings packed in a round bundle */
+      for(var ry=-3; ry<=3; ry++) for(var rx=-3; rx<=3; rx++){
+        var oy = ry*tr*1.75, ox = rx*tr*2.02 + (ry%2 ? tr : 0);
+        if(ox*ox + oy*oy > Math.pow(tr*6.2, 2)) continue;
+        var t = new THREE.Mesh(new THREE.TorusGeometry(R0 + ox, tr, 10, 120), mat); t.rotation.x = Math.PI/2; t.position.y = oy; t.castShadow = t.receiveShadow = true; g.add(t); n++;
+      }
+      /* binding straps */
+      var strapM = new THREE.MeshStandardMaterial({color:new THREE.Color(0x2f6fd1).convertSRGBToLinear(), roughness:.5});
+      [0, 2.1, 4.2].forEach(function(a){
+        var s = new THREE.Mesh(new THREE.TorusGeometry(tr*7.2, .028, 8, 48), strapM);
+        s.position.set(Math.cos(a)*R0, 0, Math.sin(a)*R0); s.rotation.y = -a; s.scale.set(1, .62, 1); g.add(s);
+      });
+      /* the loose end, cut to show the cores */
+      var end = new THREE.CatmullRomCurve3([new THREE.Vector3(R0+tr*5, .2, .2), new THREE.Vector3(R0+.9, .45, 1.1), new THREE.Vector3(R0+1.5, .55, 2.2)]);
+      var tail = new THREE.Mesh(new THREE.TubeGeometry(end, 40, tr*1.25, 14, false), mat); tail.castShadow = true; g.add(tail);
+      cutEnd(g, end.getPoint(1), end.getTangent(1).normalize(), tr*1.25);
+      /* tag with the brand */
+      var tc = document.createElement('canvas'); tc.width = 256; tc.height = 128; var tg = tc.getContext('2d');
+      tg.fillStyle = '#f4f1ea'; tg.fillRect(0,0,256,128); tg.fillStyle = '#123072'; tg.font = '700 40px "Aref Ruqaa","IBM Plex Sans Arabic",serif'; tg.textAlign = 'center'; tg.direction = 'rtl'; tg.fillText('سعد البديري', 128, 56);
+      tg.font = '600 26px "Saira Condensed",sans-serif'; tg.direction = 'ltr'; tg.fillStyle = '#333'; tg.fillText('90 m · ' + cfg.size + ' mm²', 128, 100);
+      var tt = new THREE.CanvasTexture(tc); tt.encoding = THREE.sRGBEncoding;
+      var tag = new THREE.Mesh(new THREE.PlaneGeometry(.9, .45), new THREE.MeshStandardMaterial({map:tt, roughness:.8, side:THREE.DoubleSide}));
+      tag.position.set(-R0 - .1, .05, .9); tag.rotation.set(-.2, -1.2, 0); g.add(tag); g.userData.tag = {tex:tt, canvas:tc};
+      g.position.set(0, -1.4 + tr*6.2*.9, 0); g.rotation.x = -.08;
+      return g;
+    }
+    function woodTex(face){
+      var c = document.createElement('canvas'); c.width = 1024; c.height = 1024; var g = c.getContext('2d');
+      var tones = ['#b07a46','#a46f3e','#bb8650','#9c683a','#b47d48'];
+      for(var i=0;i<8;i++){ g.fillStyle = tones[i % tones.length]; g.fillRect(i*128, 0, 128, 1024);
+        for(var k=0;k<40;k++){ g.strokeStyle = 'rgba(70,40,15,'+(.08 + Math.random()*.12)+')'; g.lineWidth = 1 + Math.random()*2; g.beginPath(); var x = i*128 + Math.random()*128; g.moveTo(x, 0); g.bezierCurveTo(x + 10 - Math.random()*20, 340, x + 10 - Math.random()*20, 680, x + 6 - Math.random()*12, 1024); g.stroke(); }
+        g.fillStyle = 'rgba(40,20,5,.55)'; g.fillRect(i*128, 0, 3, 1024); }
+      for(var kn=0; kn<6; kn++){ var kx = Math.random()*1024, ky = Math.random()*1024; var rg = g.createRadialGradient(kx,ky,1,kx,ky,22); rg.addColorStop(0,'rgba(60,30,10,.7)'); rg.addColorStop(1,'rgba(60,30,10,0)'); g.fillStyle = rg; g.beginPath(); g.ellipse(kx, ky, 12, 26, 0, 0, 7); g.fill(); }
+      if(face){
+        g.save(); g.translate(512, 512);
+        g.strokeStyle = 'rgba(18,48,114,.85)'; g.lineWidth = 14; g.beginPath(); g.arc(0, 0, 330, 0, 7); g.stroke();
+        g.fillStyle = 'rgba(18,48,114,.9)'; g.textAlign = 'center'; g.direction = 'rtl';
+        g.font = '700 120px "Aref Ruqaa","IBM Plex Sans Arabic",serif'; g.fillText('سعد البديري', 0, -150);
+        g.direction = 'ltr'; g.font = '700 64px "Saira Condensed",sans-serif'; g.fillText('1000 m', 0, 190);
+        g.font = '700 54px "Saira Condensed",sans-serif'; g.fillText(cfg.size + ' mm²', 0, 270);
+        g.restore();
+      }
+      var t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      if(face){ t.center.set(.5,.5); t.rotation = Math.PI; }
+      return t;
+    }
+    function buildDrum(){
+      var g = new THREE.Group(), FR = 2.45, FT = .2, W = 2.3, BR = 1.15, tr = .115;
+      var faceTex = woodTex(true), sideTex = woodTex(false);
+      var faceM = new THREE.MeshStandardMaterial({map:faceTex, roughness:.85, bumpMap:sideTex, bumpScale:.01});
+      var rimM = new THREE.MeshStandardMaterial({map:sideTex, roughness:.9});
+      [-1, 1].forEach(function(sd){
+        var f = new THREE.Mesh(new THREE.CylinderGeometry(FR, FR, FT, 72), [rimM, faceM, faceM]); f.rotation.z = Math.PI/2; f.position.x = sd*(W/2 + FT/2); f.castShadow = f.receiveShadow = true; g.add(f);
+        if(sd < 0) f.rotation.x = Math.PI;
+        var hub = new THREE.Mesh(new THREE.CylinderGeometry(.42, .42, FT + .06, 32), new THREE.MeshStandardMaterial({color:0x2a2d33, metalness:.8, roughness:.4})); hub.rotation.z = Math.PI/2; hub.position.x = f.position.x; g.add(hub);
+        var hole = new THREE.Mesh(new THREE.CircleGeometry(.22, 24), new THREE.MeshBasicMaterial({color:0x050608})); hole.rotation.y = sd*Math.PI/2; hole.position.x = f.position.x + sd*(FT/2 + .035); g.add(hole);
+        for(var b=0;b<8;b++){ var a = b/8*Math.PI*2, bolt = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, FT + .08, 10), new THREE.MeshStandardMaterial({color:0x9aa0a8, metalness:1, roughness:.35})); bolt.rotation.z = Math.PI/2; bolt.position.set(f.position.x, Math.cos(a)*1.65, Math.sin(a)*1.65); g.add(bolt); }
+      });
+      var mat = windMat(), layers = 6, perRow = Math.floor(W/(tr*2));
+      for(var l=0;l<layers;l++){
+        var rr = BR + tr + l*tr*1.8, geo = new THREE.TorusGeometry(rr, tr, 10, 120), cnt = l===layers-1 ? Math.floor(perRow*.62) : perRow;
+        var im = new THREE.InstancedMesh(geo, mat, cnt), m4 = new THREE.Matrix4(), q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), Math.PI/2);
+        for(var k=0;k<cnt;k++){ var x = -W/2 + tr + k*tr*2 + (l%2 ? tr*.5 : 0); if(x > W/2 - tr) x = W/2 - tr; m4.compose(new THREE.Vector3(x,0,0), q, new THREE.Vector3(1,1,1)); im.setMatrixAt(k, m4); }
+        im.castShadow = im.receiveShadow = true; g.add(im);
+      }
+      /* the cable leaving the drum to the floor, cut at the end */
+      var topR = BR + tr + (layers-1)*tr*1.8;
+      var end = new THREE.CatmullRomCurve3([new THREE.Vector3(W/2 - tr*3, -.3, topR), new THREE.Vector3(W/2 - .2, -1.4, topR + .6), new THREE.Vector3(W/2 + .4, -2.2, topR + 1.6), new THREE.Vector3(W/2 + 1.6, -2.3, topR + 2.4)]);
+      var tail = new THREE.Mesh(new THREE.TubeGeometry(end, 60, tr*1.25, 14, false), mat); tail.castShadow = true; g.add(tail);
+      cutEnd(g, end.getPoint(1), end.getTangent(1).normalize(), tr*1.25);
+      g.position.set(0, -1.4 + FR, 0); g.rotation.y = -.55;
+      g.userData.face = faceTex;
+      return g;
+    }
+    var MODES = {cable:{t:[.8,.1,0], d:[15.2,18]}, coil:{t:[0,-.6,0], d:[11.5,14]}, drum:{t:[0,1.0,0], d:[15,18.5]}};
+    function setMode(m){
+      if(!MODES[m]) m = 'cable'; mode = m;
+      if(m==='coil' && !coilGrp){ coilGrp = buildCoil(); scene.add(coilGrp); }
+      if(m==='drum' && !drumGrp){ drumGrp = buildDrum(); scene.add(drumGrp); }
+      cable.visible = m==='cable'; if(coilGrp) coilGrp.visible = m==='coil'; if(drumGrp) drumGrp.visible = m==='drum';
+      var stg = document.getElementById('stage'); stg.classList.toggle('m-coil', m==='coil'); stg.classList.toggle('m-drum', m==='drum');
+      document.querySelectorAll('.stage-mode [data-mode]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.mode===m); });
+      controls.target.fromArray(MODES[m].t); frame();
+    }
+    function refreshExtras(){
+      recolorWind();
+      if(coilGrp){ scene.remove(coilGrp); coilGrp = null; if(mode==='coil'){ coilGrp = buildCoil(); scene.add(coilGrp); } }
+      if(drumGrp){ scene.remove(drumGrp); drumGrp = null; if(mode==='drum'){ drumGrp = buildDrum(); scene.add(drumGrp); } }
+    }
+    document.querySelector('.stage-mode').addEventListener('click', function(e){ var b = e.target.closest('[data-mode]'); if(b) setMode(b.dataset.mode); });
 
     /* stripping animation */
     var anim = null;
@@ -1709,8 +1846,8 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     }
     var showLabels = false, v3 = new THREE.Vector3();
     function placeLabels(){
-      wrap.classList.toggle('on', showLabels && !anim);
-      if(!showLabels || anim) return;
+      wrap.classList.toggle('on', showLabels && !anim && mode==='cable');
+      if(!showLabels || anim || mode!=='cable') return;
       var w = canvas.clientWidth, h = canvas.clientHeight;
       LAB.forEach(function(L){
         if(!L.on){ L.el.hidden = true; return; }
@@ -1725,8 +1862,8 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     function frame(){
       var w = canvas.clientWidth, h = canvas.clientHeight; if(!w||!h) return;
       renderer.setSize(w, h, false); camera.aspect = w/h;
-      var dist = w/h < 1.2 ? 18 : 15.2;
-      camera.position.copy(new THREE.Vector3(7.4,4.0,11.8).normalize().multiplyScalar(dist)).add(controls.target);
+      var md = MODES[mode] || MODES.cable, dist = w/h < 1.2 ? md.d[1] : md.d[0];
+      camera.position.copy(new THREE.Vector3(7.4, mode==='coil' ? 6.2 : 4.0, 11.8).normalize().multiplyScalar(dist)).add(controls.target);
       camera.updateProjectionMatrix();
     }
     new ResizeObserver(frame).observe(canvas); frame();
@@ -1755,8 +1892,10 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       cfg.code = p.code; cfg.size = size; cfg.volt = p.volt || '0.6/1 kV'; cfg.std = p.std || 'IEC 60502-1';
       cfg.metal = p.metal; cfg.armour = !!p.armour; cfg.flex = /Flex/i.test(p.code||''); if(p.color) cfg.col = p.color;
       armour.visible = cfg.armour; condMat.color.copy(p.metal==='al' ? ALU : COPPER);
+      var recol = !windMats.length || true;
       buildCores(n); labelText(); drawPrint(); if(changed) strip();
-    } };
+      if(recol) refreshExtras();
+    }, mode:setMode };
   }
 
   /* ---------- 3D route to the shop (built from the shop video, no people) ---------- */
