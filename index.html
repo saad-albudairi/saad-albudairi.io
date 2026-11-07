@@ -26,6 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Noto+Kufi+Arabic:wght@600;800&family=Saira+Condensed:wght@500;600;700&display=swap">
+<script>try{var t=localStorage.getItem('sab-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
 <style>
 /* Layout: calm dark page, one idea per screen — hero with live cable, three material tiles that open into sizes, interactive Shorja map */
 :root{
@@ -41,12 +42,26 @@
   --alu:#B4BECC;
   --flex:#14B8A6;
   --wa:#25d366;
+  --card:#0C1526;
+  --bar-bg:rgba(10,17,32,.88);
   --font-display:"Noto Kufi Arabic","IBM Plex Sans Arabic",system-ui,sans-serif;
   --font-body:"IBM Plex Sans Arabic",system-ui,sans-serif;
   --font-tech:"Saira Condensed","IBM Plex Sans Arabic",system-ui,sans-serif;
   color-scheme:dark;
 }
 :root{--wa-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 0 1 12 4zm-3.2 4c-.2 0-.6.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3 2.4.9 2.9.8 3.4.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.4l-2-.9c-.3-.1-.5-.2-.7.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6l.5-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6z'/%3E%3C/svg%3E")}
+html[data-theme="light"]{
+  --bg:#F2F5FA;--bg-2:#FFFFFF;--bg-3:#E6ECF6;--glow:#D9E5FB;--line:rgba(20,50,110,.15);
+  --fg:#0E1A33;--muted:#526079;--copper:#1F5FE0;--copper-hi:#1747B0;--alu:#5E6B7E;--card:#FFFFFF;--bar-bg:rgba(242,245,250,.9);
+  color-scheme:light;
+}
+html[data-theme="light"] .logo-hex polygon{fill:#0E1A33}
+html[data-theme="light"] .cart-btn b.zero{background:#dfe6f2}
+html[data-theme="light"] .stage-tag,html[data-theme="light"] .drag-hint{color:var(--fg)}
+html[data-theme="light"] .place .phone{color:var(--copper)}
+html[data-theme="light"] .stage-tools button{background:rgba(255,255,255,.85);color:var(--fg);border-color:var(--line)}
+html[data-theme="light"] .stage-tools button[aria-pressed="true"]{background:var(--copper);color:#fff}
+html[data-theme="light"] .iosg-mock.tb,html[data-theme="light"] .iosg-mock.add{background:#e9edf4}
 *{box-sizing:border-box}
 body{margin:0}
 img{max-width:100%}
@@ -74,7 +89,7 @@ h2{font-size:clamp(28px,4vw,40px);font-weight:800}
 
 /* bar */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(10,17,32,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bar-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .bar > .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo-mark{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
@@ -82,20 +97,51 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .logo-mark svg{margin-top:-2px}
 .logo-hex{flex:none;filter:drop-shadow(0 4px 12px rgba(61,123,255,.35))}
 .bar-act{display:flex;align-items:center;gap:8px}
-.cart-btn{position:relative;display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:14px;color:var(--fg);background:#0C1526;border:1px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer}
+.cart-btn{position:relative;display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:14px;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer}
 .cart-btn .ico{width:20px;height:20px}
 .cart-btn b{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--copper);color:#fff;font-family:var(--font-tech);font-size:13px}
 .cart-btn b.zero{background:#26324a;color:var(--muted)}
 .cart-btn.bump{animation:bump .5s}
 @keyframes bump{40%{transform:scale(1.15)}}
-@media (max-width:460px){.order-now{display:none}.cart-t{display:none}}
+@media (max-width:460px){.order-now{display:none}.cart-t{display:none}.bar-act .app-btn{display:none}.logo b{font-size:23px;white-space:nowrap}.logo-mark svg{width:104px}.logo-hex{width:34px;height:34px}.bar > .wrap{gap:8px}}
 .nav{display:flex;gap:26px;font-size:15px}
 .nav a{text-decoration:none;color:var(--muted);transition:color .2s}
 .nav a:hover{color:var(--fg)}
 .bar .btn{padding:9px 16px}
 
 /* hero */
-.hero{background:radial-gradient(80% 70% at 30% 55%,var(--glow) 0%,var(--bg) 70%)}
+.hero{position:relative;overflow:hidden;background:radial-gradient(80% 70% at 30% 55%,var(--glow) 0%,var(--bg) 70%)}
+.hero > .wrap{position:relative;z-index:1}
+.hero-fx{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+.fx-btn{position:absolute;z-index:2;bottom:10px;inset-inline-start:max(16px,env(safe-area-inset-left,0px));display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:12px;color:var(--muted);background:var(--bar-bg);border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer}
+.fx-dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.fx-btn[aria-pressed="true"] .fx-dot{background:var(--copper);box-shadow:0 0 8px var(--copper)}
+.open-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;text-decoration:none;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.open-pill .led{width:10px;height:10px;border-radius:50%;background:#8a94a6}
+.open-pill.open .led{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.2);animation:ledp 1.6s ease-in-out infinite}
+.open-pill.closed .led{background:#ef4444}
+@keyframes ledp{50%{box-shadow:0 0 0 7px rgba(34,197,94,.05)}}
+.theme-btn{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.theme-btn .ico{width:20px;height:20px}
+.theme-btn .moon{display:none}
+html[data-theme="light"] .theme-btn .sun{display:none}
+html[data-theme="light"] .theme-btn .moon{display:block}
+.size-use{flex-basis:100%;display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.7;padding:10px 12px;border-radius:12px;background:rgba(61,123,255,.08);border:1px solid rgba(61,123,255,.22)}
+.size-use a{color:var(--copper-hi);white-space:nowrap}
+.tabbar{display:none}
+@media (max-width:700px){
+  .tabbar{position:fixed;z-index:9;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+  .tabbar a,.tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:none;border:0;padding:4px 0;cursor:pointer}
+  .tabbar .ico{width:23px;height:23px}
+  .tabbar [aria-current="page"]{color:var(--copper)}
+  .tabbar .tb-call{color:#22c55e}
+  .tabbar .tb-n{position:absolute;top:0;inset-inline-start:calc(50% + 4px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--copper);color:#fff;font-size:11px;line-height:18px;font-family:var(--font-tech)}
+  .tabbar .tb-n.zero{display:none}
+  body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  body .wa-float{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  .ios-tip{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .fx-btn{bottom:6px}
+}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:center;padding-block:56px 40px}
 .hero-copy{display:flex;flex-direction:column;gap:22px}
 .hero h1{font-size:clamp(36px,5.4vw,60px);font-weight:800}
@@ -149,7 +195,7 @@ section.block{padding-block:84px}
 .type-info p{margin:0;color:var(--muted);font-size:15px}
 .label{font-size:13px;color:var(--muted);margin-bottom:10px}
 .sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;direction:ltr}
-.sizes button{font-family:var(--font-tech);font-size:17px;letter-spacing:.04em;color:var(--fg);background:#0C1526;border:1px solid var(--line);border-radius:10px;padding:10px 6px;cursor:pointer;font-variant-numeric:tabular-nums;transition:border-color .15s,background .15s}
+.sizes button{font-family:var(--font-tech);font-size:17px;letter-spacing:.04em;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 6px;cursor:pointer;font-variant-numeric:tabular-nums;transition:border-color .15s,background .15s}
 .sizes button small{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em}
 .sizes button:hover{border-color:var(--tone)}
 .sizes button[aria-pressed="true"]{background:var(--tone);border-color:var(--tone);color:#ffffff}
@@ -184,7 +230,7 @@ select{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1
 .tel{font-family:var(--font-tech);letter-spacing:.04em;direction:ltr;unicode-bidi:isolate;white-space:nowrap;font-variant-numeric:tabular-nums}
 .place .btn{width:100%}
 .nums{display:flex;flex-direction:column;gap:8px}
-.numrow{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:12px 14px;border-radius:12px;background:#0C1526;border:1px solid var(--line)}
+.numrow{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
 .numrow .nl{font-size:13px;color:var(--muted)}
 .numrow .phone{font-size:23px;justify-self:start}
 .nact{display:flex;gap:6px}
@@ -239,7 +285,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;
 .iosg-x{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
 .iosg-sub{margin:6px 0 12px;color:var(--muted);font-size:14px}
 .iosg-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:g}
-.iosg-steps li{counter-increment:g;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;background:#0C1526;border:1px solid var(--line);position:relative;padding-inline-start:52px}
+.iosg-steps li{counter-increment:g;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--line);position:relative;padding-inline-start:52px}
 .iosg-steps li::before{content:counter(g);position:absolute;inset-inline-start:14px;top:14px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--copper);color:#fff;font-family:var(--font-tech);font-weight:700}
 .iosg-txt{display:flex;flex-direction:column;gap:3px;font-size:14px;line-height:1.6}
 .iosg-txt b{font-size:15px}
@@ -281,7 +327,7 @@ details.iosg-safari summary{cursor:pointer;font-weight:600;font-size:14px;color:
 .cart-x{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--fg);font-size:16px;cursor:pointer}
 .cart-body{flex:1;overflow:auto;padding:16px 20px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
 .cart-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:ci}
-.cart-list li{counter-increment:ci;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:12px;border-radius:12px;background:#0C1526;border:1px solid var(--line)}
+.cart-list li{counter-increment:ci;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:12px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
 .cart-list li::before{content:counter(ci);grid-row:1/3;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(61,123,255,.18);color:var(--copper-hi);font-family:var(--font-tech);font-size:14px}
 .ci-name{font-weight:600;font-size:15px}
 .ci-meta{grid-column:2;font-size:13px;color:var(--muted)}
@@ -310,7 +356,7 @@ details.iosg-safari summary{cursor:pointer;font-weight:600;font-size:14px;color:
 .btn.wa.next{animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 6px rgba(37,211,102,.28)}}
 /* hours */
-.hours{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:#0C1526;border:1px solid var(--line)}
+.hours{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
 .hrow{display:flex;justify-content:space-between;gap:10px;font-size:15px;color:var(--muted)}
 .hrow.today{color:var(--fg);font-weight:600}
 .now{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
@@ -338,7 +384,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .meters .wide{grid-column:1/-1}
 .seg button:disabled{opacity:.35;cursor:not-allowed}
-.meters div{display:flex;flex-direction:column;gap:2px;padding:10px;border-radius:10px;background:#0C1526}
+.meters div{display:flex;flex-direction:column;gap:2px;padding:10px;border-radius:10px;background:var(--card)}
 .meters span{font-size:12px;color:var(--muted)}
 .meters b{font-size:15px}
 .meter-bar{height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
@@ -348,7 +394,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .cmp{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;align-items:start}
 .cmp-live{display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:18px;border:1px solid var(--line);background:var(--bg-2)}
 .cmp-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.cmp-card{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:#0C1526;border:1px solid var(--line)}
+.cmp-card{display:flex;flex-direction:column;gap:2px;padding:16px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
 .cmp-card.cu{border-color:rgba(184,100,46,.55)}
 .cmp-card.al{border-color:rgba(201,204,209,.5)}
 .cmp-card .tag{font-size:13px;color:var(--muted)}
@@ -427,7 +473,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .shop-tools{position:absolute;top:12px;right:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:calc(100% - 24px)}
 .shop-label{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
 .shop-label span{position:absolute;left:0;bottom:10px;transform:translateX(-50%);white-space:nowrap;font-weight:700;font-size:14px;color:#fff;background:var(--copper);border-radius:999px;padding:5px 14px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
-.coords{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:#0C1526;border:1px solid var(--line)}
+.coords{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
 .coords span{font-size:13px;color:var(--muted)}
 .coords b{font-family:var(--font-tech);font-size:18px;letter-spacing:.04em;user-select:all;flex:1 1 auto}
 .coords .copy{font:inherit;font-size:13px;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
@@ -441,7 +487,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 /* colours */
 .colors{display:flex;flex-direction:column;gap:4px}
 .swatches{display:flex;flex-wrap:wrap;gap:8px}
-.swatches button{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:14px;color:var(--fg);background:#0C1526;border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;cursor:pointer}
+.swatches button{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:14px;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;cursor:pointer}
 .swatches button i,.pick-c i{width:20px;height:20px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
 .swatches button:hover{border-color:var(--tone)}
 .swatches button[aria-pressed="true"]{border-color:var(--tone);box-shadow:0 0 0 2px var(--tone)}
@@ -472,7 +518,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .ticks i{position:absolute;top:0;width:8px;height:8px;margin-right:-4px;border-radius:50%;background:var(--copper)}
 .route-steps{list-style:none;margin:0;padding:0 0 4px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin}
 .route-steps button{flex:none;display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:14px;color:var(--muted);background:var(--bg-2);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;cursor:pointer;white-space:nowrap}
-.route-steps button b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-tech);font-size:14px;background:#0C1526;color:var(--fg)}
+.route-steps button b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-tech);font-size:14px;background:var(--card);color:var(--fg)}
 .route-steps button.done{color:var(--fg)}
 .route-steps button.done b{background:rgba(61,123,255,.3)}
 .route-steps button[aria-current="step"]{color:#fff;border-color:var(--copper);background:var(--copper)}
@@ -561,6 +607,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       </span>
     </a>
     <div class="bar-act">
+      <button type="button" class="theme-btn" id="themeBtn" aria-label="الوضع النهاري" title="نهاري / ليلي"><svg class="ico sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg><svg class="ico moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg></button>
       <button type="button" class="cart-btn" id="cartBtn" aria-label="سلة الطلب"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><span class="cart-t">السلة</span><b id="cartN">0</b></button>
       <button type="button" class="app-btn" id="appBtn" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M12 8v6M9.5 11.5 12 14l2.5-2.5"/></svg><span class="app-t">نزّل التطبيق</span></button>
       <a class="btn solid order-now" href="#products">اطلب الآن</a>
@@ -581,8 +628,11 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 
 <main id="top">
   <section class="hero" id="model" data-view="home">
+    <canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
+    <button type="button" class="fx-btn" id="fxBtn" aria-pressed="true"><span class="fx-dot"></span><span id="fxTxt">الخلفية المتحركة: شغّالة</span></button>
     <div class="wrap">
       <div class="hero-copy">
+        <a class="open-pill" href="#where" id="openPill"><span class="led"></span><span class="op-t">أوقات الدوام</span></a>
         <div class="eyebrow">كيبلات كهربائية · بغداد</div>
         <h1>كيبلات <em>نحاس وفافون</em> وفلكس</h1>
         <p class="lead">بالشورجة منذ 1991، ونوصل لكل محافظات العراق. نجهّز المقاولين والمهندسين بكل الأنواع والقياسات.</p>
@@ -942,6 +992,14 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   <button type="button" id="iosTipX">تمام</button>
 </div>
 
+<nav class="tabbar" aria-label="القائمة السفلية">
+  <a href="#home" data-tab="home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>الرئيسية</a>
+  <a href="#products" data-tab="products"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>المنتجات</a>
+  <button type="button" id="tabCart"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><b class="tb-n zero" id="tabN">0</b>السلة</button>
+  <a href="#calc" data-tab="calc"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h2M12 18h4"/></svg>الحاسبة</a>
+  <a class="tb-call" href="tel:+9647707368351"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>اتصال</a>
+</nav>
+
 <a class="wa-float" data-wa target="_blank" rel="noopener" href="https://wa.me/9647707368351" aria-label="راسلنا علواتساب"><span class="wa-i"></span><span class="wa-float-t">واتساب</span></a>
 <footer><div class="wrap"><span>سعد البديري للكيبلات · منذ 1991 · الشورجة، بغداد · المحل <bdi class="tel" dir="ltr">0770 736 8351</bdi> · المسؤول <bdi class="tel" dir="ltr">0770 074 0146</bdi></span><span>© 2026 سعد البديري</span></div></footer>
 </div>
@@ -1010,6 +1068,12 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     return 'كيبل ' + st.g.name + (st.g.id==='cu' ? ' ' + st.a.name : '') + ' ' + coreName();
   }
   function sizeLabel(s){ return st.n + '×' + s; }
+  var USE = {'1.5':'الإنارة ونقاط الضوء','2.5':'البلاكات العادية (السوكيتات) والمراوح','4':'سخان الماي أو سبلت 1 طن','6':'سبلت 1.5 لـ 2 طن، أو الفرن الكهربائي','10':'سبلت 3 طن، أو خط رئيسي لشقة صغيرة','16':'الخط الرئيسي لبيت فاز واحد','25':'بيت كبير، أو خط المولدة للبيت','35':'بيت كبير ثلاث فاز، أو عمارة صغيرة','50':'عمارة صغيرة أو ورشة','70':'عمارة سكنية أو ورشة كبيرة','95':'معمل صغير أو مجمع تجاري صغير','120':'معمل، أو تغذية من مولدة أهلية','150':'مولدة أهلية كبيرة أو مجمع','185':'المجمعات والمعامل الكبيرة','240':'التغذية الرئيسية للمولدات والمحولات الكبيرة'};
+  function sizeUse(){
+    var u = USE[st.size]; if(!u) return '';
+    var note = st.g.id==='al' ? ' (الفافون يتحمّل أقل من النحاس بنفس القياس)' : '';
+    return '<div class="size-use"><span>💡</span><span><b>يصلح عادةً لـ:</b> ' + u + note + '. هذا تقريبي، والقياس الصح يعتمد على الحمل والمسافة. <a href="#calc">احسبه بالحاسبة ←</a></span></div>';
+  }
   function message(){
     return 'مرحبا محل سعد البديري، أريد سعر:\nالنوع: ' + itemName() + ' (' + st.a.ar + ')\nالقياس: \u2066' + sizeLabel(st.size) + '\u2069 ملم²\nاللون: ' + COLORS[st.color].name + '\nالمنشأ: ' + st.origin + '\nالكمية: ' + (st.qty ? st.qty + ' ' + st.unit : '___ ' + st.unit) + '\nالتوصيل إلى: ' + st.gov;
   }
@@ -1035,7 +1099,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
           '<div class="sizes">'+SIZES.map(function(s){ return '<button type="button" data-s="'+s+'" aria-pressed="'+(s===st.size)+'">'+sizeLabel(s)+'<small>ملم²</small></button>'; }).join('')+'</div></div>'+
         '<div class="order">'+
           (st.size
-            ? '<div class="pick"><b>'+itemName()+'</b> · <span class="tech">'+sizeLabel(st.size)+' ملم²</span> · <span class="pick-c"><i style="background:'+swatchBg(st.color)+'"></i>'+COLORS[st.color].name+'</span></div>'+
+            ? '<div class="pick"><b>'+itemName()+'</b> · <span class="tech">'+sizeLabel(st.size)+' ملم²</span> · <span class="pick-c"><i style="background:'+swatchBg(st.color)+'"></i>'+COLORS[st.color].name+'</span></div>'+sizeUse()+
               '<div class="order-grid">'+
                 '<label class="fld"><span>المنشأ</span><select id="origin">'+ORIGINS.map(function(x){ return '<option'+(x===st.origin?' selected':'')+'>'+x+'</option>'; }).join('')+'</select></label>'+
                 '<label class="fld"><span>الكمية</span><input type="text" id="qty" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="مثلاً 100" value="'+st.qty+'"></label>'+
@@ -1092,6 +1156,13 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       var box = document.getElementById('openNow');
       box.classList.toggle('open', open); box.classList.toggle('closed', !open);
       document.getElementById('openTxt').textContent = open ? 'مفتوح هسه · يسد الساعة ' + (fri ? '12 الظهر' : '3 العصر') : 'مسدود هسه · يفتح الساعة 7 الصبح';
+      var pill = document.getElementById('openPill');
+      if(pill){
+        pill.classList.toggle('open', open); pill.classList.toggle('closed', !open);
+        var left = close - h, lt;
+        if(open){ lt = left < 1 ? 'باقي ' + Math.max(1, Math.round(left*60)) + ' دقيقة' : (left < 1.5 ? 'باقي ساعة' : (left < 2.5 ? 'باقي ساعتين' : 'لحد ' + (fri ? '12 الظهر' : '3 العصر'))); }
+        pill.querySelector('.op-t').textContent = open ? 'مفتوح هسه · ' + lt + (left < 2.5 ? ' على السد' : '') : (h < 7 ? 'مسدود هسه · يفتح اليوم 7 الصبح' : 'مسدود هسه · يفتح باچر 7 الصبح');
+      }
       document.querySelectorAll('.hrow').forEach(function(r){ r.classList.toggle('today', (r.dataset.day==='fri')===fri); });
     }
     tick(); setInterval(tick, 60000);
@@ -1235,7 +1306,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   function saveCart(){ try{ localStorage.setItem('sab-cart', JSON.stringify(cart)); localStorage.setItem('sab-cust', JSON.stringify(cust)); }catch(err){} }
   function enDigits(v){ return String(v).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }).replace(/[۰-۹]/g, function(d){ return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d); }); }
   function esc(t){ return String(t).replace(/[&<>"]/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]; }); }
-  function cartCount(){ var b = document.getElementById('cartN'); b.textContent = cart.length; b.classList.toggle('zero', !cart.length); }
+  function cartCount(){ var b = document.getElementById('cartN'); b.textContent = cart.length; b.classList.toggle('zero', !cart.length); var t = document.getElementById('tabN'); if(t){ t.textContent = cart.length; t.classList.toggle('zero', !cart.length); } }
   function addToCart(){
     if(!st.g || !st.size) return;
     var q = parseInt(st.qty,10);
@@ -1299,6 +1370,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   (function(){
     cartCount();
     document.getElementById('cartBtn').addEventListener('click', openCart);
+    document.getElementById('tabCart').addEventListener('click', openCart);
     var box = document.getElementById('cart');
     box.addEventListener('click', function(e){
       if(e.target.closest('[data-close]')){ closeCart(); return; }
@@ -1339,6 +1411,58 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !box.hidden) closeCart(); });
   })();
 
+  /* ---------- theme (day / night) ---------- */
+  (function(){
+    var b = document.getElementById('themeBtn'), root = document.documentElement;
+    function sync(){ var l = root.getAttribute('data-theme')==='light'; b.setAttribute('aria-label', l ? 'الوضع الليلي' : 'الوضع النهاري'); var m = document.querySelector('meta[name=theme-color]'); if(m) m.content = l ? '#F2F5FA' : '#0A1120'; }
+    b.addEventListener('click', function(){
+      var l = root.getAttribute('data-theme')!=='light';
+      if(l) root.setAttribute('data-theme','light'); else root.removeAttribute('data-theme');
+      try{ localStorage.setItem('sab-theme', l ? 'light' : 'dark'); }catch(err){}
+      sync(); if(window.__fxColor) window.__fxColor();
+    });
+    sync();
+  })();
+
+  /* ---------- animated hero background (optional) ---------- */
+  (function(){
+    var cv = document.getElementById('heroFx'), btn = document.getElementById('fxBtn'); if(!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2), raf = 0, t0 = 0, vis = true;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var on = !reduce; try{ var sv = localStorage.getItem('sab-fx'); if(sv) on = sv==='on'; }catch(err){}
+    var col = {line:'rgba(61,123,255,.10)', glow:'61,123,255'};
+    window.__fxColor = function(){ var l = document.documentElement.getAttribute('data-theme')==='light'; col = l ? {line:'rgba(31,95,224,.10)', glow:'31,95,224'} : {line:'rgba(61,123,255,.10)', glow:'61,123,255'}; if(!on) draw(0, true); };
+    window.__fxColor();
+    var lines = [];
+    function setup(){
+      var r = cv.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+      lines = []; var n = W < 700 ? 5 : 7;
+      for(var i=0;i<n;i++){ lines.push({y:H*(.12 + .8*i/(n-1)), a:8 + Math.random()*18, f:.004 + Math.random()*.004, ph:Math.random()*6, sp:.06 + Math.random()*.08, off:Math.random(), w:1 + Math.random()*1.2}); }
+    }
+    function yAt(L, x, t){ return L.y + Math.sin(x*L.f + L.ph + t*.0004)*L.a; }
+    function draw(t, still){
+      ctx.clearRect(0,0,W,H);
+      lines.forEach(function(L){
+        ctx.beginPath(); for(var x=0;x<=W;x+=12){ var y = yAt(L,x,still?0:t); if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+        ctx.strokeStyle = col.line; ctx.lineWidth = L.w; ctx.stroke();
+        if(still) return;
+        var px = ((t*L.sp*.001 + L.off) % 1.2 - .1) * W, len = W*.14;
+        var g = ctx.createLinearGradient(px-len,0,px,0); g.addColorStop(0,'rgba('+col.glow+',0)'); g.addColorStop(1,'rgba('+col.glow+',.85)');
+        ctx.beginPath(); for(var x2=Math.max(0,px-len); x2<=Math.min(W,px); x2+=6){ var y2 = yAt(L,x2,t); if(x2===Math.max(0,px-len)) ctx.moveTo(x2,y2); else ctx.lineTo(x2,y2); }
+        ctx.strokeStyle = g; ctx.lineWidth = L.w + 1.4; ctx.shadowColor = 'rgba('+col.glow+',.9)'; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
+        if(px>0 && px<W){ ctx.beginPath(); ctx.arc(px, yAt(L,px,t), 2.6, 0, 6.3); ctx.fillStyle = 'rgba('+col.glow+',1)'; ctx.fill(); }
+      });
+    }
+    function loop(t){ raf = 0; if(!on || !vis || document.hidden) return; draw(t); raf = requestAnimationFrame(loop); }
+    function start(){ if(!raf && on && vis) raf = requestAnimationFrame(loop); }
+    function ui(){ btn.setAttribute('aria-pressed', on); document.getElementById('fxTxt').textContent = on ? 'الخلفية المتحركة: شغّالة' : 'الخلفية المتحركة: طافية'; cv.style.opacity = on ? '' : '.55'; }
+    btn.addEventListener('click', function(){ on = !on; try{ localStorage.setItem('sab-fx', on ? 'on' : 'off'); }catch(err){} ui(); if(on) start(); else draw(0, true); });
+    if('IntersectionObserver' in window) new IntersectionObserver(function(es){ vis = es[0].isIntersecting; if(vis) start(); }).observe(cv);
+    document.addEventListener('visibilitychange', start);
+    window.addEventListener('resize', function(){ setup(); if(!on) draw(0, true); });
+    setup(); ui(); if(on) start(); else draw(0, true);
+  })();
+
   /* ---------- route tabs: 3D / video ---------- */
   (function(){
     var tabs = document.querySelector('.vtabs'); if(!tabs) return;
@@ -1365,6 +1489,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     var slot = document.getElementById('slot-' + v) || document.getElementById('slot-home'), stg = document.getElementById('stage');
     if(stg.parentNode !== slot) slot.appendChild(stg);
     window.__view = v;
+    document.querySelectorAll('.tabbar [data-tab]').forEach(function(a){ if(a.dataset.tab===v) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
     if(window.goatcounter && window.goatcounter.count && v!=='home') track('قسم/' + v);
     if(v==='products' && st.g) syncModel();
     if(v==='calc' && window.__calcModel) window.__calcModel();
