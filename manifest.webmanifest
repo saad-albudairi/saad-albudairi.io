@@ -1,0 +1,25 @@
+{
+  "name": "سعد البديري للكيبلات",
+  "short_name": "سعد البديري",
+  "description": "كيبلات نحاس وفافون وفلكس بكل القياسات، الشورجة بغداد منذ 1991. اطلب علواتساب.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./?ref=app",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1120",
+  "theme_color": "#0A1120",
+  "categories": ["shopping", "business"],
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "أستفسر عن كيبل", "url": "./#products"},
+    {"name": "أعرف قياس حملي", "url": "./#calc"},
+    {"name": "المحل والدوام", "url": "./#where"}
+  ]
+}

@@ -8,6 +8,12 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://saad-albudairi.github.io/saad-albudairi.io/">
 <meta property="og:url" content="https://saad-albudairi.github.io/saad-albudairi.io/">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="سعد البديري">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0A1120">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_IQ">
@@ -212,6 +218,15 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;
 #qty,#cLoad,input[type=number]{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;direction:ltr;text-align:right}
 .order-go{display:flex;flex-wrap:wrap;align-items:center;gap:14px;width:100%}
 .price-note{font-size:13px;color:var(--muted)}
+.app-btn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:14px;color:var(--copper-hi);background:rgba(61,123,255,.1);border:1px solid rgba(61,123,255,.45);border-radius:12px;padding:8px 12px;cursor:pointer}
+.app-btn[hidden]{display:none}
+.app-btn .ico{width:18px;height:18px}
+@media (max-width:460px){.app-t{display:none}}
+.ios-tip{position:fixed;z-index:21;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:420px;margin:0 auto;padding:16px 18px;border-radius:16px;background:var(--bg-2);border:1px solid rgba(61,123,255,.45);box-shadow:0 18px 50px rgba(0,0,0,.55);font-size:14px;line-height:1.8}
+.ios-tip[hidden]{display:none}
+.ios-tip ol{margin:6px 0 10px;padding-inline-start:20px}
+.ios-tip .sh{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;border:1px solid var(--line);font-size:12px}
+.ios-tip button{font:inherit;font-weight:600;padding:8px 18px;border-radius:10px;border:0;background:var(--copper);color:#fff;cursor:pointer}
 .cart{position:fixed;inset:0;z-index:20;display:flex;justify-content:flex-start}
 .cart[hidden]{display:none}
 .cart-back{position:absolute;inset:0;background:rgba(3,7,15,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
@@ -495,6 +510,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     </a>
     <div class="bar-act">
       <button type="button" class="cart-btn" id="cartBtn" aria-label="سلة الطلب"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><span class="cart-t">السلة</span><b id="cartN">0</b></button>
+      <button type="button" class="app-btn" id="appBtn" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M12 8v6M9.5 11.5 12 14l2.5-2.5"/></svg><span class="app-t">نزّل التطبيق</span></button>
       <a class="btn solid order-now" href="#products">اطلب الآن</a>
     </div>
   </div>
@@ -687,6 +703,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <details><summary>تبيعون بالمتر لو بس بكرات؟</summary><p>نبيع بكل الطرق: بالمتر، باللفة (90 متر)، وبالبكرة الكاملة (1000 متر). وللكميات الكبيرة عدنا خصومات.</p></details>
         <details><summary>شنو المنشأ المتوفر؟</summary><p>عدنا منشأ سعودي وتركي وإيراني. تگدر تختار المنشأ اللي تريده وكت الطلب.</p></details>
         <details><summary>توصلون للمحافظات؟</summary><p>إي، نوصل لكل محافظات العراق. داخل بغداد يوصل بنفس اليوم بعد الدفع، وللمحافظات خلال يوم أو يومين. أجرة التوصيل حسب الكمية.</p></details>
+        <details><summary>أگدر أنزّل الموقع كتطبيق؟</summary><p>إي. بالأندرويد اضغط زر «نزّل التطبيق» فوق، أو من قائمة كروم اختار «تثبيت التطبيق». بالآيفون افتح الموقع بالسفاري، اضغط زر المشاركة واختار «إضافة إلى الشاشة الرئيسية». يطلعلك اللوغو بالشاشة ويفتح الموقع بسرعة مثل التطبيق.</p></details>
         <details><summary>شلون أدفع؟</summary><p>الدفع كاش أو بالماستر كارد. التوصيل بنفس اليوم داخل بغداد يكون بعد الدفع بالماستر كارد.</p></details>
         <details><summary>شنو الفرق بين المدرّع وغير المدرّع؟</summary><p>المدرّع بيه طبقة أسلاك فولاذ تحميه، فيصلح للدفن تحت الأرض والأماكن المعرضة للضرب. غير المدرّع للتمديد داخل المباني والقنوات. المدرّع متوفر بالنحاس بس.</p></details>
         <details><summary>شنو يعني خط واحد وخطين وأربع خطوط؟</summary><p>هو عدد القلوب داخل الكيبل. الخطين للفاز الواحد (220)، والأربع خطوط للثلاث فازات (380)، والخط الواحد للتمديدات الخاصة واللوحات. كل الأنواع متوفرة بكل القياسات.</p></details>
@@ -842,6 +859,12 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       </div>
     </div>
   </section>
+</div>
+
+<div class="ios-tip" id="iosTip" hidden role="dialog" aria-label="تنزيل التطبيق على الآيفون">
+  <b>تنزيل التطبيق على الآيفون 📱</b>
+  <ol><li>اضغط زر المشاركة <span class="sh">⬆︎</span> جوة بالسفاري</li><li>اختار «إضافة إلى الشاشة الرئيسية»</li><li>اضغط «إضافة»، ويطلع اللوغو بشاشتك مثل أي تطبيق</li></ol>
+  <button type="button" id="iosTipX">تمام</button>
 </div>
 
 <a class="wa-float" data-wa target="_blank" rel="noopener" href="https://wa.me/9647707368351" aria-label="راسلنا علواتساب"><span class="wa-i"></span><span class="wa-float-t">واتساب</span></a>
@@ -1146,6 +1169,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     var item = {name:itemName(), size:sizeLabel(st.size), color:st.color, origin:st.origin, qty:q, unit:st.unit};
     var same = cart.filter(function(x){ return x.name===item.name && x.size===item.size && x.color===item.color && x.origin===item.origin && x.unit===item.unit; })[0];
     if(same) same.qty += q; else cart.push(item);
+    track('سلة/' + item.size + ' ' + item.name);
     saveCart(); cartCount();
     var cb = document.getElementById('cartBtn'); cb.classList.remove('bump'); void cb.offsetWidth; cb.classList.add('bump');
     st.qty = ''; if(qi){ qi.value = ''; qi.classList.remove('bad'); }
@@ -1216,6 +1240,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         var err = document.getElementById('cartErr');
         if(bad.length){ e.preventDefault(); err.textContent = bad.join('، ') + '.'; err.hidden = false; (!cust.name.trim() ? n : p).focus(); return; }
         err.hidden = true;
+        if(send.id==='cWa1'){ track('طلب/' + cust.gov); cart.forEach(function(x){ track('طلب-قياس/' + x.size + ' ' + x.name); }); }
         send.classList.add('done'); send.classList.remove('next');
         var o = document.getElementById(send.id==='cWa1' ? 'cWa2' : 'cWa1'); if(!o.classList.contains('done')) o.classList.add('next');
       }
@@ -1265,6 +1290,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     var slot = document.getElementById('slot-' + v) || document.getElementById('slot-home'), stg = document.getElementById('stage');
     if(stg.parentNode !== slot) slot.appendChild(stg);
     window.__view = v;
+    if(window.goatcounter && window.goatcounter.count && v!=='home') track('قسم/' + v);
     if(v==='products' && st.g) syncModel();
     if(v==='calc' && window.__calcModel) window.__calcModel();
     window.scrollTo(0,0);
@@ -1918,6 +1944,28 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 
   window.__cable = initCable();
   if(window.__cable) window.__cable.set({code:'Cu/XLPE/SWA/PVC', armour:true, metal:'cu', color:COLORS.black}, '4×16');
+  /* ---------- app install + visit counter (live site only) ---------- */
+  (function(){
+    var live = /github\.io$/.test(location.hostname) || /saad-albudairi/.test(location.hostname);
+    var btn = document.getElementById('appBtn'), tip = document.getElementById('iosTip'), deferred = null;
+    var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1);
+    if(live && 'serviceWorker' in navigator){ window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
+    window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred = e; if(!standalone) btn.hidden = false; });
+    if(live && ios && !standalone) btn.hidden = false;
+    btn.addEventListener('click', function(){
+      if(deferred){ deferred.prompt(); deferred.userChoice.then(function(r){ if(r.outcome==='accepted'){ btn.hidden = true; track('تطبيق/تنزيل'); } deferred = null; }); }
+      else tip.hidden = false;
+    });
+    document.getElementById('iosTipX').addEventListener('click', function(){ tip.hidden = true; });
+    window.addEventListener('appinstalled', function(){ btn.hidden = true; });
+    if(live){
+      var gc = document.createElement('script'); gc.async = true; gc.src = 'https://gc.zgo.at/count.js';
+      gc.setAttribute('data-goatcounter', 'https://saad-albudairi.goatcounter.com/count'); document.head.appendChild(gc);
+    }
+  })();
+  function track(path){ try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:path, title:path, event:true}); }catch(err){} }
+
   window.__world = initWorld();
   if(!window.__world){ ['world','wBar','rSteps'].forEach(function(id){ document.getElementById(id).hidden = true; }); document.getElementById('map').hidden = false; }
 })();
