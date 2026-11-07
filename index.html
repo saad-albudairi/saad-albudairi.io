@@ -127,6 +127,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .theme-btn .moon{display:none}
 html[data-theme="light"] .theme-btn .sun{display:none}
 html[data-theme="light"] .theme-btn .moon{display:block}
+.cond-info{margin:8px 0 0;font-size:14px;color:var(--muted);line-height:1.7}
+.cond-info b{color:var(--fg)}
 .size-use{flex-basis:100%;display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.7;padding:10px 12px;border-radius:12px;background:rgba(61,123,255,.08);border:1px solid rgba(61,123,255,.22)}
 .size-use a{color:var(--copper-hi);white-space:nowrap}
 .tabbar{display:none}
@@ -384,6 +386,10 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .res-name{font-size:16px;font-weight:600}
 .meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .meters .wide{grid-column:1/-1}
+.calc-why{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--card)}
+.calc-why summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--copper-hi)}
+.calc-why ol{margin:10px 0 2px;padding-inline-start:20px;font-size:13.5px;line-height:1.9;color:var(--muted)}
+.calc-why ol b{color:var(--fg);font-family:var(--font-tech);letter-spacing:.03em}
 .seg button:disabled{opacity:.35;cursor:not-allowed}
 .meters div{display:flex;flex-direction:column;gap:2px;padding:10px;border-radius:10px;background:var(--card)}
 .meters span{font-size:12px;color:var(--muted)}
@@ -748,11 +754,25 @@ input[type=range]{width:100%;accent-color:var(--copper)}
               <button type="button" data-v="3" aria-pressed="false">إنارة</button>
             </div>
           </div>
+          <div class="fld" id="cCondF"><span>نوع الموصل (النحاس)</span>
+            <div class="seg" role="group" aria-label="نوع الموصل" id="cCond">
+              <button type="button" data-v="strand" aria-pressed="true">ستراند</button>
+              <button type="button" data-v="fine" aria-pressed="false">شعري</button>
+            </div>
+          </div>
           <div class="calc-row">
             <label class="fld"><span>الحمل</span><input type="text" id="cLoad" inputmode="decimal" autocomplete="off" value="32"></label>
-            <label class="fld"><span>الوحدة</span><select id="cUnit"><option value="a">أمبير</option><option value="kw">كيلوواط</option></select></label>
+            <label class="fld"><span>الوحدة</span><select id="cUnit"><option value="a">أمبير</option><option value="kw">كيلوواط</option><option value="kva">كي في أي (KVA)</option></select></label>
           </div>
-          <label class="fld"><span id="cTempL">حرارة الجو</span><select id="cTemp"></select></label>
+          <div class="calc-row">
+            <label class="fld"><span id="cTempL">حرارة الجو</span><select id="cTemp"></select></label>
+            <label class="fld"><span>معامل القدرة</span><select id="cPf"><option value="1">1 (سخانات وإنارة عادية)</option><option value="0.95">0.95</option><option value="0.9">0.9</option><option value="0.85" selected>0.85 (عام)</option><option value="0.8">0.8 (مكائن وسبلتات)</option></select></label>
+          </div>
+          <div class="calc-row">
+            <label class="fld"><span>كيبلات ويّاه بنفس المجرى</span><select id="cGroup"><option value="1">لا، لوحده</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="9">7 لـ 9</option><option value="12">10 لـ 12</option><option value="20">أكثر من 12</option></select></label>
+            <label class="fld"><span>مصدر الكهرباء</span><select id="cSrc"><option value="pub">وطنية (شبكة عامة)</option><option value="pri">مولدة أو محولة خاصة</option></select></label>
+          </div>
+          <label class="fld" id="cSoilF" hidden><span>نوع التربة</span><select id="cSoil"><option value="1.5">رطبة أو طينية</option><option value="2.5" selected>عادية</option><option value="3">جافة أو رملية</option></select></label>
           <label class="fld"><span>طول الكيبل: <b id="cLenOut">40</b> متر</span><input type="range" id="cLen" min="5" max="500" step="5" value="40"></label>
         </form>
         <div class="calc-out" aria-live="polite">
@@ -766,9 +786,10 @@ input[type=range]{width:100%;accent-color:var(--copper)}
             <div><span>تحمّل الكيبل بحرارتك</span><b id="rIz">—</b></div>
             <div class="wide"><span>شنو حدد القياس</span><b id="rWhy">التيار</b></div>
           </div>
+          <details class="calc-why" id="rDetails"><summary>شلون انحسب؟ (خطوة بخطوة)</summary><ol id="rSteps2"></ol></details>
           <div class="meter-bar"><i id="rBar"></i></div>
           <button type="button" class="btn solid" id="rGo">اختار هذا القياس واطلب</button>
-          <p class="calc-note">الحساب حسب المواصفة الدولية <span class="tech">IEC 60364-5-52</span>: جداول تحمّل التيار، تصحيح الحرارة، والقاطع لازم يكون أكبر من الحمل وأصغر من تحمّل الكيبل. هبوط الجهد محسوب بمعامل قدرة 0.85، وحدّه 5٪ للأجهزة و3٪ للإنارة. النحاس والفافون عازلهم XLPE (90°)، والفلكس PVC (70°)، والفافون يبدي من 16 ملم². إذا أكثر من كيبل ممدودين سوا بنفس المجرى، القياس يحتاج يكبر، فخلي المهندس يأكده.</p>
+          <p class="calc-note">الحساب حسب المواصفات الدولية: <span class="tech">IEC 60364-5-52</span> (جداول تحمّل التيار B.52.3 لـ B.52.5، تصحيح الحرارة B.52.14 وB.52.15، التربة B.52.16، تجميع الكيبلات B.52.17 وB.52.19، وهبوط الجهد الملحق G)، و<span class="tech">IEC 60364-4-43</span> لاختيار القاطع، و<span class="tech">IEC 60228</span> لمقاومة الموصل (ستراند Class 2 وشعري Class 5). النتيجة لكيبل متعدد الخطوط بتيار متناوب 50 هرتز. للمشاريع الكبيرة يبقى توقيع المهندس المختص ضروري.</p>
         </div>
       </div>
     </div>
@@ -1061,7 +1082,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   }).join('');
 
   var ORIGINS = ['أي منشأ','سعودي','تركي','إيراني'], UNITS = ['متر','لفة (90 متر)','بكرة (1000 متر)'], UNIT_M = {'متر':1,'لفة (90 متر)':90,'بكرة (1000 متر)':1000};
-  var st = {g:null, a:null, n:4, size:null, color:'black', gov:'بغداد', origin:'أي منشأ', qty:'', unit:'متر'};
+  var st = {g:null, a:null, n:4, cond:'strand', size:null, color:'black', gov:'بغداد', origin:'أي منشأ', qty:'', unit:'متر'};
 
   tiles.addEventListener('click', function(e){
     var b = e.target.closest('.tile'); if(!b) return;
@@ -1072,9 +1093,11 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   });
 
   function coreName(){ return CORE_OPTS.filter(function(c){ return c.n===st.n; })[0].name; }
+  var COND = {strand:'ستراند', fine:'شعري'};
+  function condOf(g){ return g.id==='flex' ? 'fine' : (g.id==='al' ? 'strand' : st.cond); }
   function itemName(){
-    if(st.g.id==='flex') return 'كيبل فلكس ' + coreName();
-    return 'كيبل ' + st.g.name + (st.g.id==='cu' ? ' ' + st.a.name : '') + ' ' + coreName();
+    if(st.g.id==='flex') return 'كيبل فلكس شعري ' + coreName();
+    return 'كيبل ' + st.g.name + (st.g.id==='cu' ? ' ' + COND[st.cond] + ' ' + st.a.name : '') + ' ' + coreName();
   }
   function sizeLabel(s){ return st.n + '×' + s; }
   var USE = {'1.5':'الإنارة ونقاط الضوء','2.5':'البلاكات العادية (السوكيتات) والمراوح','4':'سخان الماي أو سبلت 1 طن','6':'سبلت 1.5 لـ 2 طن، أو الفرن الكهربائي','10':'سبلت 3 طن، أو خط رئيسي لشقة صغيرة','16':'الخط الرئيسي لبيت فاز واحد','25':'بيت كبير، أو خط المولدة للبيت','35':'بيت كبير ثلاث فاز، أو عمارة صغيرة','50':'عمارة صغيرة أو ورشة','70':'عمارة سكنية أو ورشة كبيرة','95':'معمل صغير أو مجمع تجاري صغير','120':'معمل، أو تغذية من مولدة أهلية','150':'مولدة أهلية كبيرة أو مجمع','185':'المجمعات والمعامل الكبيرة','240':'التغذية الرئيسية للمولدات والمحولات الكبيرة'};
@@ -1098,9 +1121,13 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       '<div class="panel" id="panel" style="--tone:'+g.tone+'">'+
         '<div class="panel-head"><h3>'+g.name+'</h3><div class="filters">'+
           (g.armourOpts.length > 1 ? seg('التدريع', g.armourOpts.map(function(x){ return {v:x.id, name:x.name}; }), 'a', a.id) : '')+
+          (g.id==='cu' ? seg('نوع الموصل', [{v:'strand', name:'ستراند'},{v:'fine', name:'شعري'}], 'cd', st.cond) : '')+
           seg('عدد الخطوط', CORE_OPTS.map(function(c){ return {v:String(c.n), name:c.name}; }), 'n', String(st.n))+
         '</div></div>'+
-        '<div class="type-info"><span class="code ar">'+a.ar+'</span><p>'+a.desc+'</p></div>'+
+        '<div class="type-info"><span class="code ar">'+a.ar+'</span><p>'+a.desc+'</p>'+
+          '<p class="cond-info">'+(g.id==='flex' ? '🧵 <b>شعري:</b> الفلكس موصله شعري بس (أسلاك نحاس رفيعة هواية)، حتى يكون مرن ويلتوي بسهولة.' :
+            g.id==='al' ? '🔩 <b>ستراند:</b> أسلاك فافون مجدولة.' :
+            (st.cond==='fine' ? '🧵 <b>شعري:</b> أسلاك نحاس رفيعة هواية (Class 5)، مرن ويلتوي بسهولة، يصلح للوحات والمعدات والأماكن الضيقة.' : '🔩 <b>ستراند:</b> أسلاك نحاس أثخن مجدولة (Class 2)، أصلب وأثبت، يصلح للتمديدات الثابتة والدفن والتغذية.'))+'</p></div>'+
         '<div class="colors"><div class="label">اللون'+(g.colors.length===1 ? ' · الفلكس متوفر بالأبيض بس' : ' · اختار لون الكيبل ويتغيّر الموديل 3D وياه')+'</div><div class="swatches" role="group" aria-label="لون الكيبل">'+
           g.colors.map(function(k){ return '<button type="button" data-c="'+k+'" aria-pressed="'+(k===st.color)+'"><i style="background:'+swatchBg(k)+'"></i>'+COLORS[k].name+'</button>'; }).join('')+
         '</div></div>'+
@@ -1127,6 +1154,8 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   slot.addEventListener('click', function(e){
     var ab = e.target.closest('[data-a]');
     if(ab){ st.a = st.g.armourOpts.filter(function(x){ return x.id===ab.dataset.a; })[0]; renderPanel(); syncModel(); return; }
+    var cdb = e.target.closest('[data-cd]');
+    if(cdb){ st.cond = cdb.dataset.cd; renderPanel(); syncModel(); return; }
     var nb = e.target.closest('[data-n]');
     if(nb){ st.n = parseInt(nb.dataset.n,10); renderPanel(); syncModel(); return; }
     var sb = e.target.closest('[data-s]');
@@ -1183,82 +1212,108 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     var sz = sizeLabel(st.size || (st.n===1 ? '16' : '16'));
     document.getElementById('tagSize').textContent = sz;
     document.getElementById('tagName').textContent = itemName() + ' · ' + COLORS[st.color].name;
-    if(window.__cable) window.__cable.set({code:st.a.code, armour:st.a.armour, metal:st.g.metal, volt:st.g.volt, std:st.g.std, color:COLORS[st.color]}, sz);
+    if(window.__cable) window.__cable.set({code:st.a.code, armour:st.a.armour, metal:st.g.metal, volt:st.g.volt, std:st.g.std, color:COLORS[st.color], cond:condOf(st.g)}, sz);
   }
 
 
-  /* ---------- calculator (IEC 60364-5-52) ---------- */
+  /* ---------- calculator (IEC 60364-5-52 / 4-43 / IEC 60228) ---------- */
   (function(){
-    // current-carrying capacity (A), multicore cable, aligned with SIZES 1.5..240
+    // current-carrying capacity (A) of multicore cables, aligned with SIZES 1.5..240
     var T = {
-      cu:{air:{2:[24,33,45,58,80,107,138,171,209,269,328,382,441,506,599], 3:[23,31,42,54,75,100,127,158,192,246,298,346,395,450,538]},   // XLPE 90°, method C (B.52.5)
-          ground:{2:[26,34,44,56,73,95,121,146,173,213,252,287,324,363,419], 3:[22,29,37,46,61,79,101,122,144,178,211,240,271,304,351]}}, // XLPE, method D (B.52.3)
+      cu:{air:{2:[24,33,45,58,80,107,138,171,209,269,328,382,441,506,599], 3:[23,31,42,54,75,100,127,158,192,246,298,346,395,450,538]},   // XLPE 90°C, method C, B.52.5
+          ground:{2:[26,34,44,56,73,95,121,146,173,213,252,287,324,363,419], 3:[22,29,37,46,61,79,101,122,144,178,211,240,271,304,351]}}, // XLPE, method D1 (in duct), B.52.3/B.52.5
       al:{air:{2:[0,26,35,45,62,84,101,126,154,198,241,280,324,371,439], 3:[0,24,32,42,58,77,97,120,146,187,227,263,304,347,409]},
           ground:{2:[0,26,34,42,56,73,93,112,132,163,193,220,249,279,322], 3:[0,22,29,36,47,61,78,94,112,138,164,186,210,236,272]}},
-      flex:{air:{2:[19.5,27,36,46,63,85,112,138,168,213,258,299,344,392,461], 3:[17.5,24,32,41,57,76,96,119,144,184,223,259,299,341,403]}} // PVC 70°, method C (B.52.4)
+      flex:{air:{2:[19.5,27,36,46,63,85,112,138,168,213,258,299,344,392,461], 3:[17.5,24,32,41,57,76,96,119,144,184,223,259,299,341,403]}} // PVC 70°C, method C, B.52.4
     };
-    var KT = { // temperature correction (B.52.14 air ref 30°C, B.52.15 ground ref 20°C)
-      air:{xlpe:{30:1,35:.96,40:.91,45:.87,50:.82,55:.76}, pvc:{30:1,35:.94,40:.87,45:.79,50:.71,55:.61}},
-      ground:{xlpe:{20:1,25:.96,30:.93,35:.89,40:.85}, pvc:{20:1,25:.95,30:.89,35:.84,40:.77}}
+    // IEC 60228 max DC resistance at 20°C (ohm/km)
+    var R20 = {
+      cu2:[12.1,7.41,4.61,3.08,1.83,1.15,.727,.524,.387,.268,.193,.153,.124,.0991,.0754],
+      cu5:[13.3,7.98,4.95,3.30,1.91,1.21,.780,.554,.386,.272,.206,.161,.129,.106,.0801],
+      al2:[0,0,0,0,3.08,1.91,1.20,.868,.641,.443,.320,.253,.206,.164,.125]
     };
-    var TEMPS = {air:[[30,'30° معتدل'],[35,'35°'],[40,'40°'],[45,'45°'],[50,'50° صيف العراق'],[55,'55° سطح أو قرب مصدر حرارة']], ground:[[20,'20°'],[25,'25°'],[30,'30° تربة العراق بالصيف'],[35,'35°'],[40,'40°']]};
+    var KT = { // B.52.14 (air, ref 30°C) and B.52.15 (ground, ref 20°C)
+      air:{xlpe:{30:1,35:.96,40:.91,45:.87,50:.82,55:.76,60:.71}, pvc:{30:1,35:.94,40:.87,45:.79,50:.71,55:.61,60:.50}},
+      ground:{xlpe:{20:1,25:.96,30:.93,35:.89,40:.85,45:.80,50:.76}, pvc:{20:1,25:.95,30:.89,35:.84,40:.77,45:.71,50:.63}}
+    };
+    var KG_AIR = {1:1,2:.80,3:.70,4:.65,5:.60,6:.57,9:.50,12:.45,20:.38};      // B.52.17, bunched
+    var KG_GND = {1:1,2:.85,3:.75,4:.70,5:.65,6:.60,9:.55,12:.50,20:.45};       // B.52.19, ducts touching
+    var KS = {'1.5':1.10,'2.5':1,'3':.96};                                       // B.52.16, buried ducts
+    var TEMPS = {air:[[30,'30° معتدل'],[35,'35°'],[40,'40°'],[45,'45°'],[50,'50° صيف العراق'],[55,'55° سطح أو قرب حرارة'],[60,'60°']], ground:[[20,'20°'],[25,'25°'],[30,'30° تربة العراق بالصيف'],[35,'35°'],[40,'40°']]};
     var DEF = {air:50, ground:30};
     var BRK = [6,10,16,20,25,32,40,50,63,80,100,125,160,200,250,315,400,500,630];
-    var PF = .85, SIN = Math.sqrt(1-PF*PF), LAMBDA = .00008, RHO = {cu:.0225, al:.036, flex:.0225};
-    var c = {metal:'cu', phase:1, inst:'air', use:5, res:null};
+    var ALPHA = {cu:.00393, al:.00403}, XL = .08; // reactance ohm/km (IEC 60364-5-52 Annex G)
+    var LIM = {pub:{3:3,5:5}, pri:{3:6,5:8}};      // Table G.52.1
+    var c = {metal:'cu', phase:1, inst:'air', use:5, cond:'strand', res:null};
+    function $(id){ return document.getElementById(id); }
     function fillTemps(){
-      var sel = document.getElementById('cTemp');
-      sel.innerHTML = TEMPS[c.inst].map(function(t){ return '<option value="'+t[0]+'"'+(t[0]===DEF[c.inst]?' selected':'')+'>'+t[1]+'</option>'; }).join('');
-      document.getElementById('cTempL').textContent = c.inst==='ground' ? 'حرارة التربة' : 'حرارة الجو';
+      $('cTemp').innerHTML = TEMPS[c.inst].map(function(t){ return '<option value="'+t[0]+'"'+(t[0]===DEF[c.inst]?' selected':'')+'>'+t[1]+'</option>'; }).join('');
+      $('cTempL').textContent = c.inst==='ground' ? 'حرارة التربة' : 'حرارة الجو';
+      $('cSoilF').hidden = c.inst!=='ground';
     }
-    function press(id, v){ document.getElementById(id).querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.v===String(v)); }); }
+    function press(id, v){ $(id).querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.v===String(v)); }); }
     function segBind(id, key, cast){
-      var el = document.getElementById(id);
-      el.addEventListener('click', function(e){
+      $(id).addEventListener('click', function(e){
         var b = e.target.closest('button'); if(!b || b.disabled) return;
         c[key] = cast ? cast(b.dataset.v) : b.dataset.v; press(id, b.dataset.v);
         if(key==='metal'){
           var gb = document.querySelector('#cInst [data-v=ground]'); gb.disabled = c.metal==='flex';
           if(c.metal==='flex' && c.inst==='ground'){ c.inst = 'air'; press('cInst','air'); fillTemps(); }
+          $('cCondF').hidden = c.metal!=='cu';
         }
         if(key==='inst') fillTemps();
         run();
       });
     }
     segBind('cMetal','metal'); segBind('cPhase','phase', function(v){ return parseInt(v,10); });
-    segBind('cInst','inst'); segBind('cUse','use', function(v){ return parseInt(v,10); });
+    segBind('cInst','inst'); segBind('cUse','use', function(v){ return parseInt(v,10); }); segBind('cCond','cond');
     fillTemps();
-    ['cLoad','cUnit','cLen','cTemp'].forEach(function(id){ document.getElementById(id).addEventListener('input', run); document.getElementById(id).addEventListener('change', run); });
+    ['cLoad','cUnit','cLen','cTemp','cPf','cGroup','cSrc','cSoil'].forEach(function(id){ $(id).addEventListener('input', run); $(id).addEventListener('change', run); });
     function fmt(n, d){ return n.toLocaleString('en-US', {maximumFractionDigits:d==null?1:d}); }
     function num(v){ return parseFloat(String(v).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }).replace(/[٫,]/g,'.').replace(/[^0-9.]/g,'')) || 0; }
-    function $(id){ return document.getElementById(id); }
     function run(){
       var load = num($('cLoad').value), unit = $('cUnit').value, L = parseInt($('cLen').value,10), tC = parseInt($('cTemp').value,10);
+      var PF = parseFloat($('cPf').value), SIN = Math.sqrt(Math.max(0, 1-PF*PF)), grp = parseInt($('cGroup').value,10), src = $('cSrc').value;
       $('cLenOut').textContent = L;
       var three = c.phase===3, V = three ? 380 : 220, loaded = three ? 3 : 2, n = three ? 4 : 2;
-      var Ib = unit==='kw' ? (three ? load*1000/(Math.sqrt(3)*380*PF) : load*1000/(220*PF)) : load;
-      var ins = c.metal==='flex' ? 'pvc' : 'xlpe', k = KT[c.inst][ins][tC] || 1;
-      var tab = T[c.metal][c.inst][loaded], rho = RHO[c.metal], minI = c.metal==='al' ? 5 : 0;
+      var cls = c.metal==='flex' ? 'cu5' : (c.metal==='al' ? 'al2' : (c.cond==='fine' ? 'cu5' : 'cu2'));
+      var Ib = unit==='kw' ? (three ? load*1000/(Math.sqrt(3)*380*PF) : load*1000/(220*PF)) : unit==='kva' ? (three ? load*1000/(Math.sqrt(3)*380) : load*1000/220) : load;
+      var ins = c.metal==='flex' ? 'pvc' : 'xlpe', theta = ins==='xlpe' ? 90 : 70;
+      var ka = KT[c.inst][ins][tC] || 1, kg = (c.inst==='ground' ? KG_GND : KG_AIR)[grp] || 1, ks = c.inst==='ground' ? (KS[$('cSoil').value] || 1) : 1, k = ka*kg*ks;
+      var tab = T[c.metal][c.inst][loaded], minI = c.metal==='al' ? 5 : 0, lim = LIM[src][c.use];
       var out = $('rSize'), go = $('rGo');
-      function fail(name){ out.textContent = '—'; $('rName').textContent = name; ['rDrop','rBrk','rIz','rWhy'].forEach(function(id){ $(id).textContent = '—'; }); $('rAmp').textContent = Ib>0 ? fmt(Ib) + ' أمبير' : '—'; $('rBar').style.width = Ib>0 ? '100%' : '0'; c.res = null; go.disabled = true; }
+      function fail(name){ out.textContent = '—'; $('rName').textContent = name; ['rDrop','rBrk','rIz','rWhy'].forEach(function(id){ $(id).textContent = '—'; }); $('rAmp').textContent = Ib>0 ? fmt(Ib) + ' أمبير' : '—'; $('rBar').style.width = Ib>0 ? '100%' : '0'; $('rSteps2').innerHTML = ''; c.res = null; go.disabled = true; }
       if(Ib<=0) return fail('دخّل الحمل');
       var In = 0; for(var b=0;b<BRK.length;b++){ if(BRK[b]>=Ib){ In = BRK[b]; break; } }
       if(!In) return fail('الحمل كبير، تحتاج أكثر من كيبل على التوازي. راسلنا ونحسبه وياك');
-      function dropAt(i){ var A = parseFloat(SIZES[i]); return (three ? Math.sqrt(3) : 2)*L*Ib*(rho/A*PF + LAMBDA*SIN)/V*100; }
-      var iAmp = -1, iDrop = -1;
-      for(var i=minI;i<SIZES.length;i++){ if(tab[i] && tab[i]*k >= In){ iAmp = i; break; } }
-      for(var j=minI;j<SIZES.length;j++){ if(dropAt(j) <= c.use){ iDrop = j; break; } }
+      var alpha = ALPHA[c.metal==='al' ? 'al' : 'cu'];
+      function rAt(i){ return R20[cls][i] * (1 + alpha*(theta-20)); } // ohm/km at operating temperature
+      function dropAt(i){ var R = rAt(i)/1000, X = XL/1000; return (three ? Math.sqrt(3) : 2)*L*Ib*(R*PF + X*SIN)/V*100; }
+      var iAmp = -1, iDrop = -1, need = In/k;
+      for(var i=minI;i<SIZES.length;i++){ if(tab[i] && tab[i] >= need){ iAmp = i; break; } }
+      for(var j=minI;j<SIZES.length;j++){ if(R20[cls][j] && dropAt(j) <= lim){ iDrop = j; break; } }
       if(iAmp<0 || iDrop<0) return fail('الحمل أو المسافة أكبر من قياس 240، تحتاج كيبلين على التوازي. راسلنا ونحسبه وياك');
-      var idx = Math.max(iAmp, iDrop), drop = dropAt(idx), armour = c.inst==='ground' && c.metal==='cu';
+      var idx = Math.max(iAmp, iDrop), drop = dropAt(idx), armour = c.inst==='ground' && c.metal==='cu', Iz = tab[idx]*k;
       out.textContent = n + '×' + SIZES[idx];
-      $('rName').textContent = 'كيبل ' + ({cu:'نحاس', al:'فافون', flex:'فلكس'})[c.metal] + (armour ? ' مدرّع' : '') + ' ' + (n===4 ? 'أربع خطوط' : 'خطين');
+      $('rName').textContent = 'كيبل ' + ({cu:'نحاس', al:'فافون', flex:'فلكس'})[c.metal] + (c.metal==='cu' ? (c.cond==='fine' ? ' شعري' : ' ستراند') : (c.metal==='flex' ? ' شعري' : '')) + (armour ? ' مدرّع' : '') + ' ' + (n===4 ? 'أربع خطوط' : 'خطين');
       $('rAmp').textContent = fmt(Ib) + ' أمبير';
-      $('rDrop').textContent = fmt(drop) + '٪ من ' + c.use + '٪';
+      $('rDrop').textContent = fmt(drop, 2) + '٪ من ' + lim + '٪';
       $('rBrk').textContent = In + ' أمبير';
-      $('rIz').textContent = fmt(tab[idx]*k, 0) + ' أمبير';
-      $('rWhy').textContent = idx===minI && c.metal==='al' && iAmp<=minI && iDrop<=minI ? 'أصغر قياس فافون (16)' : (iDrop > iAmp ? 'طول المسافة (هبوط الجهد)' : 'التيار والحرارة');
-      $('rBar').style.width = Math.min(100, drop/c.use*100) + '%';
-      c.res = {g:c.metal, n:n, size:SIZES[idx], armour:armour}; go.disabled = false;
+      $('rIz').textContent = fmt(Iz, 0) + ' أمبير';
+      $('rWhy').textContent = (iAmp===minI && iDrop===minI && c.metal==='al') ? 'أصغر قياس فافون (16)' : (iDrop > iAmp ? 'طول المسافة (هبوط الجهد)' : 'تحمّل التيار بعد التصحيح');
+      $('rBar').style.width = Math.min(100, drop/lim*100) + '%';
+      var steps = [
+        'تيار الحمل: <b>Ib = ' + fmt(Ib) + ' A</b>' + (unit==='kw' ? ' (من ' + load + ' kW بمعامل قدرة ' + PF + ')' : unit==='kva' ? ' (من ' + load + ' kVA)' : ''),
+        'القاطع القياسي الأقرب فوق الحمل: <b>In = ' + In + ' A</b> (IEC 60364-4-43: Ib ≤ In ≤ Iz)',
+        'معاملات التصحيح: الحرارة <b>' + ka + '</b>' + (grp>1 ? ' × التجميع (' + grp + ' كيبلات) <b>' + kg + '</b>' : '') + (c.inst==='ground' ? ' × التربة <b>' + ks + '</b>' : '') + ' = <b>' + fmt(k, 3) + '</b>',
+        'التحمّل المطلوب بالجدول: In ÷ ' + fmt(k,3) + ' = <b>' + fmt(need) + ' A</b>، وأول قياس يتحمّله <b>' + SIZES[iAmp] + ' ملم²</b> (' + tab[iAmp] + ' A' + (c.inst==='ground' ? '، طريقة D1' : '، طريقة C') + ')',
+        'مقاومة الموصل (IEC 60228 ' + (cls==='cu5' ? 'شعري Class 5' : 'ستراند Class 2') + ') عند ' + theta + '°: <b>' + fmt(rAt(idx), 3) + ' Ω/km</b>، والممانعة 0.08 Ω/km',
+        'هبوط الجهد على ' + L + ' م = <b>' + fmt(drop, 2) + '٪</b> (الحد ' + lim + '٪ ' + (src==='pub' ? 'للشبكة العامة' : 'للمصدر الخاص') + (c.use===3 ? '، إنارة' : '، أجهزة') + ')' + (iDrop > iAmp ? '، فكبّرنا القياس لـ <b>' + SIZES[iDrop] + '</b>' : ''),
+        'النتيجة: <b>' + n + '×' + SIZES[idx] + ' ملم²</b>، تحمّله الفعلي <b>' + fmt(Iz,0) + ' A</b> ≥ القاطع ' + In + ' A ✓'
+      ];
+      $('rSteps2').innerHTML = steps.map(function(x){ return '<li>' + x + '</li>'; }).join('');
+      c.res = {g:c.metal, n:n, size:SIZES[idx], armour:armour, cond:c.metal==='cu' ? c.cond : 'strand'};
+      go.disabled = false;
       calcModel();
     }
     function calcModel(){
@@ -1266,10 +1321,10 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       var g = GROUPS.filter(function(x){ return x.id===c.res.g; })[0], a = g.armourOpts.filter(function(o){ return !!o.armour===c.res.armour; })[0] || g.armourOpts[0], sz = c.res.n + '×' + c.res.size;
       $('tagSize').textContent = sz;
       $('tagName').textContent = $('rName').textContent;
-      window.__cable.set({code:a.code, armour:a.armour, metal:g.metal, volt:g.volt, std:g.std, color:COLORS[g.colors[0]]}, sz);
+      window.__cable.set({code:a.code, armour:a.armour, metal:g.metal, volt:g.volt, std:g.std, color:COLORS[g.colors[0]], cond:c.res.cond}, sz);
     }
     window.__calcModel = calcModel;
-    $('rGo').addEventListener('click', function(){ if(c.res) openProduct(c.res.g, c.res.n, c.res.size, c.res.armour); });
+    $('rGo').addEventListener('click', function(){ if(c.res) openProduct(c.res.g, c.res.n, c.res.size, c.res.armour, c.res.cond); });
     run();
   })();
 
@@ -1289,8 +1344,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     r.addEventListener('input', upd); upd();
   })();
 
-  function openProduct(gid, n, size, armour){
+  function openProduct(gid, n, size, armour, cond){
     var g = GROUPS.filter(function(x){ return x.id===gid; })[0];
+    if(cond && gid==='cu') st.cond = cond;
     st.g = g; st.a = g.armourOpts.filter(function(o){ return !!o.armour===!!armour; })[0] || g.armourOpts[0]; st.n = n; st.size = size; st.color = g.colors[0];
     renderPanel(); syncModel(); go('products');
     setTimeout(function(){ var p = document.getElementById('panel'); if(p) p.scrollIntoView({behavior:'smooth', block:'center'}); }, 60);
@@ -1675,8 +1731,23 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     };
     var coresGrp = null, curN = 0;
     var coresMetal = '';
+    function helixGeo(rad, pitch, x1, x2, r, segs){
+      var pts = []; for(var i=0;i<=segs;i++){ var x = x1+(x2-x1)*i/segs, a = x*2*Math.PI/pitch; pts.push(new THREE.Vector3(x, rad*Math.cos(a), rad*Math.sin(a))); }
+      return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), segs, r, 6, false);
+    }
+    function fineBundle(grp, R, cy, cz, k){ /* شعري: many thin wires, instanced per ring */
+      var wr = R/9, m4 = new THREE.Matrix4(), rot = new THREE.Matrix4(), tr = new THREE.Matrix4().makeTranslation(0, cy, cz);
+      var core = cyl(wr*1.2, X0, END.cond - .02, condMat, 10); core.position.y = cy; core.position.z = cz; grp.add(core);
+      for(var ring=1; ring<=4; ring++){
+        var rad = ring*wr*2*.98, cnt = Math.floor(Math.PI*rad/wr), geo = (ring===1 && rad===0) ? null : helixGeo(rad, 5.5 + ring*.6, X0, END.cond - .02*ring, wr, 120);
+        var im = new THREE.InstancedMesh(geo, condMat, cnt);
+        for(var j=0;j<cnt;j++){ rot.makeRotationX(j/cnt*Math.PI*2 + k + ring*.3); m4.multiplyMatrices(tr, rot); im.setMatrixAt(j, m4); }
+        im.castShadow = true; grp.add(im);
+      }
+    }
     function buildCores(n){
-      if(n===curN && coresMetal===cfg.metal) return; curN = n; coresMetal = cfg.metal;
+      var key = cfg.metal + (cfg.cond||'');
+      if(n===curN && coresMetal===key) return; curN = n; coresMetal = key;
       if(coresGrp){ cable.remove(coresGrp); coresGrp.traverse(function(o){ if(o.geometry) o.geometry.dispose(); }); }
       coresGrp = new THREE.Group(); var c = CORES[n], isAl = cfg.metal==='al';
       c.pos.forEach(function(pp, k){
@@ -1689,6 +1760,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         }
         var cy = pp[0], cz = pp[1];
         var ins = cyl(c.rIns, X0, END.insul, insul[c.col[k]], 72); ins.position.y = cy; ins.position.z = cz; coresGrp.add(ins);
+        if(cfg.cond==='fine'){ var lastR = c.rings[c.rings.length-1]; fineBundle(coresGrp, lastR[1] + c.sr, cy, cz, k); return; }
         var core = cyl(c.sr, X0, END.cond, condMat, 24); core.position.y = cy; core.position.z = cz; coresGrp.add(core);
         c.rings.forEach(function(r, ri){ for(var s=0;s<r[0];s++) coresGrp.add(helix(r[1], s/r[0]*Math.PI*2 + k + ri, 3.2*(ri+1), X0, END.cond - .05, c.sr, condMat, 110, cy, cz)); });
       });
@@ -1872,7 +1944,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         armour:'درع أسلاك فولاذ',
         bed:'حشوة',
         insul: cfg.flex ? 'عازل PVC' : 'عازل XLPE',
-        cond: cfg.metal==='al' ? 'موصل فافون' : (cfg.flex ? 'نحاس مرن' : 'موصل نحاس')
+        cond: cfg.metal==='al' ? 'موصل فافون ستراند' : (cfg.cond==='fine' ? 'نحاس شعري' : 'نحاس ستراند')
       };
       if(cfg.metal==='al') t.insul = 'عازل XLPE أسود';
       LAB.forEach(function(L){ L.chip.textContent = t[L.k]; L.on = cfg.metal==='al' ? (L.k==='insul' || L.k==='cond') : (L.k!=='armour' || cfg.armour); });
@@ -1924,6 +1996,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       var n = parseInt(size,10) || 4, changed = n!==curN || !!p.armour!==cfg.armour || p.metal!==cfg.metal;
       cfg.code = p.code; cfg.size = size; cfg.volt = p.volt || '0.6/1 kV'; cfg.std = p.std || 'IEC 60502-1';
       cfg.metal = p.metal; cfg.armour = !!p.armour; cfg.flex = /Flex/i.test(p.code||''); if(p.color) cfg.col = p.color;
+      cfg.cond = p.metal==='al' ? 'strand' : (cfg.flex ? 'fine' : (p.cond || 'strand'));
       var al = p.metal==='al';
       armour.visible = cfg.armour && !al; bedMesh.visible = !al; sheathParts.forEach(function(m){ m.visible = !al; });
       condMat.color.copy(al ? ALU : COPPER); condMat.roughness = al ? .36 : .3;
