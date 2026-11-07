@@ -231,6 +231,36 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;
 .app-btn[hidden]{display:none}
 .app-btn .ico{width:18px;height:18px}
 @media (max-width:460px){.app-t{display:none}}
+.iosg{position:fixed;inset:0;z-index:22;background:rgba(3,7,15,.72);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+.iosg[hidden]{display:none}
+.iosg-box{width:min(440px,100%);background:var(--bg-2);border:1px solid rgba(61,123,255,.45);border-radius:20px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.6);margin-bottom:70px}
+.iosg-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.iosg-head b{font-size:18px}
+.iosg-x{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+.iosg-sub{margin:6px 0 12px;color:var(--muted);font-size:14px}
+.iosg-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:g}
+.iosg-steps li{counter-increment:g;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;background:#0C1526;border:1px solid var(--line);position:relative;padding-inline-start:52px}
+.iosg-steps li::before{content:counter(g);position:absolute;inset-inline-start:14px;top:14px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--copper);color:#fff;font-family:var(--font-tech);font-weight:700}
+.iosg-txt{display:flex;flex-direction:column;gap:3px;font-size:14px;line-height:1.6}
+.iosg-txt b{font-size:15px}
+.iosg-txt span{color:var(--muted)}
+.iosg-txt .k{display:inline-grid;place-items:center;min-width:24px;height:20px;border-radius:6px;border:1px solid var(--line);color:var(--fg)}
+.iosg-mock{border-radius:12px;background:#f2f2f7;color:#111;display:flex;align-items:center;font-size:14px;direction:ltr}
+.iosg-mock.tb{justify-content:space-around;padding:8px 6px}
+.iosg-mock.tb .d{color:#9aa0aa;font-size:20px;width:30px;text-align:center}
+.iosg-mock .hl{display:grid;place-items:center;width:40px;height:36px;border-radius:10px;background:#dbe6ff;animation:hl 1.2s ease-in-out infinite}
+@keyframes hl{50%{box-shadow:0 0 0 5px rgba(61,123,255,.35)}}
+.iosg-mock.row{justify-content:space-between;padding:12px 14px;direction:rtl;background:#fff;box-shadow:inset 0 0 0 2px #3D7BFF}
+.iosg-mock.add{gap:10px;padding:10px 14px;direction:rtl}
+.iosg-mock.add img{border-radius:10px}
+.iosg-mock.add span{flex:1}
+.iosg-mock.add b{color:#0a64ff}
+.iosg-other p{font-size:15px;line-height:1.8;margin:12px 0}
+.iosg-copy,.iosg-ok{font:inherit;font-weight:700;width:100%;padding:12px;border-radius:12px;border:0;cursor:pointer;margin-top:12px}
+.iosg-copy{background:var(--copper);color:#fff}
+.iosg-ok{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.iosg-arrow{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-size:40px;color:#fff;text-shadow:0 0 18px #3D7BFF;animation:bob 1s ease-in-out infinite;pointer-events:none}
+@keyframes bob{50%{transform:translate(-50%,10px)}}
 .ios-tip{position:fixed;z-index:21;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:420px;margin:0 auto;padding:16px 18px;border-radius:16px;background:var(--bg-2);border:1px solid rgba(61,123,255,.45);box-shadow:0 18px 50px rgba(0,0,0,.55);font-size:14px;line-height:1.8}
 .ios-tip[hidden]{display:none}
 .ios-tip ol{margin:6px 0 10px;padding-inline-start:20px}
@@ -876,6 +906,29 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       </div>
     </div>
   </section>
+</div>
+
+<div class="iosg" id="iosGuide" hidden role="dialog" aria-modal="true" aria-labelledby="iosgH">
+  <div class="iosg-box">
+    <div class="iosg-head"><b id="iosgH">نزّل التطبيق على الآيفون 📱</b><button type="button" class="iosg-x" id="iosgX" aria-label="سد">✕</button></div>
+    <div class="iosg-safari" id="iosgSafari">
+      <p class="iosg-sub">3 ضغطات بس، وبدون App Store 👇</p>
+      <ol class="iosg-steps">
+        <li><div class="iosg-txt"><b>اضغط زر المشاركة</b><span>تحت بالشاشة. بالآيفونات الجديدة اضغط <span class="k">⋯</span> تحت، وبعدها «مشاركة».</span></div>
+          <div class="iosg-mock tb"><span class="d">‹</span><span class="d">›</span><span class="hl"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#3D7BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span><span class="d">⧉</span><span class="d">⋯</span></div></li>
+        <li><div class="iosg-txt"><b>اختار «إضافة إلى الشاشة الرئيسية»</b><span>انزل شوية بالقائمة. إذا ما لگيتها اضغط «عرض المزيد».</span></div>
+          <div class="iosg-mock row"><span>إضافة إلى الشاشة الرئيسية</span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg></div></li>
+        <li><div class="iosg-txt"><b>اضغط «إضافة»</b><span>فوق باليمين، ويطلع اللوغو بشاشتك ويفتح مثل التطبيق ✅</span></div>
+          <div class="iosg-mock add"><img src="apple-touch-icon.png" alt="" width="40" height="40" onerror="this.style.display='none'"><span>سعد البديري</span><b>إضافة</b></div></li>
+      </ol>
+    </div>
+    <div class="iosg-other" id="iosgOther" hidden>
+      <p>بالآيفون التنزيل يشتغل من <b>سفاري</b> بس. انسخ الرابط وافتحه بسفاري، وبعدها اضغط «نزّل التطبيق» مرة ثانية.</p>
+      <button type="button" class="iosg-copy" id="iosgCopy">انسخ رابط الموقع</button>
+    </div>
+    <button type="button" class="iosg-ok" id="iosgOk">تمام، فهمت</button>
+  </div>
+  <div class="iosg-arrow" id="iosgArrow" aria-hidden="true">⬇</div>
 </div>
 
 <div class="ios-tip" id="iosTip" hidden role="dialog" aria-labelledby="iosTipH">
@@ -1980,7 +2033,25 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       if(android) return ['اضغط النقاط الثلاث ⋮ فوق بكروم', 'اختار «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية»', 'اضغط «تثبيت»، ويطلع اللوغو بشاشتك مثل أي تطبيق'];
       return ['بكروم أو إيدج، اضغط أيقونة التثبيت ⊕ بآخر شريط العنوان', 'أو من القائمة ⋮ اختار «تثبيت سعد البديري»', 'يتنصب ويفتح بنافذة لوحده مثل البرنامج'];
     }
+    var iosSafari = ios && !inApp && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(ua);
+    var iosChrome = ios && !inApp && /CriOS|EdgiOS/.test(ua);
+    function iosGuide(){
+      var g = document.getElementById('iosGuide');
+      document.getElementById('iosgSafari').hidden = !(iosSafari || iosChrome);
+      document.getElementById('iosgOther').hidden = iosSafari || iosChrome;
+      document.getElementById('iosgArrow').hidden = !iosSafari;
+      g.hidden = false; track('تطبيق/شرح-آيفون');
+    }
+    document.getElementById('iosgX').addEventListener('click', function(){ document.getElementById('iosGuide').hidden = true; });
+    document.getElementById('iosgOk').addEventListener('click', function(){ document.getElementById('iosGuide').hidden = true; });
+    document.getElementById('iosgCopy').addEventListener('click', function(){
+      var u = 'https://saad-albudairi.github.io/saad-albudairi.io/', b = this;
+      function ok(){ b.textContent = '✓ انسخ. افتح سفاري والصقه بالعنوان'; }
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, function(){ prompt('انسخ الرابط:', u); });
+      else { prompt('انسخ الرابط:', u); }
+    });
     function install(){
+      if(ios && !deferred){ iosGuide(); return; }
       if(deferred){ deferred.prompt(); deferred.userChoice.then(function(r){ if(r.outcome==='accepted'){ btn.hidden = true; bar.hidden = true; track('تطبيق/تنزيل'); } deferred = null; }); return; }
       document.getElementById('iosTipL').innerHTML = steps().map(function(x){ return '<li>' + x + '</li>'; }).join('');
       tip.hidden = false; track('تطبيق/شرح');
