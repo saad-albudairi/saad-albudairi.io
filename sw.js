@@ -1,5 +1,5 @@
 /* سعد البديري — service worker: يخلي الموقع يفتح بسرعة وحتى بدون نت */
-var V = 'sab-v8';
+var V = 'sab-v9';
 var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './shop-route.jpg',
   './vendor/three.min.js',
   './vendor/OrbitControls.js'];
