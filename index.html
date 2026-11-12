@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-R29a3iuLB4WhJ6PUH0nd/fU5MGFbZ86AQuC49ag+yuk=' 'sha256-jcdiESZOYOfPx9oPIy3pIVIFkAecuYoUWrMrNyMCUQ0=' 'sha256-lfxEWdkbiDEFpYg6BJwKjvL7co2mB4yNg7YSB6w6A7Q=' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://saad-albudairi.goatcounter.com; media-src 'self'; connect-src 'self' https://saad-albudairi.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-R29a3iuLB4WhJ6PUH0nd/fU5MGFbZ86AQuC49ag+yuk=' 'sha256-jcdiESZOYOfPx9oPIy3pIVIFkAecuYoUWrMrNyMCUQ0=' 'sha256-eUO0bTiDDD55EkTv0AL2ZVvblIKI98f5lzMsJ7WylH4=' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://saad-albudairi.goatcounter.com; media-src 'self'; connect-src 'self' https://saad-albudairi.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>سعد البديري للكيبلات</title>
@@ -434,6 +434,46 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .res-name{font-size:16px;font-weight:600}
 .meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .meters .wide{grid-column:1/-1}
+.deliv{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){.deliv{grid-template-columns:1fr}}
+.deliv-stage,.house-stage{position:relative;border-radius:20px;overflow:hidden;border:1px solid rgba(61,123,255,.22);background:radial-gradient(ellipse at 50% 45%,rgba(61,123,255,.16),transparent 72%),var(--bg-2)}
+.deliv-stage{aspect-ratio:5/4}
+.house-stage{aspect-ratio:16/10}
+@media (max-width:700px){.deliv-stage{aspect-ratio:1/1}.house-stage{aspect-ratio:4/5}}
+.deliv-stage canvas,.house-stage canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.map-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.map-labels span{position:absolute;transform:translate(-50%,-135%);font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--bar-bg);border:1px solid var(--line);white-space:nowrap;color:var(--fg)}
+.map-labels span.hq{background:#d97706;border-color:#d97706;color:#fff}
+.map-labels span.sel{background:var(--copper);border-color:var(--copper);color:#fff}
+.map-labels span.room{transform:translate(-50%,-50%);background:rgba(255,255,255,.82);border:0;font-size:12.5px;color:#1c2740;font-weight:700;padding:2px 9px}
+.map-hint{top:8px;bottom:auto;left:8px;right:auto}
+.deliv-side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.deliv-card{padding:16px 18px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.deliv-card .dc-route{display:flex;align-items:center;gap:8px;font-family:"Noto Kufi Arabic",sans-serif;font-weight:800;font-size:20px;margin-bottom:8px}
+.deliv-card .dc-route i{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--copper) 0 8px,transparent 8px 14px);min-width:20px}
+.dc-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.dc-facts div{padding:10px;border-radius:12px;background:rgba(61,123,255,.08);text-align:center}
+.dc-facts b{display:block;font-family:var(--font-tech);font-size:20px;color:var(--copper-hi);letter-spacing:.03em}
+.dc-facts span{font-size:12px;color:var(--muted)}
+.deliv-card p{margin:0 0 12px;font-size:14px;color:var(--muted);line-height:1.7}
+.deliv-govs{display:flex;flex-wrap:wrap;gap:6px}
+.deliv-govs button{font:inherit;font-size:13.5px;font-weight:600;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+.deliv-govs button[aria-pressed="true"]{background:var(--copper);border-color:var(--copper);color:#fff}
+.deliv-govs button.hq{border-color:#d97706}
+.house{display:flex;flex-direction:column;gap:14px}
+.house[hidden]{display:none}
+.house-bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.house-bar .price-note{flex:1;min-width:220px}
+.house-card{position:absolute;left:10px;right:10px;bottom:10px;max-width:440px;margin-inline:auto;padding:14px 16px;border-radius:16px;background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(61,123,255,.4);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.house-card[hidden]{display:none}
+.hc-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.hc-top b{font-size:17px}
+.hc-x{font:inherit;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--fg);cursor:pointer}
+.hc-res{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 10px;font-size:13.5px;color:var(--muted)}
+.hc-res b{font-family:var(--font-tech);font-size:18px;color:var(--copper-hi);letter-spacing:.03em}
+.hc-btns{display:flex;flex-wrap:wrap;gap:8px}
+.hc-btns button{font:inherit;font-size:13.5px;font-weight:700;border-radius:10px;padding:8px 12px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.hc-btns button.pri{background:var(--copper);border-color:var(--copper);color:#fff}
 .calc-mode{margin:0 0 18px;width:max-content;max-width:100%}
 .calc[hidden],.stage-slot[hidden]{display:none}
 .proj{display:flex;flex-direction:column;gap:14px}
@@ -770,6 +810,27 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     </div>
   </section>
 
+  <section class="block" id="delivery" data-view="home">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">التوصيل</div>
+        <h2>من الشورجة لكل محافظات العراق</h2>
+        <p class="lead">اختار محافظتك وشوف شاحنتنا تمشي إلها من بغداد.</p>
+      </div>
+      <div class="deliv">
+        <div class="deliv-stage" id="mapStage">
+          <canvas id="mapCanvas" aria-label="خريطة العراق ثلاثية الأبعاد"></canvas>
+          <div class="map-labels" id="mapLabels" aria-hidden="true"></div>
+          <div class="drag-hint map-hint">اضغط على محافظة</div>
+        </div>
+        <div class="deliv-side">
+          <div class="deliv-card" id="mapCard" aria-live="polite"></div>
+          <div class="deliv-govs" id="mapGovs" role="group" aria-label="المحافظات"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="block" id="products" data-view="products">
     <div class="wrap">
       <div class="head">
@@ -794,6 +855,19 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       <div class="seg calc-mode" role="group" aria-label="نوع الحساب" id="calcMode">
         <button type="button" data-m="single" aria-pressed="true">حمل واحد</button>
         <button type="button" data-m="project" aria-pressed="false">مشروع كامل (بيت أو محل)</button>
+        <button type="button" data-m="house" aria-pressed="false">بيت 3D</button>
+      </div>
+      <div class="house" id="house" hidden>
+        <div class="house-stage" id="houseStage">
+          <canvas id="houseCanvas" aria-label="بيت ثلاثي الأبعاد"></canvas>
+          <div class="map-labels" id="houseLabels" aria-hidden="true"></div>
+          <div class="drag-hint">اضغط على أي جهاز · اسحب للتدوير</div>
+          <div class="house-card" id="houseCard" hidden></div>
+        </div>
+        <div class="house-bar">
+          <button type="button" class="btn solid" id="houseAll">احسب كيبلات البيت كله</button>
+          <span class="price-note">اضغط على السبلت أو السخان أو أي جهاز، ويطلعلك قياس كيبله وقاطعه والخط من اللوحة الرئيسية لحده. الحساب بنفس مواصفة <span class="tech">IEC 60364-5-52</span>.</span>
+        </div>
       </div>
       <div class="proj" id="proj" hidden>
         <div class="proj-set">
@@ -1121,6 +1195,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   <section class="more-box" role="dialog" aria-modal="true" aria-label="المزيد">
     <div class="more-grip" data-mclose></div>
     <div class="more-grid">
+      <a class="more-i" href="#calc" data-house3d data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6v9H3z"/><path d="M3 10l9 5 9-5M12 15v4"/></svg><span>بيت 3D تفاعلي</span></a>
       <a class="more-i" href="#calc" data-proj data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5M12 7.5v3M10.5 9h3"/></svg><span>حاسبة مشروع كامل</span></a>
       <a class="more-i" href="#compare" data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 7h4l-2 6zM15 7h4l-2 6zM5 13a2 2 0 0 0 4 0M15 13a2 2 0 0 0 4 0M8 21h8"/></svg><span>نحاس لو فافون</span></a>
       <a class="more-i" href="#faq" data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg><span>عندي سؤال</span></a>
@@ -1444,8 +1519,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     };
     /* single / project switch */
     window.__calcMode = function(m){
-      var pj = m==='project';
-      $('proj').hidden = !pj; $('calcSingle').hidden = pj; $('slot-calc').hidden = pj;
+      var pj = m==='project', hs = m==='house';
+      $('proj').hidden = !pj; $('calcSingle').hidden = pj || hs; $('slot-calc').hidden = pj || hs; $('house').hidden = !hs;
+      if(hs && window.__houseStart) window.__houseStart();
       $('calcMode').querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.m===m); });
       if(pj && window.__projRun) window.__projRun();
     };
@@ -1542,6 +1618,9 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       $('pMsg').textContent = '✓ انضافت ' + added + ' أصناف للسلة. افتح السلة تحت وأرسل الطلب.';
     });
     window.__projRun = draw;
+    window.__projPre = PRE;
+    window.__projAdd = function(i, L){ var r = mk(i, 1); if(L) r.L = L; var same = rows.filter(function(x){ return x.n===r.n && x.L===r.L; })[0]; if(same) same.c += 1; else rows.push(r); save(); };
+    window.__projSet = function(list){ rows = []; list.forEach(function(it){ var r = mk(it.i, 1); r.L = it.L; var same = rows.filter(function(x){ return x.n===r.n && x.L===r.L; })[0]; if(same) same.c += 1; else rows.push(r); }); save(); };
   })();
 
   /* ---------- copper vs aluminium ---------- */
@@ -1698,6 +1777,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     b.addEventListener('click', function(){ m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); });
     m.addEventListener('click', function(e){
       var pj = e.target.closest('[data-proj]'); if(pj && window.__calcMode) window.__calcMode('project');
+      var h3 = e.target.closest('[data-house3d]'); if(h3 && window.__calcMode) window.__calcMode('house');
       if(e.target.closest('[data-mclose]') || e.target.closest('a')) close();
     });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !m.hidden) close(); });
@@ -1741,7 +1821,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       var l = root.getAttribute('data-theme')!=='light';
       if(l) root.setAttribute('data-theme','light'); else root.removeAttribute('data-theme');
       try{ localStorage.setItem('sab-theme', l ? 'light' : 'dark'); }catch(err){}
-      sync(); if(window.__fxColor) window.__fxColor();
+      sync(); if(window.__fxColor) window.__fxColor(); if(window.__mapTheme) window.__mapTheme(); if(window.__houseTheme) window.__houseTheme();
     });
     sync();
   })();
@@ -2706,6 +2786,265 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     }
   })();
   function track(path){ try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:path, title:path, event:true}); }catch(err){} }
+
+  /* ================= shared helpers for the extra 3D scenes ================= */
+  function isLight(){ return document.documentElement.getAttribute('data-theme')==='light'; }
+  function mkRenderer(canvas){
+    if(!window.THREE) return null;
+    try{ var r = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true}); }catch(err){ return null; }
+    r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); r.outputEncoding = THREE.sRGBEncoding; r.shadowMap.enabled = true; r.shadowMap.type = THREE.PCFSoftShadowMap;
+    return r;
+  }
+  function lin(hex){ return new THREE.Color(hex).convertSRGBToLinear(); }
+  function whenVisible(el, onChange){ if('IntersectionObserver' in window) new IntersectionObserver(function(es){ onChange(es[0].isIntersecting); }, {threshold:.05}).observe(el); else onChange(true); }
+  function tapPick(canvas, cb){ /* a tap that is not a drag */
+    var sx = 0, sy = 0;
+    canvas.addEventListener('pointerdown', function(e){ sx = e.clientX; sy = e.clientY; });
+    canvas.addEventListener('pointerup', function(e){ if(Math.abs(e.clientX-sx) + Math.abs(e.clientY-sy) > 8) return; var r = canvas.getBoundingClientRect(); cb(new THREE.Vector2((e.clientX-r.left)/r.width*2-1, -((e.clientY-r.top)/r.height*2-1))); });
+  }
+
+  /* ================= delivery map: Iraq in 3D with a truck ================= */
+  function initMap(){
+    var canvas = document.getElementById('mapCanvas'), stage = document.getElementById('mapStage');
+    var card = document.getElementById('mapCard'), chips = document.getElementById('mapGovs');
+    /* [name, lon, lat, road km from Baghdad] */
+    var G = [['بغداد',44.37,33.31,0],['البصرة',47.78,30.51,545],['نينوى',43.13,36.34,400],['أربيل',44.01,36.19,350],['السليمانية',45.44,35.56,370],['دهوك',42.99,36.87,470],['كركوك',44.39,35.47,250],['الأنبار',43.30,33.43,110],['ديالى',44.65,33.75,60],['صلاح الدين',43.68,34.60,180],['بابل',44.42,32.47,100],['كربلاء',44.02,32.60,105],['النجف',44.33,32.00,160],['واسط',45.82,32.50,170],['الديوانية',44.93,31.99,180],['ميسان',47.15,31.84,365],['ذي قار',46.26,31.04,360],['المثنى',45.28,31.31,270]];
+    var sel = 'البصرة';
+    function info(name){
+      var g = G.filter(function(x){ return x[0]===name; })[0], hq = name==='بغداد';
+      card.innerHTML = '<div class="dc-route"><span>الشورجة</span><i></i><span>' + name + '</span></div>'+
+        '<div class="dc-facts"><div><b>' + (hq ? 'نفس اليوم' : 'يوم – يومين') + '</b><span>مدة التوصيل</span></div><div><b>' + (hq ? 'داخل بغداد' : '≈ ' + g[3] + ' كم') + '</b><span>المسافة</span></div><div><b>حسب الكمية</b><span>أجرة التوصيل</span></div></div>'+
+        '<p>' + (hq ? 'داخل بغداد يوصلك الطلب بنفس اليوم بعد الدفع بالماستر كارد.' : 'نحمّل طلبك من محلنا بالشورجة ويوصلك ' + name + ' خلال يوم أو يومين. المسافة تقريبية على الطريق.') + '</p>'+
+        '<button type="button" class="btn solid" id="mapOrder">اطلب لـ ' + name + '</button>';
+      chips.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.g===name); });
+    }
+    chips.innerHTML = G.map(function(g){ return '<button type="button" data-g="' + g[0] + '"' + (g[0]==='بغداد' ? ' class="hq"' : '') + ' aria-pressed="false">' + g[0] + '</button>'; }).join('');
+    card.addEventListener('click', function(e){ if(!e.target.closest('#mapOrder')) return; cust.gov = sel; saveCart(); track('توصيل/' + sel); location.hash = 'products'; });
+    var api = {go:function(){}};
+    chips.addEventListener('click', function(e){ var b = e.target.closest('[data-g]'); if(!b) return; sel = b.dataset.g; info(sel); api.go(sel); });
+    info(sel);
+
+    var renderer = mkRenderer(canvas); if(!renderer){ stage.hidden = true; return null; }
+    var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 1, .1, 100), K = Math.cos(33*Math.PI/180);
+    function P(lon, lat, y){ return new THREE.Vector3((lon-43.7)*K, y || 0, -(lat-33.2)); }
+    var BORDER = [[42.36,37.11],[42.78,37.38],[43.35,37.30],[44.20,37.28],[44.79,37.16],[44.88,36.75],[45.25,36.35],[45.45,35.98],[46.10,35.80],[46.33,35.72],[46.05,35.25],[45.75,34.85],[45.45,34.35],[45.42,33.97],[45.95,33.45],[46.20,33.10],[46.75,32.80],[47.40,32.40],[47.72,32.05],[47.86,31.80],[47.68,31.40],[47.70,31.00],[48.03,30.99],[48.03,30.45],[48.55,29.95],[47.97,30.00],[47.70,30.09],[47.40,30.09],[47.11,29.96],[46.55,29.10],[44.72,29.20],[43.40,30.15],[42.08,31.11],[40.40,31.95],[39.20,32.15],[38.79,33.38],[39.90,33.95],[41.00,34.42],[41.22,34.80],[41.23,35.50],[41.38,36.50],[41.83,36.60]];
+    var shape = new THREE.Shape(); BORDER.forEach(function(p, i){ var x = (p[0]-43.7)*K, y = p[1]-33.2; if(i) shape.lineTo(x, y); else shape.moveTo(x, y); });
+    var geo = new THREE.ExtrudeGeometry(shape, {depth:.26, bevelEnabled:true, bevelSize:.035, bevelThickness:.035, bevelSegments:3}); geo.rotateX(-Math.PI/2);
+    var landM = new THREE.MeshStandardMaterial({roughness:.62, metalness:.1}), sideM = new THREE.MeshStandardMaterial({roughness:.7});
+    var land = new THREE.Mesh(geo, [landM, sideM]); land.position.y = -.295; land.receiveShadow = true; land.castShadow = true; scene.add(land);
+    var edge = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(BORDER.map(function(p){ return P(p[0], p[1], .004); })), new THREE.LineBasicMaterial({color:0x7aa5ff, transparent:true, opacity:.9})); scene.add(edge);
+    var shadowFloor = new THREE.Mesh(new THREE.CircleGeometry(9, 48), new THREE.ShadowMaterial({opacity:.28})); shadowFloor.rotation.x = -Math.PI/2; shadowFloor.position.y = -.31; shadowFloor.receiveShadow = true; scene.add(shadowFloor);
+    /* the two rivers make the map readable at a glance */
+    var riverM = new THREE.MeshBasicMaterial({color:0x58b6ff, transparent:true, opacity:.85});
+    [[[42.40,37.08],[43.13,36.34],[43.30,35.50],[43.68,34.60],[43.95,34.15],[44.37,33.31],[45.00,32.90],[45.82,32.50],[46.70,32.05],[47.15,31.84],[47.43,31.00]],
+     [[41.00,34.42],[42.00,34.30],[42.80,33.90],[43.30,33.43],[43.90,33.20],[44.30,32.70],[44.40,32.20],[45.00,31.50],[45.28,31.31],[46.26,31.04],[47.43,31.00],[47.78,30.51],[48.45,30.00]]
+    ].forEach(function(r){ scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(r.map(function(p){ return P(p[0], p[1], .012); })), 80, .022, 6, false), riverM)); });
+    /* pins */
+    var pins = [], hits = [], pinM = new THREE.MeshStandardMaterial({color:lin(0x9db7ff), emissive:lin(0x2a5bd8), emissiveIntensity:.6, roughness:.4}), hqM = new THREE.MeshStandardMaterial({color:lin(0xffb44d), emissive:lin(0xd97706), emissiveIntensity:.9, roughness:.4}), selM = new THREE.MeshStandardMaterial({color:lin(0xffffff), emissive:lin(0x3d7bff), emissiveIntensity:1.2, roughness:.3});
+    G.forEach(function(g){
+      var grp = new THREE.Group(), hq = g[0]==='بغداد'; grp.position.copy(P(g[1], g[2], 0));
+      var stem = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, hq ? .42 : .26, 8), hq ? hqM : pinM); stem.position.y = hq ? .21 : .13; grp.add(stem);
+      var head = new THREE.Mesh(new THREE.SphereGeometry(hq ? .11 : .07, 18, 14), hq ? hqM : pinM); head.position.y = hq ? .46 : .28; head.castShadow = true; grp.add(head);
+      var hit = new THREE.Mesh(new THREE.SphereGeometry(.3, 8, 8), new THREE.MeshBasicMaterial({visible:false})); hit.position.y = .2; hit.userData.g = g[0]; grp.add(hit); hits.push(hit);
+      scene.add(grp); pins.push({g:g, grp:grp, head:head, hq:hq});
+    });
+    var ring = new THREE.Mesh(new THREE.RingGeometry(.14, .19, 40), new THREE.MeshBasicMaterial({color:0xffb44d, transparent:true, side:THREE.DoubleSide})); ring.rotation.x = -Math.PI/2; ring.position.copy(P(44.37, 33.31, .01)); scene.add(ring);
+    /* truck loaded with two cable drums */
+    var truck = new THREE.Group();
+    (function(){
+      function box(w, h, d, m, x, y, z){ var b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); b.castShadow = true; truck.add(b); return b; }
+      var body = new THREE.MeshStandardMaterial({color:lin(0x1f5fe0), roughness:.45, metalness:.2}), dark = new THREE.MeshStandardMaterial({color:lin(0x151a26), roughness:.7}), glass = new THREE.MeshStandardMaterial({color:lin(0xbfe1ff), roughness:.15, metalness:.5}), wood = new THREE.MeshStandardMaterial({color:lin(0xb07a46), roughness:.85}), blk = new THREE.MeshStandardMaterial({color:lin(0x1b1c1f), roughness:.55});
+      box(.2, .03, .52, dark, 0, .075, -.03);            /* chassis */
+      box(.21, .15, .14, body, 0, .165, .2);             /* cab */
+      box(.2, .07, .012, glass, 0, .19, .273);           /* windscreen */
+      box(.22, .025, .36, body, 0, .1, -.1);             /* flat bed */
+      [[-.105,.2],[.105,.2],[-.105,-.08],[.105,-.08],[-.105,-.22],[.105,-.22]].forEach(function(w){ var t = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, .035, 16), dark); t.rotation.z = Math.PI/2; t.position.set(w[0], .05, w[1]); t.castShadow = true; truck.add(t); });
+      [-.02, -.2].forEach(function(z){
+        var d = new THREE.Group(); d.position.set(0, .215, z);
+        [-.075, .075].forEach(function(x){ var f = new THREE.Mesh(new THREE.CylinderGeometry(.1, .1, .014, 24), wood); f.rotation.z = Math.PI/2; f.position.x = x; f.castShadow = true; d.add(f); });
+        var c = new THREE.Mesh(new THREE.CylinderGeometry(.075, .075, .136, 24), blk); c.rotation.z = Math.PI/2; d.add(c); truck.add(d);
+      });
+      truck.scale.setScalar(1.55);
+    })();
+    scene.add(truck);
+    var road = new THREE.Mesh(new THREE.BoxGeometry(.05, .006, 1), new THREE.MeshBasicMaterial({color:0xffb44d})); road.visible = false; scene.add(road);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x1b2a4a, .95));
+    var sun = new THREE.DirectionalLight(0xffffff, 1.25); sun.position.set(-4, 9, 5); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.camera.left = -6; sun.shadow.camera.right = 6; sun.shadow.camera.top = 6; sun.shadow.camera.bottom = -6; scene.add(sun);
+    var controls = new THREE.OrbitControls(camera, canvas); controls.enablePan = false; controls.enableDamping = true; controls.minPolarAngle = .35; controls.maxPolarAngle = 1.2; controls.minDistance = 7; controls.maxDistance = 22; controls.target.set(-.2, 0, .15);
+    function theme(){ var l = isLight(); landM.color.copy(lin(l ? 0xc7d8f8 : 0x16306b)); sideM.color.copy(lin(l ? 0x8fb0ea : 0x0c1c40)); edge.material.color.set(l ? 0x1f5fe0 : 0x7aa5ff); }
+    theme(); window.__mapTheme = theme;
+    /* labels */
+    var lab = document.getElementById('mapLabels'), lHQ = document.createElement('span'), lSel = document.createElement('span'); lHQ.className = 'hq'; lHQ.textContent = 'الشورجة · بغداد'; lSel.className = 'sel'; lab.appendChild(lHQ); lab.appendChild(lSel);
+    var W = 1, H = 1, v3 = new THREE.Vector3();
+    function place(el, pos){ v3.copy(pos).project(camera); el.style.left = ((v3.x+1)/2*W) + 'px'; el.style.top = ((1-v3.y)/2*H) + 'px'; }
+    function fit(){
+      var r = canvas.getBoundingClientRect(); W = r.width; H = r.height; if(!W || !H) return;
+      renderer.setSize(W, H, false); camera.aspect = W/H; camera.updateProjectionMatrix();
+      var t = Math.tan(camera.fov*Math.PI/360), d = Math.max(4.15/(t*camera.aspect), 4.5/t);
+      camera.position.copy(new THREE.Vector3(.12, .86, .5).normalize().multiplyScalar(d)).add(controls.target);
+    }
+    var from = P(44.37, 33.31, 0), to = from.clone(), t0 = 0, dur = 1, moving = false, HQ = from.clone();
+    api.go = function(name){
+      var g = G.filter(function(x){ return x[0]===name; })[0]; if(!g) return;
+      pins.forEach(function(p){ p.head.material = p.hq ? hqM : (p.g[0]===name ? selM : pinM); p.head.scale.setScalar(p.g[0]===name && !p.hq ? 1.5 : 1); });
+      to = P(g[1], g[2], 0); lSel.textContent = name; lSel.style.display = name==='بغداد' ? 'none' : '';
+      from = HQ.clone(); dur = 1400 + g[3]*4.2; t0 = performance.now(); moving = name!=='بغداد';
+      road.visible = moving; if(!moving){ truck.position.copy(HQ); truck.position.x += .28; }
+      else truck.rotation.y = Math.atan2(to.x-from.x, to.z-from.z);
+      start();
+    };
+    tapPick(canvas, function(pt){ var rc = new THREE.Raycaster(); rc.setFromCamera(pt, camera); var h = rc.intersectObjects(hits)[0]; if(h){ sel = h.object.userData.g; info(sel); api.go(sel); } });
+    var raf = 0, vis = false, cur = new THREE.Vector3();
+    function frame(now){
+      raf = 0; if(!vis || document.hidden) return;
+      if(moving){
+        var k = Math.min(1, (now - t0)/dur), e = k<.5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2;
+        cur.lerpVectors(from, to, e); truck.position.set(cur.x, .012 + Math.abs(Math.sin(now*.03))*.004, cur.z);
+        var len = cur.distanceTo(from); road.scale.z = Math.max(.001, len); road.position.set((from.x+cur.x)/2, .008, (from.z+cur.z)/2); road.rotation.y = truck.rotation.y;
+        if(k>=1) moving = false;
+      }
+      var pul = (now*.001) % 1.6 / 1.6; ring.scale.setScalar(1 + pul*2.2); ring.material.opacity = .8*(1-pul);
+      controls.update(); renderer.render(scene, camera);
+      place(lHQ, v3.set(HQ.x, .6, HQ.z).clone()); if(lSel.style.display!=='none') place(lSel, new THREE.Vector3(to.x, .42, to.z));
+      raf = requestAnimationFrame(frame);
+    }
+    function start(){ if(!raf && vis) raf = requestAnimationFrame(frame); }
+    new ResizeObserver(function(){ fit(); start(); }).observe(canvas);
+    whenVisible(stage, function(v){ var first = v && !vis; vis = v; if(v){ fit(); start(); if(first && !initMap.played){ initMap.played = true; api.go(sel); } } });
+    document.addEventListener('visibilitychange', start);
+    fit();
+    return api;
+  }
+
+  /* ================= interactive 3D house ================= */
+  function initHouse(){
+    var canvas = document.getElementById('houseCanvas'), stage = document.getElementById('houseStage'), card = document.getElementById('houseCard');
+    var renderer = mkRenderer(canvas); if(!renderer) return null;
+    var PRE = window.__projPre, scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 1, .1, 200);
+    var CX = 6, CZ = 4.5, WH = 1.0;                       /* house 12 x 9 m, cut-away walls */
+    function M(hex, o){ o = o || {}; o.color = lin(hex); if(o.roughness==null) o.roughness = .7; return new THREE.MeshStandardMaterial(o); }
+    function add(mesh, x, y, z, parent){ mesh.position.set(x - CX, y, z - CZ); mesh.castShadow = true; mesh.receiveShadow = true; (parent || scene).add(mesh); return mesh; }
+    /* rooms: [name, x1, z1, x2, z2, floor colour] */
+    var ROOMS = [['الصالة',0,0,6,5,0x8fa6c9],['غرفة نوم 1',0,5,6,9,0xb39f82],['المطبخ',6,0,12,3.5,0x86b09a],['الممر',6,3.5,9,6,0x98a0b0],['الحمام',9,3.5,12,6,0x76aabd],['غرفة نوم 2',6,6,12,9,0xb394a2]];
+    var floorMs = [];
+    ROOMS.forEach(function(r){ var m = M(r[5], {roughness:.9}); floorMs.push(m); var f = new THREE.Mesh(new THREE.BoxGeometry(r[3]-r[1]-.04, .08, r[4]-r[2]-.04), m); add(f, (r[1]+r[3])/2, -.04, (r[2]+r[4])/2); f.castShadow = false; });
+    var base = new THREE.Mesh(new THREE.BoxGeometry(15.5, .12, 12), M(0x4f8a5b, {roughness:1})); add(base, CX - .9, -.14, CZ); base.castShadow = false;
+    var wallM = M(0xd9dfe9, {roughness:.85}), capM = M(0x5f7397, {roughness:.8});
+    function wall(x1, z1, x2, z2){
+      var len = Math.hypot(x2-x1, z2-z1), horiz = Math.abs(z2-z1) < .01, w = new THREE.Mesh(new THREE.BoxGeometry(horiz ? len : .16, WH, horiz ? .16 : len), wallM); add(w, (x1+x2)/2, WH/2, (z1+z2)/2);
+      var c = new THREE.Mesh(new THREE.BoxGeometry(horiz ? len : .18, .04, horiz ? .18 : len), capM); add(c, (x1+x2)/2, WH + .02, (z1+z2)/2); c.castShadow = false;
+    }
+    /* outer walls (front door gap on the left wall), then inner walls with door gaps */
+    wall(0,0,12,0); wall(12,0,12,9); wall(0,9,12,9); wall(0,0,0,1.6); wall(0,2.6,0,9);
+    wall(0,5,2.2,5); wall(3.2,5,6,5); wall(6,0,6,1.2); wall(6,2.2,6,4.2); wall(6,5,6,9);
+    wall(6,3.5,7,3.5); wall(8,3.5,12,3.5); wall(9,3.5,9,4.3); wall(9,5.3,9,6); wall(6,6,7,6); wall(8,6,12,6);
+    /* devices: [id, preset index, label, x, z, mount height, builder] */
+    var devs = [], hitList = [];
+    function dev(pi, name, x, z, h, build){
+      var g = new THREE.Group(); g.position.set(x - CX, 0, z - CZ); build(g); scene.add(g);
+      var ringM = new THREE.MeshBasicMaterial({color:0x3d7bff, transparent:true, opacity:.8, side:THREE.DoubleSide}), ring = new THREE.Mesh(new THREE.RingGeometry(.3, .38, 36), ringM); ring.rotation.x = -Math.PI/2; ring.position.y = .02; g.add(ring);
+      var hit = new THREE.Mesh(new THREE.BoxGeometry(1.1, WH + .3, 1.1), new THREE.MeshBasicMaterial({visible:false})); hit.position.y = (WH + .3)/2; g.add(hit);
+      var d = {pi:pi, name:name, x:x, z:z, h:h, g:g, ring:ring}; hit.userData.d = d; hitList.push(hit); devs.push(d); return d;
+    }
+    function part(g, geo, mat, x, y, z){ var m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; g.add(m); return m; }
+    var white = M(0xf4f6f9, {roughness:.4}), steel = M(0xb9c0ca, {roughness:.3, metalness:.6}), dark = M(0x23272f, {roughness:.5}), blue = M(0x2f6fd1, {roughness:.5}), lampM = new THREE.MeshStandardMaterial({color:lin(0xfff2c2), emissive:lin(0xffc94d), emissiveIntensity:1.1});
+    function split(g, alongX){ var b = part(g, new THREE.BoxGeometry(alongX ? 1 : .24, .3, alongX ? .24 : 1), white, 0, .82, 0); part(g, new THREE.BoxGeometry(alongX ? .9 : .02, .04, alongX ? .02 : .9), blue, alongX ? 0 : .125, .72, alongX ? .125 : 0); return b; }
+    function lamp(g){ part(g, new THREE.CylinderGeometry(.03, .05, .9, 10), dark, 0, .45, 0); part(g, new THREE.CylinderGeometry(.16, .16, .03, 20), dark, 0, .015, 0); part(g, new THREE.ConeGeometry(.24, .22, 24, 1, true), M(0xfff6d8, {side:THREE.DoubleSide, emissive:lin(0xffc94d), emissiveIntensity:.5}), 0, 1.0, 0); part(g, new THREE.SphereGeometry(.09, 16, 12), lampM, 0, .93, 0); }
+    function sockets(g, alongX){ [-.2, .2].forEach(function(o){ part(g, new THREE.BoxGeometry(alongX ? .16 : .03, .16, alongX ? .03 : .16), white, alongX ? o : 0, .4, alongX ? 0 : o); }); }
+    dev(4, 'سبلت الصالة (2 طن)', 3, .22, .82, function(g){ split(g, true); });
+    dev(0, 'إنارة الصالة', 3, 2.6, 1.0, lamp);
+    dev(1, 'بلاكات الصالة', 5.82, 3.4, .4, function(g){ sockets(g, false); });
+    dev(3, 'سبلت غرفة نوم 1 (1.5 طن)', 3, 8.78, .82, function(g){ split(g, true); });
+    dev(0, 'إنارة غرفة نوم 1', 3, 7, 1.0, lamp);
+    dev(1, 'بلاكات غرفة نوم 1', .2, 7, .4, function(g){ sockets(g, false); });
+    dev(2, 'سبلت غرفة نوم 2 (1 طن)', 9, 8.78, .82, function(g){ split(g, true); });
+    dev(0, 'إنارة غرفة نوم 2', 9, 7.4, 1.0, lamp);
+    dev(1, 'بلاكات غرفة نوم 2', 11.8, 7.5, .4, function(g){ sockets(g, false); });
+    dev(7, 'الطباخ الكهربائي', 8, .5, .9, function(g){ part(g, new THREE.BoxGeometry(.7, .85, .65), dark, 0, .425, 0); [[-.17,-.14],[.17,-.14],[-.17,.14],[.17,.14]].forEach(function(o){ var c = part(g, new THREE.CylinderGeometry(.09, .09, .02, 18), steel, o[0], .86, o[1]); c.castShadow = false; }); });
+    dev(9, 'الثلاجة', 11.5, .55, 1.0, function(g){ part(g, new THREE.BoxGeometry(.75, 1.2, .7), steel, 0, .6, 0); part(g, new THREE.BoxGeometry(.02, .5, .03), dark, -.38, .8, .2); });
+    dev(8, 'الغسالة', 6.6, 2.9, .8, function(g){ part(g, new THREE.BoxGeometry(.65, .85, .62), white, 0, .425, 0); var c = part(g, new THREE.CylinderGeometry(.2, .2, .03, 24), dark, .33, .45, 0); c.rotation.z = Math.PI/2; });
+    dev(0, 'إنارة المطبخ', 9.5, 1.9, 1.0, lamp);
+    dev(6, 'سخان الماي', 11.6, 4.2, 1.0, function(g){ var c = part(g, new THREE.CylinderGeometry(.27, .27, .75, 24), white, 0, .8, 0); part(g, new THREE.BoxGeometry(.12, .08, .04), blue, -.27, .55, 0); });
+    dev(10, 'ماطور الماي', -1.3, 7.2, .3, function(g){ part(g, new THREE.BoxGeometry(.7, .08, .45), dark, 0, .04, 0); var c = part(g, new THREE.CylinderGeometry(.17, .17, .5, 20), blue, 0, .26, 0); c.rotation.z = Math.PI/2; part(g, new THREE.CylinderGeometry(.05, .05, .3, 10), steel, .3, .35, 0); });
+    /* main panel next to the front door */
+    var PANEL = {x:.2, z:3.3};
+    (function(){ var g = new THREE.Group(); g.position.set(PANEL.x - CX, 0, PANEL.z - CZ); part(g, new THREE.BoxGeometry(.1, .5, .4), M(0x6b7482, {metalness:.5, roughness:.4}), 0, .85, 0); part(g, new THREE.BoxGeometry(.02, .08, .3), M(0xffb44d, {emissive:lin(0xd97706), emissiveIntensity:.8}), .06, .95, 0); scene.add(g); })();
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x3a4a66, .55));
+    var sun = new THREE.DirectionalLight(0xffffff, .75); sun.position.set(-7, 14, 8); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.left = -10; sun.shadow.camera.right = 10; sun.shadow.camera.top = 9; sun.shadow.camera.bottom = -9; sun.shadow.bias = -.0005; scene.add(sun);
+    var controls = new THREE.OrbitControls(camera, canvas); controls.enablePan = false; controls.enableDamping = true; controls.minPolarAngle = .2; controls.maxPolarAngle = 1.25; controls.minDistance = 9; controls.maxDistance = 40; controls.target.set(-.4, 0, 0);
+    function theme(){ wallM.color.copy(lin(isLight() ? 0xeef1f6 : 0xd9dfe9)); }
+    theme(); window.__houseTheme = theme;
+    /* room + panel labels */
+    var lab = document.getElementById('houseLabels'), labels = [];
+    ROOMS.forEach(function(r){ var el = document.createElement('span'); el.className = 'room'; el.textContent = r[0]; lab.appendChild(el); labels.push({el:el, p:new THREE.Vector3((r[1]+r[3])/2 - CX, .05, (r[2]+r[4])/2 - CZ + .9)}); });
+    (function(){ var el = document.createElement('span'); el.className = 'hq'; el.textContent = 'اللوحة الرئيسية'; lab.appendChild(el); labels.push({el:el, p:new THREE.Vector3(PANEL.x - CX, 1.4, PANEL.z - CZ)}); })();
+    var W = 1, H = 1, v3 = new THREE.Vector3();
+    function fit(){
+      var r = canvas.getBoundingClientRect(); W = r.width; H = r.height; if(!W || !H) return;
+      renderer.setSize(W, H, false); camera.aspect = W/H; camera.updateProjectionMatrix();
+      var t = Math.tan(camera.fov*Math.PI/360), d = Math.max(8.1/(t*camera.aspect), 6.0/t);
+      camera.position.copy(new THREE.Vector3(.1, .9, .46).normalize().multiplyScalar(d)).add(controls.target);
+    }
+    /* the cable run from the panel to the chosen device */
+    var cableM = new THREE.MeshStandardMaterial({color:lin(0xffb44d), emissive:lin(0xd97706), emissiveIntensity:1.1, roughness:.4}), cableMesh = null, cableT0 = 0, cableCount = 0, cur = null;
+    function route(d){
+      var y = .09, pts = [new THREE.Vector3(PANEL.x - CX + .1, .8, PANEL.z - CZ), new THREE.Vector3(PANEL.x - CX + .1, y, PANEL.z - CZ)];
+      var midx = Math.min(Math.max(d.x, .3), 11.7); pts.push(new THREE.Vector3(midx - CX, y, PANEL.z - CZ)); pts.push(new THREE.Vector3(midx - CX, y, d.z - CZ));
+      if(Math.abs(midx - d.x) > .01) pts.push(new THREE.Vector3(d.x - CX, y, d.z - CZ));
+      pts.push(new THREE.Vector3(d.x - CX, d.h, d.z - CZ));
+      var len = 0; for(var i=1;i<pts.length;i++) len += pts[i].distanceTo(pts[i-1]);
+      return {pts:pts, len:len};
+    }
+    function runLen(d){ return Math.max(5, Math.ceil(route(d).len + 2)); } /* +2 m for connections and slack */
+    function size(d){ var p = PRE[d.pi]; return window.__sizeFor({metal:'cu', cond:'strand', phase:1, tC:50, pf:p.pf, L:runLen(d), Ib:p.w/(220*p.pf), lim:p.use, minIdx:p.min}); }
+    function pick(d){
+      cur = d; devs.forEach(function(x){ x.ring.material.color.set(x===d ? 0xffb44d : 0x3d7bff); });
+      if(cableMesh){ scene.remove(cableMesh); cableMesh.geometry.dispose(); cableMesh = null; }
+      if(!d){ card.hidden = true; return; }
+      var r = route(d), path = new THREE.CurvePath(); for(var i=1;i<r.pts.length;i++) path.add(new THREE.LineCurve3(r.pts[i-1], r.pts[i]));
+      var geo = new THREE.TubeGeometry(path, 120, .045, 8, false); cableMesh = new THREE.Mesh(geo, cableM); cableCount = geo.index.count; geo.setDrawRange(0, 0); scene.add(cableMesh); cableT0 = performance.now();
+      var p = PRE[d.pi], s = size(d), L = runLen(d);
+      card.innerHTML = '<div class="hc-top"><b>' + d.name + '</b><button type="button" class="hc-x" data-x aria-label="سد">✕</button></div>'+
+        (s ? '<div class="hc-res"><span>الحمل <b>' + p.w + '</b> واط</span><span>القاطع <b>' + s.In + '</b> أمبير</span><span>الكيبل <b>2×' + s.size + '</b> ملم²</span><span>طول الخط ≈ <b>' + L + '</b> م</span></div>' : '<div class="hc-res">الحمل كبير، راسلنا ونحسبه وياك.</div>')+
+        '<div class="hc-btns">' + (s ? '<button type="button" class="pri" data-cart>أضف ' + L + ' متر 2×' + s.size + ' للسلة</button>' : '') + '<button type="button" data-proj1>أضف لحاسبة المشروع</button></div>';
+      card.hidden = false; track('بيت/' + p.n); start();
+    }
+    card.addEventListener('click', function(e){
+      if(e.target.closest('[data-x]')){ pick(null); return; }
+      if(!cur) return;
+      var s = size(cur), L = runLen(cur), b;
+      if((b = e.target.closest('[data-cart]')) && s){
+        var name = 'كيبل نحاس ستراند غير مدرّع خطين', sz = '2×' + s.size, same = cart.filter(function(x){ return x.name===name && x.size===sz && x.color==='black' && x.unit==='متر' && x.origin===ORIGINS[0]; })[0];
+        if(same) same.qty += L; else cart.push({name:name, size:sz, color:'black', origin:ORIGINS[0], qty:L, unit:'متر'});
+        saveCart(); cartCount(); b.textContent = '✓ انضاف للسلة'; b.disabled = true;
+      }
+      if((b = e.target.closest('[data-proj1]'))){ window.__projAdd(cur.pi, L); b.textContent = '✓ انضاف للمشروع'; b.disabled = true; }
+    });
+    document.getElementById('houseAll').addEventListener('click', function(){
+      window.__projSet(devs.map(function(d){ return {i:d.pi, L:runLen(d)}; })); track('بيت/الكل'); window.__calcMode('project');
+      var pj = document.getElementById('proj'); if(pj.scrollIntoView) pj.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    tapPick(canvas, function(pt){ var rc = new THREE.Raycaster(); rc.setFromCamera(pt, camera); var h = rc.intersectObjects(hitList)[0]; pick(h ? h.object.userData.d : null); });
+    var raf = 0, vis = false;
+    function frame(now){
+      raf = 0; if(!vis || document.hidden || document.getElementById('house').hidden) return;
+      var pul = (now*.001) % 1.5 / 1.5; devs.forEach(function(d){ var on = d===cur; d.ring.scale.setScalar(on ? 1.5 : 1 + pul*.6); d.ring.material.opacity = on ? .95 : .75*(1-pul); });
+      if(cableMesh){ var k = Math.min(1, (now - cableT0)/900); cableMesh.geometry.setDrawRange(0, Math.floor(cableCount*k/3)*3); }
+      controls.update(); renderer.render(scene, camera);
+      labels.forEach(function(l){ v3.copy(l.p).project(camera); l.el.style.left = ((v3.x+1)/2*W) + 'px'; l.el.style.top = ((1-v3.y)/2*H) + 'px'; });
+      raf = requestAnimationFrame(frame);
+    }
+    function start(){ if(!raf && vis) raf = requestAnimationFrame(frame); }
+    new ResizeObserver(function(){ fit(); start(); }).observe(canvas);
+    whenVisible(stage, function(v){ vis = v; if(v){ fit(); start(); } });
+    document.addEventListener('visibilitychange', start);
+    fit();
+    return {start:function(){ fit(); start(); }, pick:function(i){ pick(devs[i]); }};
+  }
+  window.__map = initMap();
+  window.__houseStart = function(){ if(!window.__house) window.__house = initHouse(); if(window.__house) window.__house.start(); else document.getElementById('houseStage').hidden = true; };
 
   window.__world = initWorld();
   if(!window.__world){ ['world','wBar','rSteps'].forEach(function(id){ document.getElementById(id).hidden = true; }); document.getElementById('map').hidden = false; }
