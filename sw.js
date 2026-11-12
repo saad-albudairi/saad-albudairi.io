@@ -1,8 +1,8 @@
 /* سعد البديري — service worker: يخلي الموقع يفتح بسرعة وحتى بدون نت */
-var V = 'sab-v6';
+var V = 'sab-v7';
 var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './shop-route.jpg',
-  'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
-  'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js'];
+  './vendor/three.min.js',
+  './vendor/OrbitControls.js'];
 self.addEventListener('install', function(e){
   e.waitUntil(caches.open(V).then(function(c){ return Promise.all(CORE.map(function(u){ return c.add(u).catch(function(){}); })); }).then(function(){ return self.skipWaiting(); }));
 });

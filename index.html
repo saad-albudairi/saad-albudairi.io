@@ -2,6 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-R29a3iuLB4WhJ6PUH0nd/fU5MGFbZ86AQuC49ag+yuk=' 'sha256-jcdiESZOYOfPx9oPIy3pIVIFkAecuYoUWrMrNyMCUQ0=' 'sha256-lfxEWdkbiDEFpYg6BJwKjvL7co2mB4yNg7YSB6w6A7Q=' https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://saad-albudairi.goatcounter.com; media-src 'self'; connect-src 'self' https://saad-albudairi.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>سعد البديري للكيبلات</title>
 <meta name="description" content="سعد البديري للكيبلات في سوق الشورجة ببغداد منذ 1991. كيبلات نحاس وفافون وفلكس، مدرّعة وغير مدرّعة، خط واحد وخطين وأربع خطوط بكل القياسات. بيع بالمتر واللفات والبكرات وتوصيل لكل محافظات العراق.">
@@ -809,7 +811,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
       </div>
       <div class="stage-slot" id="slot-calc"></div>
       <div class="calc" id="calcSingle">
-        <form class="calc-in" id="calcForm" onsubmit="return false">
+        <form class="calc-in" id="calcForm">
           <div class="fld"><span>نوع الكيبل</span>
             <div class="seg" role="group" aria-label="المعدن" id="cMetal">
               <button type="button" data-v="cu" aria-pressed="true">نحاس</button>
@@ -1085,7 +1087,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <li><div class="iosg-txt"><b>اختار «إضافة إلى الشاشة الرئيسية»</b><span>انزل شوية بالقائمة. إذا ما لگيتها اضغط «عرض المزيد».</span></div>
           <div class="iosg-mock row"><span>إضافة إلى الشاشة الرئيسية</span><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg></div></li>
         <li><div class="iosg-txt"><b>اضغط «إضافة»</b><span>فوق باليمين، ويطلع اللوغو بشاشتك ويفتح مثل التطبيق ✅</span></div>
-          <div class="iosg-mock add"><img src="apple-touch-icon.png" alt="" width="40" height="40" onerror="this.style.display='none'"><span>سعد البديري</span><b>إضافة</b></div></li>
+          <div class="iosg-mock add"><img src="apple-touch-icon.png" alt="" width="40" height="40" id="iosgIcon"><span>سعد البديري</span><b>إضافة</b></div></li>
       </ol>
     </div>
     <div class="iosg-other" id="iosgOther" hidden>
@@ -1135,8 +1137,8 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 <footer><div class="wrap"><span>سعد البديري للكيبلات · منذ 1991 · الشورجة، بغداد · المحل <bdi class="tel" dir="ltr">0770 736 8351</bdi> · المسؤول <bdi class="tel" dir="ltr">0770 074 0146</bdi></span><span>© 2026 سعد البديري</span></div></footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
 <script>
 (function(){
   var WA = '9647707368351';
@@ -2650,6 +2652,10 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   /* ---------- app install + visit counter (live site only) ---------- */
   (function(){
     var live = /github\.io$/.test(location.hostname) || /saad-albudairi/.test(location.hostname);
+    /* security: never let another site show ours inside a frame (clickjacking) */
+    if(live && window.top !== window.self){ try{ window.top.location = window.self.location.href; }catch(err){ document.documentElement.style.display = 'none'; } }
+    var cf = document.getElementById('calcForm'); if(cf) cf.addEventListener('submit', function(e){ e.preventDefault(); });
+    var gi = document.getElementById('iosgIcon'); if(gi) gi.addEventListener('error', function(){ gi.style.display = 'none'; });
     var btn = document.getElementById('appBtn'), tip = document.getElementById('iosTip'), bar = document.getElementById('appBar'), deferred = null;
     var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
     var ua = navigator.userAgent;

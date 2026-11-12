@@ -2,6 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-cUAFjyTG5rvaVqvoblBxG4b+oJCWT1dvAKZk/sN1rCA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src https://api.github.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>لوحة التحكم · سعد البديري</title>
 <meta name="robots" content="noindex,nofollow">
@@ -63,8 +65,9 @@ code{direction:ltr;unicode-bidi:isolate;background:var(--card2);border:1px solid
   <!-- login -->
   <section class="card" id="login">
     <h2>تسجيل الدخول 🔐</h2>
-    <p class="sub">الصق مفتاح GitHub الخاص بيك. ينحفظ بهذا الجهاز بس، وما ينرسل لأي مكان غير GitHub.</p>
+    <p class="sub">الصق مفتاح GitHub الخاص بيك. ما ينرسل لأي مكان غير GitHub، وينمسح من تسد المتصفح إلا إذا فعّلت «تذكرني».</p>
     <label>المفتاح (Token)<input type="password" id="tok" autocomplete="off" placeholder="github_pat_..." dir="ltr"></label>
+    <label class="sw"><input type="checkbox" id="remember"> تذكرني على هذا الجهاز (لا تفعّلها على جهاز مو مالك)</label>
     <button class="pri" id="loginBtn">دخول</button>
     <span id="loginMsg" style="margin-inline-start:10px;font-size:14px"></span>
     <details>
@@ -159,7 +162,7 @@ code{direction:ltr;unicode-bidi:isolate;background:var(--card2);border:1px solid
     }).then(function(j){
       if(j){ sha = j.sha; try{ data = JSON.parse(b64d(j.content)); }catch(e){} }
       data.announce = data.announce || {on:false, text:'', link:''}; data.offers = data.offers || [];
-      try{ localStorage.setItem('sab-admin-token', tok); }catch(e){}
+      try{ sessionStorage.setItem('sab-admin-token', tok); if($('remember').checked) localStorage.setItem('sab-admin-token', tok); else localStorage.removeItem('sab-admin-token'); }catch(e){}
       $('login').hidden = true; $('panel').hidden = false; $('savebar').hidden = false; fill();
     }).catch(function(e){ $('loginMsg').textContent = e.message; $('loginMsg').style.color = 'var(--bad)'; });
   }
@@ -203,8 +206,9 @@ code{direction:ltr;unicode-bidi:isolate;background:var(--card2);border:1px solid
   });
   $('loginBtn').addEventListener('click', function(){ tok = $('tok').value.trim(); if(tok) load(); });
   $('tok').addEventListener('keydown', function(e){ if(e.key==='Enter'){ tok = $('tok').value.trim(); if(tok) load(); } });
-  $('logout').addEventListener('click', function(){ try{ localStorage.removeItem('sab-admin-token'); }catch(e){} location.reload(); });
-  try{ tok = localStorage.getItem('sab-admin-token') || ''; }catch(e){}
+  $('logout').addEventListener('click', function(){ try{ localStorage.removeItem('sab-admin-token'); sessionStorage.removeItem('sab-admin-token'); }catch(e){} location.reload(); });
+  if(window.top !== window.self){ document.documentElement.style.display = 'none'; return; }
+  try{ tok = sessionStorage.getItem('sab-admin-token') || localStorage.getItem('sab-admin-token') || ''; if(localStorage.getItem('sab-admin-token')) $('remember').checked = true; }catch(e){}
   if(tok){ $('tok').value = tok; load(); }
 })();
 </script>
