@@ -1,5 +1,5 @@
 /* سعد البديري — service worker: يخلي الموقع يفتح بسرعة وحتى بدون نت */
-var V = 'sab-v5';
+var V = 'sab-v6';
 var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './shop-route.jpg',
   'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
   'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js'];
@@ -11,7 +11,7 @@ self.addEventListener('activate', function(e){
 });
 self.addEventListener('fetch', function(e){
   var r = e.request, u = new URL(r.url);
-  if(r.method !== 'GET' || /\.mp4$/.test(u.pathname) || /goatcounter|zgo\.at|wa\.me/.test(u.hostname)) return;
+  if(r.method !== 'GET' || /\.mp4$|offers\.json$|admin\.html$/.test(u.pathname) || /goatcounter|zgo\.at|wa\.me/.test(u.hostname)) return;
   if(r.mode === 'navigate'){ // الصفحة: من النت أول حتى التحديثات تبين، وإذا ماكو نت من الكاش
     e.respondWith(fetch(r).then(function(res){ var cp = res.clone(); caches.open(V).then(function(c){ c.put('./index.html', cp); }); return res; })
       .catch(function(){ return caches.match('./index.html').then(function(m){ return m || caches.match('./'); }); }));

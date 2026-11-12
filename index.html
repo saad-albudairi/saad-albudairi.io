@@ -90,8 +90,8 @@ h2{font-size:clamp(28px,4vw,40px);font-weight:800}
 
 /* bar */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bar-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.bar > .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.bar{position:relative;z-index:2;padding-top:env(safe-area-inset-top,0px)}
+.bar > .wrap{display:flex;align-items:center;justify-content:center;gap:16px;height:62px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo-mark{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
 .logo b{font-family:"Aref Ruqaa","Noto Kufi Arabic",serif;font-weight:700;font-size:28px;line-height:1.15;color:var(--fg)}
@@ -131,20 +131,66 @@ html[data-theme="light"] .theme-btn .moon{display:block}
 .cond-info b{color:var(--fg)}
 .size-use{flex-basis:100%;display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.7;padding:10px 12px;border-radius:12px;background:rgba(61,123,255,.08);border:1px solid rgba(61,123,255,.22)}
 .size-use a{color:var(--copper-hi);white-space:nowrap}
-.tabbar{display:none}
-@media (max-width:700px){
-  .tabbar{position:fixed;z-index:9;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);background:var(--bar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
-  .tabbar a,.tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:none;border:0;padding:4px 0;cursor:pointer}
-  .tabbar .ico{width:23px;height:23px}
-  .tabbar [aria-current="page"]{color:var(--copper)}
-  .tabbar .tb-call{color:#22c55e}
-  .tabbar .tb-n{position:absolute;top:0;inset-inline-start:calc(50% + 4px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--copper);color:#fff;font-size:11px;line-height:18px;font-family:var(--font-tech)}
-  .tabbar .tb-n.zero{display:none}
-  body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
-  body .wa-float{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
-  .ios-tip{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
-  .fx-btn{bottom:6px}
+.tabbar{position:fixed;z-index:9;left:0;right:0;bottom:0;display:flex;justify-content:space-around;background:var(--bar-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabbar a,.tabbar button{flex:1;max-width:130px;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;background:none;border:0;padding:4px 0;cursor:pointer;border-radius:12px;transition:color .15s,background .15s}
+.tabbar .ico{width:23px;height:23px}
+.tabbar [aria-current="page"],.tabbar [aria-expanded="true"]{color:var(--copper)}
+.tabbar .tb-n{position:absolute;top:0;inset-inline-start:calc(50% + 4px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--copper);color:#fff;font-size:11px;line-height:18px;font-family:var(--font-tech)}
+.tabbar .tb-n.zero{display:none}
+.tabbar .tb-wide{display:none}
+.tabbar .bump{animation:bump .5s}
+body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+body .wa-float{bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+.ios-tip{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+@media (min-width:701px){
+  .tabbar{left:50%;right:auto;transform:translateX(-50%);bottom:14px;border:1px solid var(--line);border-radius:22px;padding:8px 10px;gap:4px;box-shadow:0 16px 44px rgba(0,0,0,.4)}
+  .tabbar a,.tabbar button{flex:none;min-width:88px;max-width:none;font-size:12.5px;padding:7px 10px}
+  .tabbar a:hover,.tabbar button:hover{background:rgba(61,123,255,.1);color:var(--fg)}
+  .tabbar .tb-wide{display:flex}
+  body{padding-bottom:104px}
+  body .wa-float{bottom:104px}
+  .more-i.m-only{display:none}
 }
+.more{position:fixed;inset:0;z-index:19;display:flex;align-items:flex-end;justify-content:center}
+.more[hidden]{display:none}
+.more-back{position:absolute;inset:0;background:rgba(3,7,15,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.more-box{position:relative;width:min(560px,100%);background:var(--bg-2);border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;padding:8px 16px calc(20px + env(safe-area-inset-bottom,0px));animation:sheet .25s ease-out}
+@media (min-width:701px){.more{align-items:center}.more-box{border-radius:22px;border-bottom:1px solid var(--line);padding-bottom:18px}}
+@keyframes sheet{from{transform:translateY(30px);opacity:0}}
+.more-grip{width:44px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 12px;cursor:pointer}
+.more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.more-i{display:flex;align-items:center;gap:10px;font:inherit;font-size:15px;font-weight:600;color:var(--fg);text-decoration:none;text-align:start;padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.more-i[hidden]{display:none}
+.more-i .ico{width:22px;height:22px;color:var(--copper);flex:none}
+.more-i.more-wa .ico{color:#22c55e}
+.theme-sw .moon{display:none}
+html[data-theme="light"] .theme-sw .sun{display:none}
+html[data-theme="light"] .theme-sw .moon{display:block}
+.announce{display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;background:linear-gradient(90deg,#b45309,#d97706);color:#fff;font-weight:600;font-size:14px;text-decoration:none;text-align:center}
+.announce[hidden]{display:none}
+.offers{max-width:1200px;margin:0 auto;padding:6px 20px 52px;position:relative;z-index:1}
+.offers[hidden]{display:none}
+.offers h2{font-size:20px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.offers-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.offer{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:16px;background:var(--card);border:1px solid rgba(217,119,6,.45);box-shadow:0 0 0 1px rgba(217,119,6,.12) inset}
+.offer b{font-size:17px}
+.offer p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
+.offer small{color:#f59e0b;font-weight:600}
+.offer a{align-self:flex-start;margin-top:6px;font-weight:600;font-size:14px;color:#062b14;background:var(--wa);padding:8px 14px;border-radius:10px;text-decoration:none}
+.splash{position:fixed;inset:0;z-index:50;background:#0A1120;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#fff;transition:opacity .45s,visibility .45s}
+.splash.out{opacity:0;visibility:hidden}
+.splash svg{width:112px;height:112px;animation:spin-in 1.1s cubic-bezier(.2,.8,.2,1) both}
+.splash .ring{stroke-dasharray:365;stroke-dashoffset:365;animation:ring 1s .15s ease-out forwards}
+.splash .dot{transform-origin:100px 100px;animation:dot .5s .7s both}
+.splash b{font-family:"Aref Ruqaa",serif;font-size:34px;animation:up .6s .45s both}
+.splash span{font-size:14px;color:#9fb4dc;animation:up .6s .6s both}
+@keyframes spin-in{from{transform:rotate(-90deg) scale(.6);opacity:0}}
+@keyframes ring{to{stroke-dashoffset:0}}
+@keyframes dot{from{transform:scale(0)}}
+@keyframes up{from{transform:translateY(10px);opacity:0}}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.splash svg,.splash .ring,.splash .dot,.splash b,.splash span{animation:none}.splash .ring{stroke-dashoffset:0}}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:center;padding-block:56px 40px}
 .hero-copy{display:flex;flex-direction:column;gap:22px}
 .hero h1{font-size:clamp(36px,5.4vw,60px);font-weight:800}
@@ -386,6 +432,33 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 .res-name{font-size:16px;font-weight:600}
 .meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .meters .wide{grid-column:1/-1}
+.calc-mode{margin:0 0 18px;width:max-content;max-width:100%}
+.calc[hidden],.stage-slot[hidden]{display:none}
+.proj{display:flex;flex-direction:column;gap:14px}
+.proj[hidden]{display:none}
+.proj-set{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;padding:16px;border-radius:16px;background:var(--bg-2);border:1px solid var(--line)}
+.proj-set input,.proj-set select,.p-row input{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%;min-width:0}
+.proj-sub{font-weight:700}
+.proj-chips{display:flex;flex-wrap:wrap;gap:6px}
+.proj-chips button{font:inherit;font-size:13.5px;font-weight:600;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+.proj-chips button:hover{border-color:var(--copper)}
+.proj-list{display:flex;flex-direction:column;gap:8px}
+.p-row{display:grid;grid-template-columns:minmax(0,2.2fr) repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:end;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.p-row label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+.p-row .p-del{font:inherit;font-size:13px;color:#ff8c8c;background:none;border:1px solid rgba(255,120,120,.3);border-radius:8px;padding:9px 10px;cursor:pointer}
+.p-row .p-res{grid-column:1/-1;font-size:13.5px;color:var(--muted)}
+.p-row .p-res b{color:var(--copper-hi);font-family:var(--font-tech);font-size:16px;letter-spacing:.03em}
+@media (max-width:620px){.p-row{grid-template-columns:repeat(3,minmax(0,1fr)) auto}.p-row label:first-child{grid-column:1/-1}}
+.proj-out{padding:18px;border-radius:16px;background:var(--bg-2);border:1px solid rgba(61,123,255,.35)}
+.proj-out:empty{display:none}
+.proj-out h3{margin:0 0 10px;font-size:18px}
+.p-main{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;padding:12px 14px;border-radius:12px;background:rgba(61,123,255,.1);margin-bottom:12px}
+.p-main b{font-family:var(--font-tech);font-size:26px;color:var(--copper-hi);letter-spacing:.04em}
+.p-tab{width:100%;border-collapse:collapse;font-size:14.5px;margin-bottom:14px}
+.p-tab th,.p-tab td{text-align:start;padding:8px 6px;border-bottom:1px solid var(--line)}
+.p-tab th{font-size:12.5px;color:var(--muted);font-weight:600}
+.p-tab td.t{font-family:var(--font-tech);font-size:17px;letter-spacing:.03em}
+.proj-out .btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .calc-why{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--card)}
 .calc-why summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--copper-hi)}
 .calc-why ol{margin:10px 0 2px;padding-inline-start:20px;font-size:13.5px;line-height:1.9;color:var(--muted)}
@@ -599,7 +672,13 @@ input[type=range]{width:100%;accent-color:var(--copper)}
 </head>
 <body>
 <div dir="rtl">
+<div class="splash" id="splash" aria-hidden="true">
+  <svg viewBox="0 0 200 200"><polygon points="100,6 181,53 181,147 100,194 19,147 19,53" fill="#0E1A33" stroke="#C6CEDC" stroke-width="6"/><circle class="ring" cx="100" cy="100" r="58" fill="none" stroke="#3D7BFF" stroke-width="10" stroke-linecap="round" transform="rotate(-90 100 100)"/><g class="dot" fill="#3D7BFF"><circle cx="83" cy="83" r="15"/><circle cx="117" cy="83" r="15"/><circle cx="83" cy="117" r="15"/><circle cx="117" cy="117" r="15"/></g></svg>
+  <b>سعد البديري</b><span>للكيبلات الكهربائية · منذ 1991</span>
+</div>
+<script>(function(){var s=document.getElementById('splash');try{if(sessionStorage.getItem('sab-sp')){s.parentNode.removeChild(s);return;}sessionStorage.setItem('sab-sp','1');}catch(e){}var done=false;function h(){if(done)return;done=true;s.classList.add('out');setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s);},520);}window.addEventListener('load',function(){setTimeout(h,1250);});setTimeout(h,4000);})();</script>
 <header class="bar">
+  <a class="announce" id="announce" hidden><span class="an-ic">📢</span><span id="announceT"></span></a>
   <div class="app-bar" id="appBar" hidden>
     <div class="wrap app-bar-in">
       <img class="app-bar-ic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpolygon points='100,6 181,53 181,147 100,194 19,147 19,53' fill='%230E1A33' stroke='%23C6CEDC' stroke-width='7'/%3E%3Ccircle cx='100' cy='100' r='58' fill='none' stroke='%233D7BFF' stroke-width='10'/%3E%3Ccircle cx='83' cy='83' r='15' fill='%233D7BFF'/%3E%3Ccircle cx='117' cy='83' r='15' fill='%233D7BFF'/%3E%3Ccircle cx='83' cy='117' r='15' fill='%233D7BFF'/%3E%3Ccircle cx='117' cy='117' r='15' fill='%233D7BFF'/%3E%3C/svg%3E" alt="" width="34" height="34">
@@ -616,24 +695,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <svg width="132" height="17" viewBox="0 0 360 46" aria-hidden="true"><path d="M8,30 C80,30 120,12 190,22 C250,30 290,32 318,24" fill="none" stroke="#3D7BFF" stroke-width="7" stroke-linecap="round"/><g stroke="#3D7BFF" stroke-width="4" stroke-linecap="round"><line x1="318" y1="24" x2="350" y2="10"/><line x1="318" y1="24" x2="355" y2="26"/><line x1="318" y1="24" x2="346" y2="40"/></g></svg>
       </span>
     </a>
-    <div class="bar-act">
-      <button type="button" class="theme-btn" id="themeBtn" aria-label="الوضع النهاري" title="نهاري / ليلي"><svg class="ico sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg><svg class="ico moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg></button>
-      <button type="button" class="cart-btn" id="cartBtn" aria-label="سلة الطلب"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><span class="cart-t">السلة</span><b id="cartN">0</b></button>
-      <button type="button" class="app-btn" id="appBtn" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M12 8v6M9.5 11.5 12 14l2.5-2.5"/></svg><span class="app-t">نزّل التطبيق</span></button>
-      <a class="btn solid order-now" href="#products">اطلب الآن</a>
-    </div>
   </div>
-  <nav class="guide" aria-label="شنو تريد؟">
-    <div class="wrap guide-in">
-      <span class="guide-q">شنو تريد؟</span>
-      <a href="#home" data-go="home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>الرئيسية</a>
-      <a href="#products" data-go="products"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>أستفسر عن كيبل</a>
-      <a href="#calc" data-go="calc"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h4"/></svg>أعرف قياس حملي</a>
-      <a href="#compare" data-go="compare"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 7h4l-2 6zM15 7h4l-2 6zM5 13a2 2 0 0 0 4 0M15 13a2 2 0 0 0 4 0M8 21h8"/></svg>نحاس لو فافون</a>
-      <a href="#faq" data-go="faq"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg>عندي سؤال</a>
-      <a href="#where" data-go="where"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>المحل والدوام</a>
-    </div>
-  </nav>
 </header>
 
 <main id="top">
@@ -668,6 +730,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <div class="stage-tag"><strong><span class="num" id="tagSize">4×16</span> ملم²</strong><span id="tagName">كيبل مدرّع نحاس</span></div>
       </div></div>
     </div>
+    <div class="offers" id="offersBox" hidden><h2>🔥 عروضنا هسه</h2><div class="offers-row" id="offersRow"></div></div>
   </section>
 
   <section class="block start" data-view="home">
@@ -726,8 +789,26 @@ input[type=range]{width:100%;accent-color:var(--copper)}
         <h2>شكد قياس الكيبل اللي تحتاجه؟</h2>
         <p class="lead">اختار نوع الكيبل والكهرباء، دخّل الحمل، وحرّك طول الكيبل. القياس يطلع وحده، وبعدها تگدر تطلبه مباشرة.</p>
       </div>
+      <div class="seg calc-mode" role="group" aria-label="نوع الحساب" id="calcMode">
+        <button type="button" data-m="single" aria-pressed="true">حمل واحد</button>
+        <button type="button" data-m="project" aria-pressed="false">مشروع كامل (بيت أو محل)</button>
+      </div>
+      <div class="proj" id="proj" hidden>
+        <div class="proj-set">
+          <label class="fld"><span>نوع الكيبل</span><select id="pMetal"><option value="cu-strand">نحاس ستراند</option><option value="cu-fine">نحاس شعري</option><option value="flex">فلكس</option></select></label>
+          <label class="fld"><span>كهرباء المكان</span><select id="pPhase"><option value="1">فاز واحد 220</option><option value="3">ثلاث فازات 380</option></select></label>
+          <label class="fld"><span>حرارة الجو</span><select id="pTemp"><option value="30">30° معتدل</option><option value="40">40°</option><option value="50" selected>50° صيف العراق</option></select></label>
+          <label class="fld"><span>معامل التزامن</span><select id="pDiv"><option value="1">100٪ (كلشي يشتغل سوا)</option><option value="0.8">80٪</option><option value="0.7" selected>70٪ (بيت عادي)</option><option value="0.6">60٪</option></select></label>
+          <label class="fld"><span>طول الخط الرئيسي (متر)</span><input type="text" id="pMain" inputmode="numeric" value="20" maxlength="4"></label>
+        </div>
+        <div class="proj-sub">ضيف أحمالك (اضغط على الجهاز):</div>
+        <div class="proj-chips" id="pChips"></div>
+        <div class="proj-list" id="pList"></div>
+        <div class="proj-out" id="pOut" aria-live="polite"></div>
+        <p class="calc-note">كل جهاز محسوب بخط وقاطع خاص بيه حسب <span class="tech">IEC 60364-5-52</span> و<span class="tech">IEC 60364-4-43</span>. الواط المكتوب قيمة شائعة للجهاز، فعدّله حسب المكتوب على لوحة جهازك حتى يطلع الحساب مضبوط. هبوط الجهد محسوب من القاطع الرئيسي لحد الجهاز (الخط الرئيسي + خط الجهاز) ضمن حد 5٪ للأجهزة و3٪ للإنارة.</p>
+      </div>
       <div class="stage-slot" id="slot-calc"></div>
-      <div class="calc">
+      <div class="calc" id="calcSingle">
         <form class="calc-in" id="calcForm" onsubmit="return false">
           <div class="fld"><span>نوع الكيبل</span>
             <div class="seg" role="group" aria-label="المعدن" id="cMetal">
@@ -1022,13 +1103,33 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   <button type="button" id="iosTipX">تمام</button>
 </div>
 
-<nav class="tabbar" aria-label="القائمة السفلية">
+<nav class="tabbar" aria-label="القائمة">
   <a href="#home" data-tab="home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>الرئيسية</a>
   <a href="#products" data-tab="products"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>المنتجات</a>
-  <button type="button" id="tabCart"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><b class="tb-n zero" id="tabN">0</b>السلة</button>
   <a href="#calc" data-tab="calc"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h2M12 18h4"/></svg>الحاسبة</a>
-  <a class="tb-call" href="tel:+9647707368351"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>اتصال</a>
+  <a class="tb-wide" href="#compare" data-tab="compare"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 7h4l-2 6zM15 7h4l-2 6zM5 13a2 2 0 0 0 4 0M15 13a2 2 0 0 0 4 0M8 21h8"/></svg>نحاس لو فافون</a>
+  <a class="tb-wide" href="#faq" data-tab="faq"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg>الأسئلة</a>
+  <a class="tb-wide" href="#where" data-tab="where"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>المحل</a>
+  <button type="button" id="cartBtn" aria-label="سلة الطلب"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg><b class="tb-n zero" id="cartN">0</b>السلة</button>
+  <button type="button" id="moreBtn" aria-haspopup="dialog" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>المزيد</button>
 </nav>
+
+<div class="more" id="more" hidden>
+  <div class="more-back" data-mclose></div>
+  <section class="more-box" role="dialog" aria-modal="true" aria-label="المزيد">
+    <div class="more-grip" data-mclose></div>
+    <div class="more-grid">
+      <a class="more-i" href="#calc" data-proj data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5M12 7.5v3M10.5 9h3"/></svg><span>حاسبة مشروع كامل</span></a>
+      <a class="more-i" href="#compare" data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 7h4l-2 6zM15 7h4l-2 6zM5 13a2 2 0 0 0 4 0M15 13a2 2 0 0 0 4 0M8 21h8"/></svg><span>نحاس لو فافون</span></a>
+      <a class="more-i" href="#faq" data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/></svg><span>عندي سؤال</span></a>
+      <a class="more-i" href="#where" data-mclose><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>المحل والدوام</span></a>
+      <button type="button" class="more-i theme-sw" id="themeBtn"><svg class="ico sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg><svg class="ico moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg><span id="themeTxt">الوضع النهاري</span></button>
+      <button type="button" class="more-i" id="appBtn" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M12 8v6M9.5 11.5 12 14l2.5-2.5"/></svg><span>نزّل التطبيق</span></button>
+      <a class="more-i" href="tel:+9647707368351"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span>اتصل بالمحل</span></a>
+      <a class="more-i more-wa" target="_blank" rel="noopener" href="https://wa.me/9647707368351"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4.2A8 8 0 1 1 8.4 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-.8.8c-1-.4-1.6-1-2-2l.8-.8-1-2z"/></svg><span>واتساب</span></a>
+    </div>
+  </section>
+</div>
 
 <a class="wa-float" data-wa target="_blank" rel="noopener" href="https://wa.me/9647707368351" aria-label="راسلنا علواتساب"><span class="wa-i"></span><span class="wa-float-t">واتساب</span></a>
 <footer><div class="wrap"><span>سعد البديري للكيبلات · منذ 1991 · الشورجة، بغداد · المحل <bdi class="tel" dir="ltr">0770 736 8351</bdi> · المسؤول <bdi class="tel" dir="ltr">0770 074 0146</bdi></span><span>© 2026 سعد البديري</span></div></footer>
@@ -1325,7 +1426,120 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     }
     window.__calcModel = calcModel;
     $('rGo').addEventListener('click', function(){ if(c.res) openProduct(c.res.g, c.res.n, c.res.size, c.res.armour, c.res.cond); });
+    /* shared engine for the project calculator */
+    window.__sizeFor = function(o){
+      var three = o.phase===3, V = three ? 380 : 220, cls = o.metal==='flex' ? 'cu5' : (o.cond==='fine' ? 'cu5' : 'cu2'), ins = o.metal==='flex' ? 'pvc' : 'xlpe', theta = ins==='xlpe' ? 90 : 70;
+      var k = KT.air[ins][o.tC] || 1, tab = T[o.metal==='flex' ? 'flex' : 'cu'].air[three ? 3 : 2], sin = Math.sqrt(Math.max(0, 1 - o.pf*o.pf));
+      var In = 0; for(var b=0;b<BRK.length;b++){ if(BRK[b] >= o.Ib){ In = BRK[b]; break; } }
+      if(!In) return null;
+      function dropAt(i){ var R = R20[cls][i]*(1 + ALPHA.cu*(theta-20))/1000; return (three ? Math.sqrt(3) : 2)*o.L*o.Ib*(R*o.pf + XL/1000*sin)/V*100; }
+      var iA = -1, iD = -1, m = o.minIdx || 0;
+      for(var i=m;i<SIZES.length;i++){ if(tab[i]*k >= In){ iA = i; break; } }
+      for(var j=m;j<SIZES.length;j++){ if(dropAt(j) <= o.lim){ iD = j; break; } }
+      if(iA<0 || iD<0) return null;
+      var idx = Math.max(iA, iD);
+      return {size:SIZES[idx], In:In, Iz:tab[idx]*k, drop:dropAt(idx), byDrop:iD > iA};
+    };
+    /* single / project switch */
+    window.__calcMode = function(m){
+      var pj = m==='project';
+      $('proj').hidden = !pj; $('calcSingle').hidden = pj; $('slot-calc').hidden = pj;
+      $('calcMode').querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x.dataset.m===m); });
+      if(pj && window.__projRun) window.__projRun();
+    };
+    $('calcMode').addEventListener('click', function(e){ var b = e.target.closest('[data-m]'); if(b) window.__calcMode(b.dataset.m); });
     run();
+  })();
+
+  /* ---------- project calculator ---------- */
+  (function(){
+    function $(id){ return document.getElementById(id); }
+    var PRE = [
+      {n:'إنارة (مجموعة لمبات)', w:200, pf:1, use:3, min:0, L:10},
+      {n:'بلاكات غرفة', w:1500, pf:.9, use:5, min:1, L:12},
+      {n:'سبلت 1 طن', w:1200, pf:.85, use:5, min:1, L:15},
+      {n:'سبلت 1.5 طن', w:1700, pf:.85, use:5, min:1, L:15},
+      {n:'سبلت 2 طن', w:2300, pf:.85, use:5, min:1, L:15},
+      {n:'سبلت 3 طن', w:3500, pf:.85, use:5, min:1, L:15},
+      {n:'سخان ماي', w:2000, pf:1, use:5, min:1, L:12},
+      {n:'طباخ أو فرن كهربائي', w:3000, pf:1, use:5, min:1, L:10},
+      {n:'غسالة أوتوماتيك', w:2200, pf:.9, use:5, min:1, L:10},
+      {n:'ثلاجة أو مجمدة', w:300, pf:.8, use:5, min:1, L:10},
+      {n:'ماطور ماي 1 حصان', w:750, pf:.8, use:5, min:1, L:15},
+      {n:'مبردة هواء', w:350, pf:.8, use:5, min:1, L:12},
+      {n:'جهاز ثاني', w:1000, pf:.85, use:5, min:1, L:10}
+    ];
+    var rows = [];
+    try{ rows = JSON.parse(localStorage.getItem('sab-proj') || '[]') || []; }catch(err){ rows = []; }
+    if(!rows.length) rows = [mk(3, 2), mk(6, 1), mk(0, 4), mk(1, 4)];
+    function mk(i, c){ var p = PRE[i]; return {n:p.n, w:p.w, c:c || 1, L:p.L, pf:p.pf, use:p.use, min:p.min}; }
+    function save(){ try{ localStorage.setItem('sab-proj', JSON.stringify(rows)); }catch(err){} }
+    function num(v){ return parseFloat(String(v).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }).replace(/[٫,]/g,'.').replace(/[^0-9.]/g,'')) || 0; }
+    function fmt(n, d){ return n.toLocaleString('en-US', {maximumFractionDigits:d==null?1:d}); }
+    $('pChips').innerHTML = PRE.map(function(p, i){ return '<button type="button" data-p="' + i + '">+ ' + p.n + '</button>'; }).join('');
+    $('pChips').addEventListener('click', function(e){ var b = e.target.closest('[data-p]'); if(!b) return; rows.push(mk(parseInt(b.dataset.p,10), 1)); draw(); });
+    var last = null;
+    function calc(){
+      var mv = $('pMetal').value, metal = mv==='flex' ? 'flex' : 'cu', cond = mv==='cu-fine' ? 'fine' : (mv==='flex' ? 'fine' : 'strand');
+      var phase = parseInt($('pPhase').value,10), tC = parseInt($('pTemp').value,10), div = parseFloat($('pDiv').value), Lm = Math.max(1, num($('pMain').value));
+      var total = 0; rows.forEach(function(r){ total += r.w*r.c; });
+      var demand = total*div, Ibm = phase===3 ? demand/(Math.sqrt(3)*380*.9) : demand/(220*.9);
+      var main = total > 0 ? window.__sizeFor({metal:metal, cond:cond, phase:phase, tC:tC, pf:.9, L:Lm, Ib:Ibm, lim:2, minIdx:3}) : null;
+      var mdrop = main ? main.drop : 0;
+      var res = rows.map(function(r){
+        if(!(r.w > 0) || !(r.c > 0)) return null;
+        return window.__sizeFor({metal:metal, cond:cond, phase:1, tC:tC, pf:r.pf, L:Math.max(1, r.L), Ib:r.w/(220*r.pf), lim:Math.max(.5, r.use - mdrop), minIdx:r.min});
+      });
+      last = {metal:metal, cond:cond, phase:phase, total:total, demand:demand, Ibm:Ibm, main:main, Lm:Lm, res:res};
+      return last;
+    }
+    function draw(){
+      save();
+      $('pList').innerHTML = rows.map(function(r, i){
+        return '<div class="p-row" data-i="' + i + '">'+
+          '<label>الجهاز<input type="text" data-k="n" maxlength="40" value="' + String(r.n).replace(/"/g,'&quot;') + '"></label>'+
+          '<label>الواط<input type="text" inputmode="numeric" data-k="w" maxlength="6" value="' + r.w + '"></label>'+
+          '<label>العدد<input type="text" inputmode="numeric" data-k="c" maxlength="3" value="' + r.c + '"></label>'+
+          '<label>طول الخط (م)<input type="text" inputmode="numeric" data-k="L" maxlength="4" value="' + r.L + '"></label>'+
+          '<button type="button" class="p-del" data-del>حذف</button><div class="p-res"></div></div>';
+      }).join('');
+      out();
+    }
+    function out(){
+      var d = calc(), nMain = d.phase===3 ? 4 : 2, agg = {};
+      document.querySelectorAll('#pList .p-row').forEach(function(el, i){
+        var r = rows[i], x = d.res[i], box = el.querySelector('.p-res');
+        if(!x){ box.textContent = r && r.w > 0 ? 'الحمل أكبر من خط واحد، راسلنا ونحسبه وياك.' : 'اكتب الواط والعدد.'; return; }
+        box.innerHTML = 'كل جهاز: تيار ' + fmt(r.w/(220*r.pf)) + ' أمبير · قاطع <b>' + x.In + '</b> أمبير · كيبل <b>2×' + x.size + '</b> ملم²' + (x.byDrop ? ' (كبّرناه بسبب طول الخط)' : '');
+        var key = '2×' + x.size; agg[key] = (agg[key] || 0) + Math.ceil(r.L*r.c);
+      });
+      if(!d.total){ $('pOut').innerHTML = ''; return; }
+      var keys = Object.keys(agg).sort(function(a, b){ return parseFloat(a.split('×')[1]) - parseFloat(b.split('×')[1]); });
+      var h = '<h3>نتيجة المشروع</h3>';
+      h += '<div class="p-main"><span>الخط الرئيسي:</span>' + (d.main ? '<b>' + nMain + '×' + d.main.size + '</b><span>ملم² · ' + d.Lm + ' متر · قاطع رئيسي ' + d.main.In + ' أمبير</span>' : '<span>الحمل كبير، راسلنا ونحسبه وياك</span>') + '</div>';
+      h += '<p class="calc-note" style="margin:0 0 10px">مجموع الأحمال ' + fmt(d.total/1000, 2) + ' كيلوواط، وبعد معامل التزامن ' + fmt(d.demand/1000, 2) + ' كيلوواط (' + fmt(d.Ibm) + ' أمبير' + (d.phase===3 ? ' لكل فاز' : '') + ').</p>';
+      h += '<table class="p-tab"><thead><tr><th>الكيبل</th><th>الطول الكلي</th><th>تقريباً</th></tr></thead><tbody>';
+      keys.forEach(function(k){ var m = agg[k]; h += '<tr><td class="t">' + k + ' ملم²</td><td>' + m + ' متر</td><td>' + (m >= 90 ? Math.ceil(m/90) + ' لفة' : 'بالمتر') + '</td></tr>'; });
+      if(d.main) h += '<tr><td class="t">' + nMain + '×' + d.main.size + ' ملم²</td><td>' + d.Lm + ' متر</td><td>رئيسي</td></tr>';
+      h += '</tbody></table><div class="btns"><button type="button" class="btn solid" id="pCart">أضف كل الكيبلات للسلة</button><span class="price-note" id="pMsg">يضيف كل القياسات بأطوالها للسلة، وترسل الطلب مرة وحدة.</span></div>';
+      $('pOut').innerHTML = h; last.agg = agg; last.keys = keys; last.nMain = nMain;
+    }
+    $('pList').addEventListener('input', function(e){
+      var el = e.target.closest('.p-row'), k = e.target.dataset.k; if(!el || !k) return;
+      var r = rows[parseInt(el.dataset.i,10)]; r[k] = k==='n' ? e.target.value : num(e.target.value); save(); out();
+    });
+    $('pList').addEventListener('click', function(e){ if(!e.target.closest('[data-del]')) return; rows.splice(parseInt(e.target.closest('.p-row').dataset.i,10), 1); draw(); });
+    ['pMetal','pPhase','pTemp','pDiv','pMain'].forEach(function(id){ $(id).addEventListener('input', out); $(id).addEventListener('change', out); });
+    $('pOut').addEventListener('click', function(e){
+      if(!e.target.closest('#pCart') || !last) return;
+      var flex = last.metal==='flex', base = flex ? 'كيبل فلكس شعري ' : 'كيبل نحاس ' + (last.cond==='fine' ? 'شعري' : 'ستراند') + ' غير مدرّع ', col = flex ? 'white' : 'black', added = 0;
+      function push(name, size, qty){ var same = cart.filter(function(x){ return x.name===name && x.size===size && x.color===col && x.unit==='متر' && x.origin===ORIGINS[0]; })[0]; if(same) same.qty += qty; else cart.push({name:name, size:size, color:col, origin:ORIGINS[0], qty:qty, unit:'متر'}); added++; }
+      last.keys.forEach(function(k){ push(base + 'خطين', k, last.agg[k]); });
+      if(last.main) push(base + (last.nMain===4 ? 'أربع خطوط' : 'خطين'), last.nMain + '×' + last.main.size, Math.ceil(last.Lm));
+      saveCart(); cartCount(); track('مشروع/أضاف-للسلة');
+      $('pMsg').textContent = '✓ انضافت ' + added + ' أصناف للسلة. افتح السلة تحت وأرسل الطلب.';
+    });
+    window.__projRun = draw;
   })();
 
   /* ---------- copper vs aluminium ---------- */
@@ -1435,7 +1649,6 @@ input[type=range]{width:100%;accent-color:var(--copper)}
   (function(){
     cartCount();
     document.getElementById('cartBtn').addEventListener('click', openCart);
-    document.getElementById('tabCart').addEventListener('click', openCart);
     var box = document.getElementById('cart');
     box.addEventListener('click', function(e){
       if(e.target.closest('[data-close]')){ closeCart(); return; }
@@ -1476,10 +1689,52 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !box.hidden) closeCart(); });
   })();
 
+  /* ---------- more sheet ---------- */
+  (function(){
+    var m = document.getElementById('more'), b = document.getElementById('moreBtn');
+    function close(){ m.hidden = true; b.setAttribute('aria-expanded','false'); }
+    b.addEventListener('click', function(){ m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); });
+    m.addEventListener('click', function(e){
+      var pj = e.target.closest('[data-proj]'); if(pj && window.__calcMode) window.__calcMode('project');
+      if(e.target.closest('[data-mclose]') || e.target.closest('a')) close();
+    });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !m.hidden) close(); });
+  })();
+
+  /* ---------- reveal on scroll ---------- */
+  (function(){
+    if(!('IntersectionObserver' in window) || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, {rootMargin:'0px 0px -8% 0px', threshold:.05});
+    var els = document.querySelectorAll('main .block .head, main .block .wrap > *:not(.head):not(.stage-slot), .facts li, .tiles .tile, .faq details, footer .wrap');
+    els.forEach(function(el, i){ el.classList.add('rv'); el.style.transitionDelay = (i % 4)*60 + 'ms'; io.observe(el); });
+  })();
+
+  /* ---------- announcements and offers (edited from the admin page) ---------- */
+  (function(){
+    function esc2(t){ return String(t==null?'':t).replace(/[&<>"]/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]; }); }
+    function apply(d){
+      if(!d) return;
+      var an = document.getElementById('announce');
+      if(d.announce && d.announce.on && d.announce.text){ document.getElementById('announceT').textContent = d.announce.text; if(d.announce.link && /^(https?:|#|tel:)/.test(d.announce.link)) an.href = d.announce.link; else an.removeAttribute('href'); an.hidden = false; }
+      var today = new Date().toISOString().slice(0,10);
+      var list = (d.offers || []).filter(function(o){ return o && o.on !== false && o.title && (!o.until || o.until >= today); });
+      if(list.length){
+        document.getElementById('offersRow').innerHTML = list.map(function(o){
+          var msg = 'مرحبا محل سعد البديري، أريد أستفسر عن عرض: ' + o.title;
+          return '<div class="offer"><b>' + esc2(o.title) + '</b>' + (o.text ? '<p>' + esc2(o.text) + '</p>' : '') + (o.until ? '<small>لحد ' + esc2(o.until) + '</small>' : '') + '<a target="_blank" rel="noopener" href="' + waLink(msg) + '">اطلب العرض علواتساب</a></div>';
+        }).join('');
+        document.getElementById('offersBox').hidden = false;
+      }
+    }
+    if(/github\.io$/.test(location.hostname) || /saad-albudairi/.test(location.hostname) || location.hostname==='localhost'){
+      fetch('offers.json?t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).then(apply).catch(function(){});
+    }
+  })();
+
   /* ---------- theme (day / night) ---------- */
   (function(){
     var b = document.getElementById('themeBtn'), root = document.documentElement;
-    function sync(){ var l = root.getAttribute('data-theme')==='light'; b.setAttribute('aria-label', l ? 'الوضع الليلي' : 'الوضع النهاري'); var m = document.querySelector('meta[name=theme-color]'); if(m) m.content = l ? '#F2F5FA' : '#0A1120'; }
+    function sync(){ var l = root.getAttribute('data-theme')==='light'; b.setAttribute('aria-label', l ? 'الوضع الليلي' : 'الوضع النهاري'); var tt = document.getElementById('themeTxt'); if(tt) tt.textContent = l ? 'الوضع الليلي' : 'الوضع النهاري'; var m = document.querySelector('meta[name=theme-color]'); if(m) m.content = l ? '#F2F5FA' : '#0A1120'; }
     b.addEventListener('click', function(){
       var l = root.getAttribute('data-theme')!=='light';
       if(l) root.setAttribute('data-theme','light'); else root.removeAttribute('data-theme');
@@ -1555,6 +1810,7 @@ input[type=range]{width:100%;accent-color:var(--copper)}
     if(stg.parentNode !== slot) slot.appendChild(stg);
     window.__view = v;
     document.querySelectorAll('.tabbar [data-tab]').forEach(function(a){ if(a.dataset.tab===v) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    var mb = document.getElementById('moreBtn'); if(mb){ if(window.innerWidth <= 700 && /^(compare|faq|where)$/.test(v)) mb.setAttribute('aria-current','page'); else mb.removeAttribute('aria-current'); }
     if(window.goatcounter && window.goatcounter.count && v!=='home') track('قسم/' + v);
     if(v==='products' && st.g) syncModel();
     if(v==='calc' && window.__calcModel) window.__calcModel();

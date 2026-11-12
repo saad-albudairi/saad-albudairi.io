@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة التحكم · سعد البديري</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A1120">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Aref+Ruqaa:wght@700&display=swap">
+<style>
+:root{--bg:#0A1120;--card:#101A2D;--card2:#0C1526;--fg:#E8EEF8;--muted:#93A1B8;--blue:#3D7BFF;--line:rgba(122,165,255,.18);--ok:#22c55e;--bad:#ff8c8c;--amber:#f59e0b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;line-height:1.7;padding:0 0 110px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header{padding:18px 0 14px;border-bottom:1px solid var(--line);margin-bottom:18px}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:40px;height:40px;border-radius:10px}
+.brand b{font-family:"Aref Ruqaa",serif;font-size:24px;line-height:1.1}
+.brand span{display:block;font-size:13px;color:var(--muted)}
+a{color:var(--blue)}
+h2{font-size:19px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+label{display:flex;flex-direction:column;gap:5px;font-size:13.5px;color:var(--muted);margin-bottom:12px}
+input[type=text],input[type=password],input[type=date],select,textarea{font:inherit;font-size:16px;color:var(--fg);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
+textarea{min-height:76px;resize:vertical}
+.sw{flex-direction:row;align-items:center;gap:10px;color:var(--fg);font-size:15px;font-weight:600}
+.sw input{width:22px;height:22px;accent-color:var(--blue)}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px 18px;cursor:pointer}
+.pri{background:var(--blue);color:#fff}
+.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.del{background:transparent;color:var(--bad);border:1px solid rgba(255,120,120,.3);padding:8px 12px;font-size:13px}
+.offer{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
+.offer-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(10,17,32,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px))}
+.savebar .wrap{display:flex;align-items:center;gap:12px}
+.savebar button{flex:none}
+#status{font-size:14px;color:var(--muted)}
+#status.ok{color:var(--ok)}#status.bad{color:var(--bad)}
+.prev{display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border-radius:10px;background:linear-gradient(90deg,#b45309,#d97706);color:#fff;font-weight:600;font-size:14px;margin-top:4px}
+details{margin-top:12px;font-size:14px;color:var(--muted)}
+details summary{cursor:pointer;color:var(--blue);font-weight:600}
+ol{padding-inline-start:20px;margin:8px 0}
+code{direction:ltr;unicode-bidi:isolate;background:var(--card2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:13px}
+.stat-links{display:flex;flex-wrap:wrap;gap:10px}
+.stat-links a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;padding:11px 16px;border-radius:12px;border:1px solid var(--line);color:var(--fg);background:var(--card2)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><img src="icon-192.png" alt=""><div><b>سعد البديري</b><span>لوحة التحكم</span></div></div>
+  <a href="./" target="_blank" rel="noopener">افتح الموقع ↗</a>
+</div></header>
+
+<div class="wrap">
+  <!-- login -->
+  <section class="card" id="login">
+    <h2>تسجيل الدخول 🔐</h2>
+    <p class="sub">الصق مفتاح GitHub الخاص بيك. ينحفظ بهذا الجهاز بس، وما ينرسل لأي مكان غير GitHub.</p>
+    <label>المفتاح (Token)<input type="password" id="tok" autocomplete="off" placeholder="github_pat_..." dir="ltr"></label>
+    <button class="pri" id="loginBtn">دخول</button>
+    <span id="loginMsg" style="margin-inline-start:10px;font-size:14px"></span>
+    <details>
+      <summary>شلون أسوي المفتاح؟ (مرة وحدة بس)</summary>
+      <ol>
+        <li>ادخل على GitHub بحسابك، وافتح: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">صفحة إنشاء المفتاح</a></li>
+        <li><b>Token name:</b> اكتب <code>saad admin</code></li>
+        <li><b>Resource owner:</b> اختار <code>saad-albudairi</code></li>
+        <li><b>Expiration:</b> اختار سنة (أو No expiration)</li>
+        <li><b>Repository access:</b> اختار Only select repositories، وبعدها <code>saad-albudairi.io</code></li>
+        <li><b>Permissions ← Repository permissions ← Contents:</b> اختار <code>Read and write</code></li>
+        <li>اضغط Generate token، انسخ المفتاح والصقه هنا</li>
+      </ol>
+      <p>لا تنطي المفتاح لأحد. اللي عنده المفتاح يگدر يغيّر الموقع.</p>
+    </details>
+  </section>
+
+  <div id="panel" hidden>
+    <!-- announcement -->
+    <section class="card">
+      <h2>📢 شريط الإعلان</h2>
+      <p class="sub">شريط برتقالي يطلع بأعلى الموقع لكل الزباين.</p>
+      <label class="sw"><input type="checkbox" id="anOn"> شغّل الشريط</label>
+      <label>نص الإعلان<input type="text" id="anText" maxlength="120" placeholder="مثلاً: خصم 5٪ على كل البكرات لحد نهاية الشهر"></label>
+      <label>لمن يضغط عليه يروح لـ
+        <select id="anLink">
+          <option value="">ما يروح لمكان</option>
+          <option value="#products">الأنواع والقياسات</option>
+          <option value="#calc">الحاسبة</option>
+          <option value="#where">المحل والدوام</option>
+          <option value="https://wa.me/9647707368351">واتساب المحل</option>
+        </select>
+      </label>
+      <div class="prev" id="anPrev" hidden><span>📢</span><span id="anPrevT"></span></div>
+    </section>
+
+    <!-- offers -->
+    <section class="card">
+      <h2>🔥 العروض</h2>
+      <p class="sub">بطاقات تطلع بالصفحة الرئيسية بقسم «عروضنا هسه». العرض المنتهي تاريخه ينشال وحده.</p>
+      <div id="offers"></div>
+      <button class="ghost" id="addOffer">+ أضف عرض</button>
+    </section>
+
+    <!-- stats -->
+    <section class="card">
+      <h2>📊 الزيارات وتحليل الزباين</h2>
+      <p class="sub">الموقع يحسب: عدد الزوار، منين جايين (Google، الستيكر، فيسبوك)، أي موبايل، أكثر الأقسام، أكثر القياسات اللي تنضاف للسلة وتنطلب، والطلبات من يا محافظة.</p>
+      <div class="stat-links">
+        <a href="https://saad-albudairi.goatcounter.com" target="_blank" rel="noopener">📈 افتح لوحة الإحصائيات</a>
+        <a href="https://www.goatcounter.com/signup" target="_blank" rel="noopener">أول مرة؟ سجّل حساب</a>
+      </div>
+      <details>
+        <summary>شلون أشغّل الإحصائيات؟ (مرة وحدة بس)</summary>
+        <ol>
+          <li>اضغط «أول مرة؟ سجّل حساب»</li>
+          <li>بخانة <b>Code</b> اكتب بالضبط: <code>saad-albudairi</code></li>
+          <li>اكتب إيميلك وكلمة سر، واضغط Sign up</li>
+          <li>بعدها «افتح لوحة الإحصائيات» تطلعلك كل الأرقام</li>
+        </ol>
+        <p>شلون تقرا اللوحة: <b>Pages</b> = الأقسام والطلبات (اللي تبدي بـ «طلب/» و«سلة/» هي طلبات الزباين)، <b>Referrers</b> = منين جايين، <b>Locations</b> = الدول، <b>Browsers / Systems</b> = نوع الأجهزة.</p>
+      </details>
+    </section>
+
+    <button class="ghost" id="logout">تسجيل خروج من هذا الجهاز</button>
+  </div>
+</div>
+
+<div class="savebar" id="savebar" hidden><div class="wrap">
+  <button class="pri" id="save">احفظ وانشر</button>
+  <span id="status">التغييرات توصل للموقع بعد دقيقة تقريباً.</span>
+</div></div>
+
+<script>
+(function(){
+  var REPO = 'saad-albudairi/saad-albudairi.io', FILE = 'offers.json', API = 'https://api.github.com/repos/' + REPO + '/contents/' + FILE;
+  var tok = '', sha = null, data = {announce:{on:false, text:'', link:''}, offers:[]};
+  function $(id){ return document.getElementById(id); }
+  function hdr(){ return {'Authorization':'Bearer ' + tok, 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'}; }
+  function b64e(str){ return btoa(unescape(encodeURIComponent(str))); }
+  function b64d(b){ return decodeURIComponent(escape(atob(b.replace(/\n/g,'')))); }
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function status(t, cls){ var s = $('status'); s.textContent = t; s.className = cls || ''; }
+
+  function load(){
+    $('loginMsg').textContent = 'جاري الدخول...'; $('loginMsg').style.color = '';
+    return fetch(API + '?ref=main&t=' + Date.now(), {headers:hdr(), cache:'no-store'}).then(function(r){
+      if(r.status===401 || r.status===403) throw new Error('المفتاح غلط أو ما عنده صلاحية على المستودع.');
+      if(r.status===404) return null;
+      if(!r.ok) throw new Error('صار خطأ بالاتصال (' + r.status + ').');
+      return r.json();
+    }).then(function(j){
+      if(j){ sha = j.sha; try{ data = JSON.parse(b64d(j.content)); }catch(e){} }
+      data.announce = data.announce || {on:false, text:'', link:''}; data.offers = data.offers || [];
+      try{ localStorage.setItem('sab-admin-token', tok); }catch(e){}
+      $('login').hidden = true; $('panel').hidden = false; $('savebar').hidden = false; fill();
+    }).catch(function(e){ $('loginMsg').textContent = e.message; $('loginMsg').style.color = 'var(--bad)'; });
+  }
+  function fill(){
+    $('anOn').checked = !!data.announce.on; $('anText').value = data.announce.text || ''; $('anLink').value = data.announce.link || '';
+    prev(); drawOffers();
+  }
+  function prev(){ var t = $('anText').value.trim(); $('anPrev').hidden = !($('anOn').checked && t); $('anPrevT').textContent = t; }
+  function drawOffers(){
+    $('offers').innerHTML = data.offers.map(function(o, i){
+      return '<div class="offer" data-i="' + i + '">'+
+        '<div class="offer-top"><label class="sw" style="margin:0"><input type="checkbox" data-k="on"' + (o.on!==false ? ' checked' : '') + '> ظاهر بالموقع</label><button class="del" data-del>حذف</button></div>'+
+        '<label>عنوان العرض<input type="text" data-k="title" maxlength="60" value="' + esc(o.title) + '" placeholder="مثلاً: خصم على بكرات 4×16"></label>'+
+        '<label>التفاصيل<textarea data-k="text" maxlength="220" placeholder="مثلاً: خصم خاص عند شراء بكرتين أو أكثر، مع توصيل داخل بغداد.">' + esc(o.text) + '</textarea></label>'+
+        '<label>ينتهي بتاريخ (اختياري)<input type="date" data-k="until" value="' + esc(o.until) + '"></label></div>';
+    }).join('') || '<p class="sub">ماكو عروض هسه.</p>';
+  }
+  $('offers').addEventListener('input', function(e){
+    var el = e.target.closest('.offer'), k = e.target.dataset.k; if(!el || !k) return;
+    var o = data.offers[parseInt(el.dataset.i, 10)]; o[k] = e.target.type==='checkbox' ? e.target.checked : e.target.value;
+    status('عندك تغييرات ما محفوظة.');
+  });
+  $('offers').addEventListener('click', function(e){
+    if(!e.target.closest('[data-del]')) return;
+    data.offers.splice(parseInt(e.target.closest('.offer').dataset.i, 10), 1); drawOffers(); status('عندك تغييرات ما محفوظة.');
+  });
+  $('addOffer').addEventListener('click', function(){ data.offers.push({title:'', text:'', until:'', on:true}); drawOffers(); status('عندك تغييرات ما محفوظة.'); });
+  ['anOn','anText','anLink'].forEach(function(id){ $(id).addEventListener('input', function(){ prev(); status('عندك تغييرات ما محفوظة.'); }); });
+
+  $('save').addEventListener('click', function(){
+    data.announce = {on:$('anOn').checked, text:$('anText').value.trim(), link:$('anLink').value};
+    data.offers = data.offers.filter(function(o){ return (o.title || '').trim(); });
+    data.updated = new Date().toISOString();
+    var body = {message:'Update offers from admin panel', content:b64e(JSON.stringify(data, null, 2) + '\n'), branch:'main'}; if(sha) body.sha = sha;
+    $('save').disabled = true; status('جاري الحفظ...');
+    fetch(API, {method:'PUT', headers:hdr(), body:JSON.stringify(body)}).then(function(r){
+      return r.json().then(function(j){ if(!r.ok) throw new Error(r.status===409 ? 'انحفظ من مكان ثاني، حدّث الصفحة وجرّب.' : (j.message || 'ما انحفظ')); return j; });
+    }).then(function(j){ sha = j.content.sha; drawOffers(); status('✓ انحفظ. يطلع بالموقع بعد دقيقة تقريباً.', 'ok'); })
+      .catch(function(e){ status('✗ ' + e.message, 'bad'); })
+      .then(function(){ $('save').disabled = false; });
+  });
+  $('loginBtn').addEventListener('click', function(){ tok = $('tok').value.trim(); if(tok) load(); });
+  $('tok').addEventListener('keydown', function(e){ if(e.key==='Enter'){ tok = $('tok').value.trim(); if(tok) load(); } });
+  $('logout').addEventListener('click', function(){ try{ localStorage.removeItem('sab-admin-token'); }catch(e){} location.reload(); });
+  try{ tok = localStorage.getItem('sab-admin-token') || ''; }catch(e){}
+  if(tok){ $('tok').value = tok; load(); }
+})();
+</script>
+</body>
+</html>
