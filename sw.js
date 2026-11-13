@@ -1,6 +1,6 @@
 /* سعد البديري — service worker: يخلي الموقع يفتح بسرعة وحتى بدون نت */
-var V = 'sab-v9';
-var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './shop-route.jpg',
+var V = 'sab-v10';
+var CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png',
   './vendor/three.min.js',
   './vendor/OrbitControls.js'];
 self.addEventListener('install', function(e){
